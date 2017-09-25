@@ -1,0 +1,19 @@
+{
+    "name" : "남이섬 예약",
+    "version": "1",
+    "manifest_version" : 2,
+ 
+    "permissions" : [               // 권한
+        "notifications",
+		"http://*/*",
+		"background"
+    ],
+ 
+    "web_accessible_resources" : [  // 알림창에 뜰 아이콘
+        "48.png"
+    ],
+	
+    "background": { "scripts": ["background.js", "jquery-1.9.1.min.js"] }
+}
+
+

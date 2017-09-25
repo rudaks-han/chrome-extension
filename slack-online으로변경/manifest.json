@@ -1,0 +1,19 @@
+{
+	"name": "slack away",
+	"version": "1.0",
+	"description": "slack away",
+   "content_scripts": [
+    {
+      "matches": ["https://enomix.slack.com/**/*"],
+      "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js"]
+    }
+  ],
+   "background": {
+      "page": "background.html"
+   },
+   "background": {
+		// "scripts": ["js/jquery-1.9.1.min.js", "js/background.js"]
+  },
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"manifest_version": 2
+}
