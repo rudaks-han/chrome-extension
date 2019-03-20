@@ -8,16 +8,15 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://spectra.daouoffice.com/**"],
-      "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js", "js/common.js"]
+      "matches": ["https://spectra.daouoffice.com/**/*"],
+      "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js"]
     }
   ],
-  "background": {
-    "page" : "background.html"
-  },
-  "permissions" : [
-    "notifications", "https://spectra.daouoffice.com/**", "background", "storage", "cookies"
-  ],
-  "content_security_policy": "script-src 'self' https://www.gstatic.com https://www.gstatic.com; object-src 'self'",
-  "manifest_version" : 2
+   "background": {
+      "scripts": ["background.js"]
+   },
+   "permissions": ["notifications", "background","tabs"],
+
+   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"manifest_version": 2
 }
