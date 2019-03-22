@@ -23,6 +23,7 @@ var dayOffList = {}; // 연차
 
 			//alert(JSON.stringify(items));
 			var useFlag = items['use-flag'];
+			alert(useFlag);
 
 			if (useFlag == 'Y') {
 				check();
