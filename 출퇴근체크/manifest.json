@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "출퇴근 자동체크 프로그램",
   "browser_action": {
-    "default_icon": "images/icon.png",
+   // "default_icon": "images/icon.png",
     "default_popup": "popup.html"
   },
   "content_scripts": [

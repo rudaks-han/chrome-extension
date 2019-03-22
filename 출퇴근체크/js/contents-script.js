@@ -1,6 +1,7 @@
 var BASE_URL = 'https://spectra.daouoffice.com';
 
 var checkInterval = 5 * 1000;
+var userSessionInterval = 10 * 60 * 1000; // 10분 마다
 var calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
 
 var calendarData = {};
@@ -16,18 +17,18 @@ var dayOffList = {}; // 연차
 
 	init();
 
-
 	function init() {
 		// 사용여부 체크
 		chrome.storage.sync.get('use-flag', function (items) {
 
-			//alert(JSON.stringify(items));
 			var useFlag = items['use-flag'];
-			alert(useFlag);
 
-			if (useFlag == 'Y') {
+			if (useFlag == 'Y')
+			{
 				check();
-			} else {
+			}
+			else
+			{
 				log('출퇴근 체크가 사용하지 않음으로 설정되어 있습니다.');
 			}
 		});
@@ -42,6 +43,11 @@ var dayOffList = {}; // 연차
 			];
 
 		$.when.apply($, promises).then(function () {
+			// 세션정보 10분마다 가져온다.
+			setInterval(function() {
+                requestUserSession();
+			}, userSessionInterval);
+			
 			// 달력정보 1시간마다 가져온다.
 			setInterval(function () {
 				requestCalendar();
@@ -55,71 +61,68 @@ var dayOffList = {}; // 연차
 		});
 	}
 
-	function saveSyncStorage(id)
+	function promiseStorageSync(syncStorageId, userConfigId)
 	{
-		chrome.storage.sync.get(id, function(items) {
-			syncStorage[id] = items[id];
-			log(id + '>' + syncStorage[id])
-		});
+        return new Promise(function(resolve, reject) {
+            chrome.storage.sync.get(syncStorageId, function(items) {
+                syncStorage[syncStorageId] = items[syncStorageId];
+                //if (callback) callback();
+				if (userConfigId) userConfig[userConfigId] = items[syncStorageId];
+
+                resolve('success')
+                //log("____saveSyncStorage : " + syncStorageId + '>' + syncStorage[syncStorageId])
+            });
+        })
 	}
 
 	function getUserConfig() {
-		// userConfig.startWorkTime = '08:00';
-		// userConfig.endWorkTime = '17:00';
-/*
-		chrome.storage.sync.get('clock-in-hour', function(items) {
-			syncStorage['clock-in-hour'] = items['clock-in-hour'];
-		});
 
-		chrome.storage.sync.get('clock-in-minute', function(items) {
-			syncStorage['clock-in-minute'] = items['clock-in-minute'];
-		});
-
-		chrome.storage.sync.get('clock-out-hour', function(items) {
-			syncStorage['clock-out-minute'] = items['clock-out-minute'];
-		});
-
-		chrome.storage.sync.get('clock-out-minute', function(items) {
-			syncStorage['clock-out-minute'] = items['clock-out-minute'];
-		});
-
-		chrome.storage.sync.get('clock-in-before-minute', function(items) {
-			syncStorage['clock-in-before-minute'] = items['clock-in-before-minute'];
-		});
-
-		chrome.storage.sync.get('clock-out-after-minute', function(items) {
-			syncStorage['clock-out-after-minute'] = items['clock-out-after-minute'];
-		});
-*/
-		var promises =
-			[
-				saveSyncStorage('clock-in-hour'),
-				saveSyncStorage('clock-in-minute')
-			];
-
-		$.when.apply($, promises).then(function (result1, result2, result3, result4) {
-			userConfig['startWorkTime'] = syncStorage['clock-in-hour'] + ':' + syncStorage['clock-in-minute']; // 출근시간
-			alert(userConfig['startWorkTime']);
-		});
-
-		//
-		/*
-		userConfig['startWorkTime'] = syncStorage['clock-in-hour'] + ':' + syncStorage['clock-in-minute']; // 출근시간
-
-		userConfig['endWorkTime'] = syncStorage['clock-out-hour'] + ':' + syncStorage['clock-out-minute']; // 퇴근시간
-		userConfig['minuteBeforeClockIn'] = syncStorage['clock-in-before-minute']; // 출근하기 설정 시간 (출근시간 기준 몇분 이전)
-		userConfig['minuteAfterClockOut'] = syncStorage['clock-out-after-minute']; // 퇴근하기 설정 시간 (퇴근시간 기준 몇분 이후)
-
-		console.log(userConfig)
-*/
+        promiseStorageSync('clock-in-hour')
+			.then(function() {
+                promiseStorageSync('clock-in-minute')
+			})
+            .then(function() {
+                new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        userConfig['startWorkTime'] = syncStorage['clock-in-hour'] + ':' + syncStorage['clock-in-minute']; // 출근시간
+                        resolve('success');
+                    }, 10);
+                });
+            })
+            .then(function() {
+                promiseStorageSync('clock-out-hour')
+            })
+            .then(function() {
+                promiseStorageSync('clock-out-minute')
+            })
+            .then(function() {
+                new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        userConfig['endWorkTime'] = syncStorage['clock-out-hour'] + ':' + syncStorage['clock-out-minute']; // 출근시간
+                        resolve('success');
+                    }, 10);
+                })
+            })
+            .then(function() {
+                promiseStorageSync('clock-in-before-minute', 'minuteBeforeClockIn');
+            })
+            .then(function() {
+                promiseStorageSync('clock-out-after-minute', 'minuteAfterClockOut');
+            })
+            .then(function() {
+                new Promise(function(resolve, reject) {
+                    setTimeout(function() {
+                        console.log(userConfig);
+                        resolve('success');
+                    }, 10);
+                })
+            });
 	};
 
 	function requestUserSession() {
 		requestAjax('get', BASE_URL + '/api/user/session', null, function (res) {
 			sessionUserId = res.data.id;
 			sessionUserName = res.data.name;
-
-			//sessionUserName = '신미란';
 
 			log('name : ' + sessionUserName);
 			log('id : ' + sessionUserId);
@@ -271,7 +274,12 @@ var dayOffList = {}; // 연차
 		var todayDayOffList = dayOffList[currDate];
 
 		console.log('sessionUserName : ' + sessionUserName);
+        console.log('todayDayOffList : ' + todayDayOffList);
 
+        if (todayDayOffList)
+		{
+
+		}
 		for (var i = 0; i < todayDayOffList.length; i++) {
 			var item = todayDayOffList[i];
 			if (item.indexOf(sessionUserName) > -1) {
@@ -542,3 +550,14 @@ Date.prototype.addMinutes = function(minutes)
 	dat.setTime(dat.getTime() + minutes * 60000);
 	return dat;
 }
+
+chrome.storage.onChanged.addListener(function (changes, areaName) {
+    for (key in changes) {
+        var storageChange = changes[key];
+        //console.error('key : ' + key + ' > ' + JSON.stringify(storageChange));
+        // key: 키 값
+        // areaName: ‘sync’ or ‘local'
+        // storageChange.oldValue: 이전 값
+        // storageChange.newValue: 변경된 값
+    }
+});
