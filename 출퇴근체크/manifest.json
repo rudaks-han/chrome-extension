@@ -1,21 +1,23 @@
- {
-	"name": "출퇴근체크",
-	"version": "1.0.0",
-	"description": "출퇴근 자동체크 프로그램",
-   "content_scripts": [
+{
+  "name": "출퇴근체크",
+  "version": "1.0.0",
+  "description": "출퇴근 자동체크 프로그램",
+  "browser_action": {
+    "default_icon": "images/icon.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
     {
       "matches": ["https://spectra.daouoffice.com/**"],
-      //"matches": ["<all_urls>"],
       "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js"]
     }
   ],
-   "background": {
-      "scripts": ["background.js", "js/jquery-1.9.1.min.js"]
-   },
-    "permissions" : [               // 권한
-        "notifications",    "http://*/*",    "background", "tabs"
-    ],
-
+  "background": {
+    "scripts": ["background.js", "js/jquery-1.9.1.min.js"]
+  },
+  "permissions" : [
+    "notifications",    "http://*/*",    "background", "tabs", "storage"
+  ],
    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
 	"manifest_version": 2
 }
