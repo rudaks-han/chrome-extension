@@ -66,11 +66,9 @@ var dayOffList = {}; // 연차
         return new Promise(function(resolve, reject) {
             chrome.storage.sync.get(syncStorageId, function(items) {
                 syncStorage[syncStorageId] = items[syncStorageId];
-                //if (callback) callback();
 				if (userConfigId) userConfig[userConfigId] = items[syncStorageId];
 
                 resolve('success')
-                //log("____saveSyncStorage : " + syncStorageId + '>' + syncStorage[syncStorageId])
             });
         })
 	}
@@ -79,10 +77,10 @@ var dayOffList = {}; // 연차
 
         promiseStorageSync('clock-in-hour')
 			.then(function() {
-                promiseStorageSync('clock-in-minute')
+                return promiseStorageSync('clock-in-minute')
 			})
             .then(function() {
-                new Promise(function(resolve, reject) {
+                return new Promise(function(resolve, reject) {
                     setTimeout(function() {
                         userConfig['startWorkTime'] = syncStorage['clock-in-hour'] + ':' + syncStorage['clock-in-minute']; // 출근시간
                         resolve('success');
@@ -90,13 +88,13 @@ var dayOffList = {}; // 연차
                 });
             })
             .then(function() {
-                promiseStorageSync('clock-out-hour')
+                return promiseStorageSync('clock-out-hour');
             })
             .then(function() {
-                promiseStorageSync('clock-out-minute')
+                return promiseStorageSync('clock-out-minute')
             })
             .then(function() {
-                new Promise(function(resolve, reject) {
+                return new Promise(function(resolve, reject) {
                     setTimeout(function() {
                         userConfig['endWorkTime'] = syncStorage['clock-out-hour'] + ':' + syncStorage['clock-out-minute']; // 출근시간
                         resolve('success');
@@ -104,15 +102,14 @@ var dayOffList = {}; // 연차
                 })
             })
             .then(function() {
-                promiseStorageSync('clock-in-before-minute', 'minuteBeforeClockIn');
+                return promiseStorageSync('clock-in-before-minute', 'minuteBeforeClockIn');
             })
             .then(function() {
-                promiseStorageSync('clock-out-after-minute', 'minuteAfterClockOut');
+                return promiseStorageSync('clock-out-after-minute', 'minuteAfterClockOut');
             })
             .then(function() {
-                new Promise(function(resolve, reject) {
+                return new Promise(function(resolve, reject) {
                     setTimeout(function() {
-                        console.log(userConfig);
                         resolve('success');
                     }, 10);
                 })
@@ -124,8 +121,7 @@ var dayOffList = {}; // 연차
 			sessionUserId = res.data.id;
 			sessionUserName = res.data.name;
 
-			log('name : ' + sessionUserName);
-			log('id : ' + sessionUserId);
+			log('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserName + ']');
 		});
 	}
 
@@ -156,16 +152,6 @@ var dayOffList = {}; // 연차
 		if (isInRangeClockOut()) {
 			clockOut();
 		}
-
-		// 개인연차여부 체크/반차 포함
-
-		// 출근시간 여부 체크
-
-		/*console.log('is start work time?');
-        var params = '{"id":' + sessionUserId + ',"timeZone":"Asia/Seoul","locale":"ko","noti":"enable","useAbbroadIpCheck":"false","style":"basic","theme":"THEME_CLASSIC"}';
-        requestAjax('put', BASE_URL + '/api/user/config/' + sessionUserId, params, function(res) {
-            //log(res);
-        });*/
 	}
 
 	function requestCalendar() {
@@ -191,9 +177,6 @@ var dayOffList = {}; // 연차
 				var eventList = list[i].eventList;
 
 				var date = datetime.substring(0, 10);
-
-				//log('datetime: ' + datetime)
-				//log('datetime2: ' + year + '-' + month + '-' + day);
 
 				if (eventList.length > 0) {
 					for (var j = 0; j < eventList.length; j++) {
@@ -266,31 +249,23 @@ var dayOffList = {}; // 연차
 	}
 
 	function isUserDayOff() {
-		log('# 연차 여부 체크')
-		//log('이름 : ' + sessionUserName);
-		//sessionUserName = '신미란';
-		//console.log(dayOffList);
+		log('연차 여부 체크')
 		var currDate = getCurrDate();
 		var todayDayOffList = dayOffList[currDate];
 
-		console.log('sessionUserName : ' + sessionUserName);
-        console.log('todayDayOffList : ' + todayDayOffList);
-
         if (todayDayOffList)
 		{
-
+            for (var i = 0; i < todayDayOffList.length; i++) {
+                var item = todayDayOffList[i];
+                if (item.indexOf(sessionUserName) > -1) {
+                    if (!(item.indexOf('오전') > -1 || item.indexOf('오후') > -1 || item.indexOf('반차') > -1)) {
+                        // 연차
+                        log('오늘은 연차입니다.');
+                        return true;
+                    }
+                }
+            }
 		}
-		for (var i = 0; i < todayDayOffList.length; i++) {
-			var item = todayDayOffList[i];
-			if (item.indexOf(sessionUserName) > -1) {
-				if (!(item.indexOf('오전') > -1 || item.indexOf('오후') > -1 || item.indexOf('반차') > -1)) {
-					// 연차
-					log('[' + getCurrDate() + '] 오늘은 연차입니다.');
-					return true;
-				}
-			}
-		}
-
 		return false;
 	}
 
@@ -303,18 +278,21 @@ var dayOffList = {}; // 연차
 		var todayDayOffList = dayOffList[currDate];
 		//console.log(todayDayOffList);
 
-		for (var i = 0; i < todayDayOffList.length; i++) {
-			var item = todayDayOffList[i];
-			if (item.indexOf(sessionUserName) > -1) {
-				if (item.indexOf('오전') > -1) {
-					return '오전';
-				} else if (item.indexOf('오후') > -1) {
-					return '오후';
-				} else if (item.indexOf('반차') > -1) {
-					log('today[' + currDate + '] is a day half off [unknown] ');
-					return '오전';
-				}
-			}
+		if (todayDayOffList)
+		{
+            for (var i = 0; i < todayDayOffList.length; i++) {
+                var item = todayDayOffList[i];
+                if (item.indexOf(sessionUserName) > -1) {
+                    if (item.indexOf('오전') > -1) {
+                        return '오전';
+                    } else if (item.indexOf('오후') > -1) {
+                        return '오후';
+                    } else if (item.indexOf('반차') > -1) {
+                        log('오늘은 반차입니다. (오전/오후 알수 없음) ');
+                        return '오전';
+                    }
+                }
+            }
 		}
 
 		return false;
@@ -398,10 +376,6 @@ var dayOffList = {}; // 연차
 
 		var outTime = clockOutMarkingTime.addMinutes(60); // 기준시간 18:00 (17:00 + 01:00)
 
-		//  log('date : ' + date);
-		//  log('clockOutMarkingTime : ' + clockOutMarkingTime);
-		// log('clockOutMarkingTime : ' + clockOutMarkingTime);
-
 		if (date >= clockOutMarkingTime) {
 			if (date > outTime) {
 				log('퇴근도장 찍을 유효시간(1시간) 초과됨');
@@ -416,13 +390,17 @@ var dayOffList = {}; // 연차
 	}
 
 	function clockIn() {
-		var url = BASE_URL + '/api/ehr/attnd/clockin';
-		var param = {'clockInTime': getCurrDate() + 'T' + getCurrTime() + '.000+09:00'};
+        var currDate = getCurrDate();
+        var currTime = getCurrTime();
 
-		/*requestAjax('put', url, param, function(res) {
+		var url = BASE_URL + '/api/ehr/attnd/clockin';
+		var param = {'clockInTime': currDate + 'T' + currTime + '.000+09:00'};
+
+		requestAjax('put', url, param, function(res) {
 			if (res.code == 200)
 			{
 				// 출근도장 OK
+                showNotify('출근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 출근시간으로 표시되었습니다.');
 				saveLocalStorage('CLOCK_IN_DATE', currDate);
 				log('[' + currDate + '] 출근도장 OK.')
 			}
@@ -430,21 +408,27 @@ var dayOffList = {}; // 연차
 			{
 				// 실패
 			}
-		});*/
+		});
 
-		var currDate = getCurrDate();
+		/*var currDate = getCurrDate();
 		//saveLocalStorage('CLOCK_IN_DATE', currDate);
 		log('[' + currDate + '] 출근도장 OK.')
+        showNotify('출근도장', sessionUserName + '님, ' + currDate + '에 출근시간으로 표시되었습니다.');*/
+
 	}
 
 	function clockOut() {
-		var url = BASE_URL + '/api/ehr/attnd/clockout';
-		var param = {'clockOutTime': getCurrDate() + 'T' + getCurrTime() + '.000+09:00'};
+		var currDate = getCurrDate();
+		var currTime = getCurrTime();
 
-		/*requestAjax('put', url, param, function(res) {
+		var url = BASE_URL + '/api/ehr/attnd/clockout';
+		var param = {'clockOutTime': currDate + 'T' + currTime + '.000+09:00'};
+
+		requestAjax('put', url, param, function(res) {
 			if (res.code == 200)
 			{
 				// 퇴근도장 OK
+                showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
 				saveLocalStorage('CLOCK_OUT_DATE', currDate);
 				log('[' + currDate + '] 퇴근도장 OK.')
 			}
@@ -452,11 +436,13 @@ var dayOffList = {}; // 연차
 			{
 				// 실패
 			}
-		});*/
+		});
 
-		var currDate = getCurrDate();
+		/*var currDate = getCurrDate();
 		//saveLocalStorage('CLOCK_OUT_DATE', currDate);
 		log('[' + currDate + '] 퇴근도장 OK.')
+        showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
+        */
 	}
 
 	function saveLocalStorage(key, value) {
@@ -474,13 +460,6 @@ var dayOffList = {}; // 연차
 		/*chrome.storage.local.get(['CLOCK_IN_DATE'], function(result) {
 			log('syncStorage value is : ' + JSON.stringify(result));
 		});*/
-	}
-
-	function getSyncStorage(id)
-	{
-		chrome.storage.sync.get(id, function(items) {
-			return items[id];
-		});
 	}
 
     function requestAjax(method, url, params, onSuccess)
@@ -502,7 +481,12 @@ var dayOffList = {}; // 연차
 
     function log(str)
 	{
-		console.log(">> " + str);
+        console.log('[' + getCurrDate()  + ' ' + getCurrTime() + '] ' + str);
+	}
+
+	function logWithTime(str)
+	{
+        console.log('[' + getCurrDate()  + ' ' + getCurrTime() + '] ' + str);
 	}
 
 	function getCurrDate()
@@ -549,6 +533,14 @@ Date.prototype.addMinutes = function(minutes)
 	var dat = new Date(this.valueOf());
 	dat.setTime(dat.getTime() + minutes * 60000);
 	return dat;
+}
+
+function showNotify(title, message) {
+
+    chrome.runtime.sendMessage({action: "notification", title: title, message: message}, function(response) {
+        console.log("Response: ", response);
+    });
+
 }
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {

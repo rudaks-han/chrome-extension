@@ -315,14 +315,21 @@ ul {
     z-index: 2;
 }
 
-li a {
-    cursor: pointer;
+li {
     display: block;
     padding: 10px;
     line-height: 18px;
     vertical-align: middle;
     overflow: hidden;
     -webkit-transition: background-color 200ms linear;
-    outline: none;
-    text-decoration: none;
+}
+
+li a {
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+}
+
+#clockUseFlagText {
+  margin-left: 10px;
 }
