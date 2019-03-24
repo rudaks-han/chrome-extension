@@ -20,15 +20,13 @@ var command =
     btnClockIn : function(e)
     {
         //chrome.runtime.sendMessage({action: "btnClockIn"}, function(response) {});
-		clockIn();
-        window.close();
+		clockIn(true);
     },
 
     btnClockOut : function(e)
     {
         //chrome.runtime.sendMessage({action: "btnClockOut"}, function(response) {});
-        clockOut();
-        window.close();
+        clockOut(true);
     }
 };
 

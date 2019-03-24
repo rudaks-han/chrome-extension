@@ -115,12 +115,18 @@ function getUserConfig() {
 };
 
 function requestUserSession() {
-	requestAjax('get', BASE_URL + '/api/user/session', null, function (res) {
-		sessionUserId = res.data.id;
-		sessionUserName = res.data.name;
+	var options = {
+		method: 'get',
+		url: BASE_URL + '/api/user/session',
+		success : function(res) {
+			sessionUserId = res.data.id;
+			sessionUserName = res.data.name;
 
-		log('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserName + ']');
-	});
+			log('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserName + ']');
+		}
+	};
+
+	requestAjax(options);
 }
 
 function checkStartWorkTime() {
@@ -165,45 +171,51 @@ function requestCalendar() {
 	var url = BASE_URL + '/api/calendar/user/me/event/daily?year=' + year + '&month=' + month;
 
 	var currDate = new Date();
-	requestAjax('get', url, null, function (res) {
-		//console.error(JSON.stringify(res));
-		calendarData = res;
 
-		var list = res.data.list;
-		for (var i = 0; i < list.length; i++) {
-			var datetime = list[i].datetime;
-			var eventList = list[i].eventList;
+	var options = {
+		method: 'get',
+		url: url,
+		success : function(res) {
+			calendarData = res;
 
-			var date = datetime.substring(0, 10);
+			var list = res.data.list;
+			for (var i = 0; i < list.length; i++) {
+				var datetime = list[i].datetime;
+				var eventList = list[i].eventList;
 
-			if (eventList.length > 0) {
-				for (var j = 0; j < eventList.length; j++) {
-					// holiday: 휴일
-					// company: 연차/공가
-					var type = eventList[j].type;
+				var date = datetime.substring(0, 10);
 
-					// 연차 : 서형태,박경규,한경만
-					// 반차 : 이승엽(오후) 유민(오전) or ,로 구분
-					// 반차 : 한경만, 박은규(오후)
-					// 공가 : 유민(오후)
-					var summary = eventList[j].summary;
+				if (eventList.length > 0) {
+					for (var j = 0; j < eventList.length; j++) {
+						// holiday: 휴일
+						// company: 연차/공가
+						var type = eventList[j].type;
 
-					if (type == 'holiday') {
-						holidayList[date] = type;
-					} else if (type == 'company') {
-						if (!dayOffList[date])
-							dayOffList[date] = [];
+						// 연차 : 서형태,박경규,한경만
+						// 반차 : 이승엽(오후) 유민(오전) or ,로 구분
+						// 반차 : 한경만, 박은규(오후)
+						// 공가 : 유민(오후)
+						var summary = eventList[j].summary;
 
-						dayOffList[date].push(summary);
+						if (type == 'holiday') {
+							holidayList[date] = type;
+						} else if (type == 'company') {
+							if (!dayOffList[date])
+								dayOffList[date] = [];
+
+							dayOffList[date].push(summary);
+						}
+
 					}
-
 				}
 			}
 		}
-	})
+	};
+
+	requestAjax(options);
 }
 
-// 이미 출
+// 이미 출근
 function isMarkedClockInAlready() {
 	log('# 출근도장 표시되었는지 체크')
 	var storageClockInDate = getStorage('CLOCK_IN_DATE');
@@ -325,11 +337,10 @@ function isInRangeClockIn() {
 		clockInMarkingTime = startWorkTimeDate.addMinutes(-minuteBeforeClockIn); // 기준시간 07:55
 	}
 
-	var outTime = clockInMarkingTime.addMinutes(60); // 기준시간 09:00
+	var outTime = startWorkTimeDate.addMinutes(60); // 기준시간 09:00
 
 	// log('date : ' + date);
 	// log('clockInMarkingTime : ' + clockInMarkingTime);
-
 	if (date >= clockInMarkingTime) {
 		if (date > outTime) {
 			log('출근도장 찍을 유효시간(1시간) 초과됨');
@@ -372,7 +383,7 @@ function isInRangeClockOut() {
 		clockOutMarkingTime = endWorkTimeDate.addMinutes(minuteAfterClockOut); // 기준시간 15:05
 	}
 
-	var outTime = clockOutMarkingTime.addMinutes(60); // 기준시간 18:00 (17:00 + 01:00)
+	var outTime = endWorkTimeDate.addMinutes(60); // 기준시간 18:00 (17:00 + 01:00)
 
 	if (date >= clockOutMarkingTime) {
 		if (date > outTime) {
@@ -387,28 +398,50 @@ function isInRangeClockOut() {
 	}
 }
 
-function clockIn() {
+function clockIn(showNotification) {
 	var currDate = getCurrDate();
 	var currTime = getCurrTime();
 
 	var url = BASE_URL + '/api/ehr/attnd/clockin';
-	var param = {'clockInTime': currDate + 'T' + currTime + '.000+09:00'};
+	var param = '{"clockInTime": "' + currDate + 'T' + currTime + '.000+09:00"}';
 
-	requestAjax('put', url, param, function(res) {
-		if (res.code == 200)
-		{
-			// 출근도장 OK
-			showNotify('출근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 출근시간으로 표시되었습니다.');
-			saveLocalStorage('CLOCK_IN_DATE', currDate);
-			log('[' + currDate + '] 출근도장 OK.')
+	var options = {
+		method: 'put',
+		url: url,
+		headers: {'TimeZoneOffset': '540'},
+		param: param,
+		success : function(res) {
+			if (res.code == 200)
+			{
+				// 출근도장 OK
+				showNotify('출근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 출근시간으로 표시되었습니다.');
+				saveLocalStorage('CLOCK_IN_DATE', currDate);
+				log('[' + currDate + '] 출근도장 OK.')
+			}
+			else
+			{
+				// 실패
+				showNotify('출근도장', sessionUserName + '님, ' + ' 출근시간 등록 실패!!!.' + ' ==> ' + res.message);
+				log('[' + currDate + '] 출근도장 Fail.')
+			}
+		},
+		error : function(xhr) {
+			var responseText = JSON.parse(xhr.responseText);
+
+			if (responseText.name == 'AlreadyClockInException')
+			{
+				if (showNotification)
+				{
+					showNotify('출근도장', sessionUserName + '님, ' + ' 출근시간 등록 실패!!!.' + ' ==> ' + JSON.parse(xhr.responseText).message);
+				}
+				saveLocalStorage('CLOCK_IN_DATE', currDate);
+			}
+		},
+		complete : function(res) {
 		}
-		else
-		{
-			// 실패
-			showNotify('출근도장', sessionUserName + '님, ' + ' 출근시간 등록 실패!!!.');
-			log('[' + currDate + '] 출근도장 Fail.')
-		}
-	});
+	};
+
+	requestAjax(options);
 
 	/*var currDate = getCurrDate();
 	//saveLocalStorage('CLOCK_IN_DATE', currDate);
@@ -417,28 +450,50 @@ function clockIn() {
 
 }
 
-function clockOut() {
+function clockOut(showNotification) {
 	var currDate = getCurrDate();
 	var currTime = getCurrTime();
 
 	var url = BASE_URL + '/api/ehr/attnd/clockout';
-	var param = {'clockOutTime': currDate + 'T' + currTime + '.000+09:00'};
+	var param = '{"clockOutTime": "' + currDate + 'T' + currTime + '.000+09:00"}';
 
-	requestAjax('put', url, param, function(res) {
-		if (res.code == 200)
-		{
-			// 퇴근도장 OK
-			showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
-			saveLocalStorage('CLOCK_OUT_DATE', currDate);
-			log('[' + currDate + '] 퇴근도장 OK.')
+	var options = {
+		method: 'put',
+		url: url,
+		headers: {'TimeZoneOffset': '540'},
+		param: param,
+		success : function() {
+			if (res.code == 200)
+			{
+				// 퇴근도장 OK
+				showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
+				saveLocalStorage('CLOCK_OUT_DATE', currDate);
+				log('[' + currDate + '] 퇴근도장 OK.')
+			}
+			else
+			{
+				// 실패
+				showNotify('퇴근도장', sessionUserName + '님, ' + ' 퇴근시간 등록 실패!!!.');
+				log('[' + currDate + '] 퇴근도장 Fail.')
+			}
+		},
+		error : function(xhr) {
+			var responseText = JSON.parse(xhr.responseText);
+
+			if (responseText.name == 'AlreadyClockOutException')
+			{
+				if (showNotification)
+				{
+					showNotify('출근도장', sessionUserName + '님, ' + ' 출근시간 등록 실패!!!.' + ' ==> ' + JSON.parse(xhr.responseText).message);
+				}
+				saveLocalStorage('CLOCK_OUT_DATE', currDate);
+			}
+		},
+		complete : function(res) {
 		}
-		else
-		{
-			// 실패
-			showNotify('퇴근도장', sessionUserName + '님, ' + ' 퇴근시간 등록 실패!!!.');
-			log('[' + currDate + '] 퇴근도장 Fail.')
-		}
-	});
+	};
+
+	requestAjax(options);
 
 	/*var currDate = getCurrDate();
 	//saveLocalStorage('CLOCK_OUT_DATE', currDate);

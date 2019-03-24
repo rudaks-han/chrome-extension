@@ -16,7 +16,29 @@ function getStorage(key) {
     });*/
 }
 
-function requestAjax(method, url, params, onSuccess)
+function requestAjax(options)
+{
+    log('======= Ajax Request ======');
+    log('[url] ' + options.url);
+    log('[method] ' + options.method);
+    log('[headers] ' + options.headers);
+    log('[data] ' + options.data);
+    log('=========================');
+
+    return $.ajax({
+        type: options.method,
+        url: options.url,
+        headers: options.headers,
+        data: options.param,
+        dataType: "json",
+        contentType: "application/json", // request payload로 전송됨
+        success : options.success,
+        error : options.error,
+        complete : options.complete
+    });
+}
+
+/*function requestAjax(method, url, params, beforeSend, onSuccess)
 {
     return $.ajax({
         type: method,
@@ -24,14 +46,14 @@ function requestAjax(method, url, params, onSuccess)
         data: params,
         dataType: "json",
         contentType: "application/json", // request payload로 전송됨
-        beforeSend: function(res) {
+        beforeSend: function(xhr) {
             console.log('[requestAjax] '+  url)	;
         },
         success: function(res){
             onSuccess(res);
         }
     });
-}
+}*/
 
 function log(str)
 {
