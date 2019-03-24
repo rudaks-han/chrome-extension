@@ -9,7 +9,7 @@
   "content_scripts": [
     {
       "matches": ["https://spectra.daouoffice.com/**"],
-      "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js"]
+      "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js", "js/common.js"]
     }
   ],
   "background": {

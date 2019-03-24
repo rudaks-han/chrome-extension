@@ -15,7 +15,21 @@ var command =
 	showOptions : function() 
 	{
 		chrome.tabs.create({'url': 'options.html'});
-	}
+	},
+
+    btnClockIn : function(e)
+    {
+        //chrome.runtime.sendMessage({action: "btnClockIn"}, function(response) {});
+		clockIn();
+        window.close();
+    },
+
+    btnClockOut : function(e)
+    {
+        //chrome.runtime.sendMessage({action: "btnClockOut"}, function(response) {});
+        clockOut();
+        window.close();
+    }
 };
 
 (function($) {
@@ -23,7 +37,9 @@ var command =
     var load = function()
 	{
         $('#gotoDaouoffice').on('click', command.gotoDaouoffice);
-		$('#showOptions').on('click', command.showOptions);		
+		$('#showOptions').on('click', command.showOptions);
+		$('#btnClockIn').on('click', command.btnClockIn);
+        $('#btnClockOut').on('click', command.btnClockOut);
 		
     };
 
