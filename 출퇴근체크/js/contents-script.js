@@ -1,6 +1,6 @@
 var BASE_URL = 'https://spectra.daouoffice.com';
 
-var checkInterval = 5 * 1000;
+var checkInterval = 60 * 1000;
 var userSessionInterval = 10 * 60 * 1000; // 10분 마다
 var calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
 
@@ -122,7 +122,7 @@ function requestUserSession() {
 			sessionUserId = res.data.id;
 			sessionUserName = res.data.name;
 
-			log('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserName + ']');
+			log('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserId + ']');
 		}
 	};
 
@@ -130,11 +130,6 @@ function requestUserSession() {
 }
 
 function checkStartWorkTime() {
-	// 이미 출근도장 찍었는지 여부 체크
-	if (isMarkedClockInAlready()) {
-		return;
-	}
-
 	// 주말인지 여부 체크
 	if (isWeekend())
 		return;
@@ -147,13 +142,13 @@ function checkStartWorkTime() {
 	if (isUserDayOff())
 		return;
 
-	// 출근체크 시간범위안에 들어왔는지 여부 체크
-	if (isInRangeClockIn()) {
+	// 출근체크 시간범위 안에 들어왔는지 여부 체크
+	if (!isMarkedClockInAlready() && isInRangeClockIn()) {
 		clockIn();
 	}
 
-	// 퇴근체크 시간범위안에 들어왔는지 여부 체크
-	if (isInRangeClockOut()) {
+	// 퇴근체크 시간범위 안에 들어왔는지 여부 체크
+	if (!isMarkedClockOutAlready() && isInRangeClockOut()) {
 		clockOut();
 	}
 }
@@ -215,13 +210,26 @@ function requestCalendar() {
 	requestAjax(options);
 }
 
-// 이미 출근
+// 이미 출근도장 찍음
 function isMarkedClockInAlready() {
 	log('# 출근도장 표시되었는지 체크')
 	var storageClockInDate = getStorage('CLOCK_IN_DATE');
 
 	if (storageClockInDate == getCurrDate()) {
 		log('이미 출근도장이 찍혀져 있습니다.')
+		return true;
+	} else {
+		return false;
+	}
+}
+
+// 이미 퇴근도장 찍음
+function isMarkedClockOutAlready() {
+	log('# 퇴근도장 표시되었는지 체크')
+	var storageClockOutDate = getStorage('CLOCK_OUT_DATE');
+
+	if (storageClockOutDate == getCurrDate()) {
+		log('이미 퇴근도장이 찍혀져 있습니다.')
 		return true;
 	} else {
 		return false;
@@ -462,7 +470,7 @@ function clockOut(showNotification) {
 		url: url,
 		headers: {'TimeZoneOffset': '540'},
 		param: param,
-		success : function() {
+		success : function(res) {
 			if (res.code == 200)
 			{
 				// 퇴근도장 OK

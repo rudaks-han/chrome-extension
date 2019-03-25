@@ -27,7 +27,12 @@ var command =
     {
         //chrome.runtime.sendMessage({action: "btnClockOut"}, function(response) {});
         clockOut(true);
-    }
+    },
+
+	getUserSessionInfo : function(e)
+	{
+		chrome.runtime.sendMessage({action: "getUserSessionInfo"}, function(response) {});
+	}
 };
 
 (function($) {
@@ -38,7 +43,7 @@ var command =
 		$('#showOptions').on('click', command.showOptions);
 		$('#btnClockIn').on('click', command.btnClockIn);
         $('#btnClockOut').on('click', command.btnClockOut);
-		
+		$('#btnUserSessionInfo').on('click', command.getUserSessionInfo);
     };
 
     $(load);
