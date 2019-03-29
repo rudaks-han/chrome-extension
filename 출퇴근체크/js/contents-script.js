@@ -1,3 +1,4 @@
+/*
 var BASE_URL = 'https://spectra.daouoffice.com';
 
 var checkInterval = 60 * 1000;
@@ -182,19 +183,15 @@ function requestCalendar() {
 
 				if (eventList.length > 0) {
 					for (var j = 0; j < eventList.length; j++) {
-						// holiday: 휴일
-						// company: 연차/공가
-						var type = eventList[j].type;
+						var type = eventList[j].type; // holiday: 휴일, company: 연차/공가)
+						var summary = eventList[j].summary; // 연차 : 서형태, 반차: 이승엽(오후), 공가 : 유민(오후)
 
-						// 연차 : 서형태,박경규,한경만
-						// 반차 : 이승엽(오후) 유민(오전) or ,로 구분
-						// 반차 : 한경만, 박은규(오후)
-						// 공가 : 유민(오후)
-						var summary = eventList[j].summary;
-
-						if (type == 'holiday') {
+						if (type == 'holiday')
+						{
 							holidayList[date] = type;
-						} else if (type == 'company') {
+						}
+						else if (type == 'company')
+						{
 							if (!dayOffList[date])
 								dayOffList[date] = [];
 
@@ -236,6 +233,7 @@ function isMarkedClockOutAlready() {
 	}
 }
 
+// 주말인지 체크
 function isWeekend() {
 	log('# 주말여부 체크')
 	var currDate = new Date();
@@ -251,6 +249,7 @@ function isWeekend() {
 	}
 }
 
+// 공휴일인지 체크
 function isHoliday() {
 	log('# 공휴일 여부 체크')
 	var currDate = getCurrDate();
@@ -266,6 +265,7 @@ function isHoliday() {
 	}
 }
 
+// 연차인지 체크
 function isUserDayOff() {
 	log('연차 여부 체크')
 	var currDate = getCurrDate();
@@ -287,6 +287,7 @@ function isUserDayOff() {
 	return false;
 }
 
+// 반차인지 체크
 function isUserDayHalfOff() {
 	log('# 반차 여부 체크')
 	//log('이름 : ' + sessionUserName);
@@ -436,7 +437,14 @@ function clockIn(showNotification) {
 		error : function(xhr) {
 			var responseText = JSON.parse(xhr.responseText);
 
-			if (responseText.name == 'AlreadyClockInException')
+			if (responseText.name == 'common.unauthenticated')
+			{
+				if (showNotification)
+				{
+					showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
+				}
+			}
+			else if (responseText.name == 'AlreadyClockInException')
 			{
 				if (showNotification)
 				{
@@ -451,10 +459,10 @@ function clockIn(showNotification) {
 
 	requestAjax(options);
 
-	/*var currDate = getCurrDate();
+	//var currDate = getCurrDate();
 	//saveLocalStorage('CLOCK_IN_DATE', currDate);
-	log('[' + currDate + '] 출근도장 OK.')
-	showNotify('출근도장', sessionUserName + '님, ' + currDate + '에 출근시간으로 표시되었습니다.');*/
+	//log('[' + currDate + '] 출근도장 OK.')
+	//showNotify('출근도장', sessionUserName + '님, ' + currDate + '에 출근시간으로 표시되었습니다.');
 
 }
 
@@ -488,7 +496,14 @@ function clockOut(showNotification) {
 		error : function(xhr) {
 			var responseText = JSON.parse(xhr.responseText);
 
-			if (responseText.name == 'AlreadyClockOutException')
+			if (responseText.name == 'common.unauthenticated')
+			{
+				if (showNotification)
+				{
+					showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
+				}
+			}
+			else if (responseText.name == 'AlreadyClockOutException')
 			{
 				if (showNotification)
 				{
@@ -503,12 +518,13 @@ function clockOut(showNotification) {
 
 	requestAjax(options);
 
-	/*var currDate = getCurrDate();
+	//var currDate = getCurrDate();
 	//saveLocalStorage('CLOCK_OUT_DATE', currDate);
-	log('[' + currDate + '] 퇴근도장 OK.')
-	showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
-	*/
+	//log('[' + currDate + '] 퇴근도장 OK.')
+	//showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
+
 }
+*/
 
 chrome.storage.onChanged.addListener(function (changes, areaName) {
     for (key in changes) {

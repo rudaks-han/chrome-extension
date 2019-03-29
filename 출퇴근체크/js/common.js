@@ -1,19 +1,12 @@
 
-function saveLocalStorage(key, value) {
-    /*chrome.storage.local.set(value, function() {
-        log('syncStorage saved : ' + JSON.stringify(value));
-    });*/
-
+function saveLocalStorage(key, value)
+{
     localStorage[key] = value;
-
-    //chrome.storage.setItem(key, value);
 }
 
-function getStorage(key) {
+function getLocalStorage(key)
+{
     return localStorage[key];
-    /*chrome.storage.local.get(['CLOCK_IN_DATE'], function(result) {
-        log('syncStorage value is : ' + JSON.stringify(result));
-    });*/
 }
 
 function requestAjax(options)
@@ -21,8 +14,10 @@ function requestAjax(options)
     log('======= Ajax Request ======');
     log('[url] ' + options.url);
     log('[method] ' + options.method);
-    log('[headers] ' + options.headers);
-    log('[data] ' + options.data);
+    if (options.headers)
+        log('[headers] ' + options.headers);
+    if (options.data)
+        log('[data] ' + options.data);
     log('=========================');
 
     return $.ajax({
@@ -38,29 +33,7 @@ function requestAjax(options)
     });
 }
 
-/*function requestAjax(method, url, params, beforeSend, onSuccess)
-{
-    return $.ajax({
-        type: method,
-        url: url,
-        data: params,
-        dataType: "json",
-        contentType: "application/json", // request payload로 전송됨
-        beforeSend: function(xhr) {
-            console.log('[requestAjax] '+  url)	;
-        },
-        success: function(res){
-            onSuccess(res);
-        }
-    });
-}*/
-
 function log(str)
-{
-    console.log('[' + getCurrDate()  + ' ' + getCurrTime() + '] ' + str);
-}
-
-function logWithTime(str)
 {
     console.log('[' + getCurrDate()  + ' ' + getCurrTime() + '] ' + str);
 }
@@ -95,6 +68,32 @@ function getCurrTime()
     return hour + ':' + minute + ':' + second;
 }
 
+function getCurrYear()
+{
+    var currDate = new Date();
+    return currDate.getFullYear();
+}
+
+function getCurrMonth()
+{
+    var currDate = new Date();
+    var month = currDate.getMonth() + 1;
+    if (month < 10)
+        month = '0' + month;
+
+    return month;
+}
+
+function getCurrDay()
+{
+    var currDate = new Date();
+    var day = currDate.getDate();
+    if (day < 10)
+        day = '0' + day;
+
+    return day;
+}
+
 Date.prototype.addDays = function(days)
 {
     var dat = new Date(this.valueOf());
@@ -105,7 +104,14 @@ Date.prototype.addDays = function(days)
 Date.prototype.addMinutes = function(minutes)
 {
     var dat = new Date(this.valueOf());
-    dat.setTime(dat.getTime() + minutes * 60000);
+    dat.setTime(dat.getTime() + minutes * 60 * 1000);
+    return dat;
+}
+
+Date.prototype.addHours = function(hours)
+{
+    var dat = new Date(this.valueOf());
+    dat.setTime(dat.getTime() + hours * 60 * 60 * 1000);
     return dat;
 }
 
@@ -116,3 +122,13 @@ function showNotify(title, message) {
     });
 
 }
+
+/*
+let date = new Date();
+let endWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), '17', '00', 0);
+console.error('endWorkTimeDate : ' + endWorkTimeDate);
+
+clockOutMarkingTime = endWorkTimeDate.addMinutes(-5 * 60 + "1");
+
+console.error('clockOutMarkingTime : ' + clockOutMarkingTime);
+*/

@@ -1,6 +1,6 @@
 {
   "name": "스펙트라 그룹웨어",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "다우오피스 접속 프로그램",
   "browser_action": {
     "default_icon": "images/icon.png",
@@ -13,11 +13,14 @@
     }
   ],
   "background": {
-    "scripts": ["background.js", "js/jquery-1.9.1.min.js"]
+    //"scripts": ["js/jquery-1.9.1.min.js", "js/common.js", "js/WorkHourChecker.js", "js/WorkHourMarker.js","background.js"]
+    "page" : "background.html"
   },
   "permissions" : [
-    "notifications", "https://spectra.daouoffice.com/**", "background", "storage"
+    "notifications", "https://spectra.daouoffice.com/**", "background", "storage", "cookies"
   ],
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-  "manifest_version": 2
+  "content_security_policy": "script-src 'self' https://www.gstatic.com https://www.gstatic.com; object-src 'self'",
+  "manifest_version" : 2
 }
+
+// "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
