@@ -1,14 +1,17 @@
-let BASE_URL = 'https://spectra.daouoffice.com';
-
 
 let GOSSOcookie = '';
 
 let checkInterval = 60 * 1000;
-let userSessionInterval = 10 * 60 * 1000; // 10분 마다
+//let userSessionInterval = 10 * 60 * 1000; // 10분 마다
+let userSessionInterval = 5 * 1000; // 10분 마다
 let calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
 
 let sessionUserName;
 let sessionUserId;
+
+// 로그인 정보
+let username;
+let password;
 
 let syncStorage = {};
 let userConfig = {}; // 로그인 사용자 정보
@@ -37,16 +40,19 @@ init();
 const workHourChecker = new WorkHourChecker();
 
 function check() {
+    const userSession = new UserSession();
+    userSession.getSession();
+
     let promises =
         [
             workHourChecker.getUserConfig(),
-            workHourChecker.requestUserSession(),
+            userSession.getSession(),
             workHourChecker.requestCalendar()
         ];
 
     $.when.apply($, promises).then(() => {
         setInterval(() => {
-            workHourChecker.requestUserSession()
+            userSession.getSession()
         }, userSessionInterval); // 세션정보 10분마다 가져온다.
 
         setInterval(() => {
@@ -125,13 +131,6 @@ function showNotify(title, message) {
 
 }
 
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
 function login()
 {
     var username = "2014001";
@@ -172,7 +171,7 @@ function login()
 }
 
 function requestUserSession() {
-    var options = {
+    let options = {
         method: 'get',
         url: BASE_URL + '/api/user/session',
         success : function(res) {

@@ -5,9 +5,14 @@
     
     <title class="i18n" data-msg="google_calendar_extension_name">Options</title>
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	  <script type="text/javascript" src="js/common.js"></script>
+	  <script type="text/javascript" src="js/UserSession.js"></script>
 	  <style>
 		  .comment {
 			  color: gray;
+		  }
+		  .red {
+			  color: red;
 		  }
 	  </style>
   </head>
@@ -23,8 +28,16 @@
 				<br/>예) 퇴근 18시일 경우 19시 이후에는 체크하지 않음
 			</li>
 		</ul>
-
 	</div>
+	<article>
+		<h2 class="i18n" data-msg="toolbar_icon">그룹웨어 로그인 정보</h2>
+		<section>
+			아이디: <input type='text' name="username" id="username"/>
+			비밀번호: <input type='password' name="password" id="password" />
+			<button id="btnCheckUsernameAndPassword">확인</button>
+			<div class="comment red">* 아이디/비밀번호 정보는 크롬 브라우저에만 저장됩니다.</div>
+		</section>
+	</article>
 	<article>
 		<h2 class="i18n" data-msg="toolbar_icon">출퇴근 시간 자동설정 사용여부</h2>
 		<section>

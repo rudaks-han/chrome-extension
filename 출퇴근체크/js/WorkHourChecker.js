@@ -1,10 +1,12 @@
 class WorkHourChecker
 {
+	BASE_URL = 'https://spectra.daouoffice.com';
+
 	// 사용자의 개인설정 정보를 가져온다.
 	getUserConfig()
 	{
-		this.promiseStorageSync('clock-in-hour')
-			.then(() => this.promiseStorageSync('clock-in-minute'))
+		promiseStorageSync('clock-in-hour')
+			.then(() => promiseStorageSync('clock-in-minute'))
 			.then(() => {
 				return new Promise(function(resolve, reject) {
 					setTimeout(function() {
@@ -13,8 +15,8 @@ class WorkHourChecker
 					}, 10);
 				});
 			})
-			.then(() => this.promiseStorageSync('clock-out-hour'))
-			.then(() => this.promiseStorageSync('clock-out-minute'))
+			.then(() => promiseStorageSync('clock-out-hour'))
+			.then(() => promiseStorageSync('clock-out-minute'))
 			.then(() => {
 				return new Promise(function(resolve, reject) {
 					setTimeout(function() {
@@ -23,8 +25,8 @@ class WorkHourChecker
 					}, 10);
 				})
 			})
-			.then(() => this.promiseStorageSync('clock-in-before-minute', 'minuteBeforeClockIn'))
-			.then(() => this.promiseStorageSync('clock-out-after-minute', 'minuteAfterClockOut'))
+			.then(() => promiseStorageSync('clock-in-before-minute', 'minuteBeforeClockIn'))
+			.then(() => promiseStorageSync('clock-out-after-minute', 'minuteAfterClockOut'))
 			.then(() => {
 				return new Promise(function(resolve, reject) {
 					setTimeout(function() {
@@ -35,8 +37,11 @@ class WorkHourChecker
 	}
 
 	// 사용자 세션정보 요청
-	requestUserSession()
+	/*requestUserSession()
 	{
+		const userSession = new UserSession();
+		userSession.getSession();
+		/!*
 		let options = {
 			method: 'get',
 			url: BASE_URL + '/api/user/session',
@@ -48,13 +53,13 @@ class WorkHourChecker
 			}
 		};
 
-		requestAjax(options);
-	}
+		requestAjax(options);*!/
+	}*/
 
 	// 해당 달의 달력정보를 가져온다.
 	requestCalendar()
 	{
-		let url = `${BASE_URL}/api/calendar/user/me/event/daily?year=${getCurrYear()}&month=${getCurrMonth()}`;
+		let url = `${this.BASE_URL}/api/calendar/user/me/event/daily?year=${getCurrYear()}&month=${getCurrMonth()}`;
 
 		let options = {
 			method: 'get',
@@ -98,7 +103,7 @@ class WorkHourChecker
 	}
 
 	// chrome.storage.sync에 저장된 정보를 promise로 가져온다.
-	promiseStorageSync(syncStorageId, userConfigId)
+	/*promiseStorageSync(syncStorageId, userConfigId)
 	{
 		return new Promise(function(resolve, reject) {
 			chrome.storage.sync.get(syncStorageId, function(items) {
@@ -108,7 +113,7 @@ class WorkHourChecker
 				resolve('success')
 			});
 		})
-	}
+	}*/
 
 	// 출/퇴근시간 체크 시작
 	checkStartWorkTime()
@@ -263,7 +268,8 @@ class WorkHourChecker
 		// 임시코드
 		//let date = new Date(2019, 3, 22, 10, 57, 0);
 
-		let startWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startWorkTimeHour, startWorkTimeMinute, 0);
+		//let startWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startWorkTimeHour, startWorkTimeMinute, 0);
+		let startWorkTimeDate = this.getCurrentDateWithTime(startWorkTimeHour, startWorkTimeMinute, 0);
 		// 출근도장 찍을 시간
 		let clockInMarkingTime = null;
 
@@ -308,7 +314,8 @@ class WorkHourChecker
 		// 임시코드
 		//let date = new Date(2019, 3, 22, 12, 5, 0);
 
-		let endWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), endWorkTimeHour, endWorkTimeMinute, 0);
+		//let endWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), endWorkTimeHour, endWorkTimeMinute, 0);
+		let endWorkTimeDate = this.getCurrentDateWithTime(endWorkTimeHour, endWorkTimeMinute, 0);
 		// 퇴근도장 찍을 시간
 		let clockOutMarkingTime = null;
 
@@ -333,5 +340,11 @@ class WorkHourChecker
 			log('>>> 퇴근도장 찍을 시간 아님');
 			return false;
 		}
+	}
+
+	getCurrentDateWithTime(hour, minute, second)
+	{
+		let date = new Date();
+		return new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour, minute, second);
 	}
 }

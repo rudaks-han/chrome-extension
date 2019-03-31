@@ -1,12 +1,14 @@
 class WorkHourMarker
 {
+	BASE_URL = 'https://spectra.daouoffice.com';
+
 	// 출근하기
-	markAsClockIn(showNotification)
+	markAsClockIn()
 	{
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		let url = BASE_URL + '/api/ehr/attnd/clockin';
+		let url = this.BASE_URL + '/api/ehr/attnd/clockin';
 		//let param = '{"clockInTime": "' + currDate + 'T' + currTime + '.000+09:00"}';
 		let param = `{"clockInTime": "${currDate}T${currTime}.000+09:00"}`;
 
@@ -34,6 +36,8 @@ class WorkHourMarker
 			error : (xhr) => {
 				let responseText = JSON.parse(xhr.responseText);
 
+				this.handleError(responseText.name);
+				/*
 				if (responseText.name == 'common.unauthenticated')
 				{
 					if (showNotification)
@@ -49,7 +53,7 @@ class WorkHourMarker
 						showNotify('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
 					}
 					saveLocalStorage('CLOCK_IN_DATE', currDate);
-				}
+				}*/
 			},
 			complete : function(res) {
 			}
@@ -65,12 +69,12 @@ class WorkHourMarker
 	}
 
 	// 퇴근하기
-	markAsClockOut(showNotification)
+	markAsClockOut()
 	{
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		let url = BASE_URL + '/api/ehr/attnd/clockout';
+		let url = this.BASE_URL + '/api/ehr/attnd/clockout';
 		let param = `{"clockOutTime": "${currDate}T${currTime}.000+09:00"}`;
 
 		let options = {
@@ -82,7 +86,6 @@ class WorkHourMarker
 				if (res.code == 200)
 				{
 					// 퇴근도장 OK
-					//showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
 					showNotify('퇴근도장', `${sessionUserName}님, ${currDate} ${currTime}에 퇴근시간 체크되었습니다. 즐퇴하세요~`);
 					saveLocalStorage('CLOCK_OUT_DATE', currDate);
 					firebaseApp.writeLog(currDate, sessionUserName, '퇴근시간', `시간: ${currTime}`);
@@ -98,7 +101,9 @@ class WorkHourMarker
 			error : (xhr) => {
 				let responseText = JSON.parse(xhr.responseText);
 
-				if (responseText.name == 'common.unauthenticated')
+				this.handleError(responseText.name);
+
+				/*if (responseText.name == 'common.unauthenticated')
 				{
 					if (showNotification)
 					{
@@ -113,7 +118,7 @@ class WorkHourMarker
 						showNotify('퇴근도장', `${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
 					}
 					saveLocalStorage('CLOCK_OUT_DATE', currDate);
-				}
+				}*/
 			},
 			complete : function(res) {
 			}
@@ -128,4 +133,22 @@ class WorkHourMarker
 		*/
 	}
 
+	handleError(name)
+	{
+
+		if (name == 'common.unauthenticated')
+		{
+			showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
+		}
+		else if (responseText.name == 'AlreadyClockInException')
+		{
+			showNotify('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
+			saveLocalStorage('CLOCK_IN_DATE', currDate);
+		}
+		else if (responseText.name == 'AlreadyClockOutException')
+		{
+			showNotify('퇴근도장', `${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
+			saveLocalStorage('CLOCK_OUT_DATE', currDate);
+		}
+	}
 }

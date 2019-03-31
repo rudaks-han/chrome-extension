@@ -123,6 +123,19 @@ function showNotify(title, message) {
 
 }
 
+// chrome.storage.sync에 저장된 정보를 promise로 가져온다.
+function promiseStorageSync(syncStorageId, userConfigId)
+{
+    return new Promise(function(resolve, reject) {
+        chrome.storage.sync.get(syncStorageId, function(items) {
+            syncStorage[syncStorageId] = items[syncStorageId];
+            if (userConfigId) userConfig[userConfigId] = items[syncStorageId];
+
+            resolve('success')
+        });
+    })
+}
+
 /*
 let date = new Date();
 let endWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), '17', '00', 0);
