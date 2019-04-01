@@ -3,18 +3,16 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/popup.css" />
-	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="js/popup.js"></script>
-	<script type="text/javascript" src="js/contents-script.js"></script>
+
   </head>
   <body>
     <header>
       <div id="action-bar">        
-        <img src="images/ic_settings_white_24dp.png" id="showOptions" class="i18n">
+        <img src="images/ic_settings_white_24dp.png" id="showOptions" class="i18n" title="환경설정">
       </div>
       <div class="popup-title">
         <a data-href="calendar_ui_url" target="_blank">
-          <span class="i18n" id="logo_text">스펙트라 그룹웨어 출퇴근 체크</span>
+          <span class="i18n" id="logo_text">스펙트라 그룹웨어 (다우오피스)</span>
         </a>
       </div>
       
@@ -24,40 +22,30 @@
       <ul>
 			<li>
                 <a id="gotoDaouoffice">
-                    <div class="text" style="text-decoration:underline">그룹웨어 접속</div>
+                    <div class="text" style="text-decoration:underline">다우오피스 그룹웨어 접속</div>
                 </a>
 			</li>
+            <li>
+                <div class="text">출퇴근 자동체크
+                <span id="clockUseFlagText">(사용중)</span>
+                </div>
+            </li>
+          <li>
+              <div class="text">
+                  <button id="btnClockIn" class="button btn-default">출근하기</button>
+                  <button id="btnClockOut" class="button btn-default">퇴근하기</button>
+              </div>
+          </li>
+          <li>
+              <div><button id="btnUserSessionInfo" class="button btn-default">사용자 정보</button></div>
+          </li>
         </ul>
     </div>
+
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="js/popup.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <script type="text/javascript" src="js/contents-script.js"></script>
+
   </body>
 </html>
-
-<!--
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>PD팀 품질현황 알리미</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="css/popup.css" />
-		<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="js/popup.js"></script>
-        <script type="text/javascript" src="js/contents-script.js"></script>
-    </head>
-    <body>
-        <ul>
-            <li>
-				<a id="checkQuality">
-                    <div class="text"> 품질현황 체크</div>
-                </a>
-                <a id="gotoJenkins">
-                    <div class="text" style="text-decoration:underline">Jenkins 접속</div>
-                </a>
-				<a id="gotoSonarqube">
-                    <div class="text" style="text-decoration:underline">SonarQube 접속</div>
-                </a>
-				
-            </li>
-        </ul>
-    </body>
-</html>
--->

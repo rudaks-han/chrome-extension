@@ -4,7 +4,7 @@ function init()
 
 	chrome.storage.sync.get('use-flag', function(items) {
 
-		var useFlag = items['use-flag'];
+		let useFlag = items['use-flag'];
 
 		if (typeof useFlag == 'undefined')
 		{
@@ -23,6 +23,8 @@ function init()
 		}
 	});
 
+	setElementValue('username', '');
+	setElementValue('password', '');
 	setElementValue('clock-in-hour', '09');
 	setElementValue('clock-in-minute', '00');
 	setElementValue('clock-out-hour', '18');
@@ -48,7 +50,7 @@ function setElementValue(id, defaultValue)
 
 function saveUseFlag()
 {
-	var useFlag = $('input[name="use-flag"]:checked').val();
+	let useFlag = $('input[name="use-flag"]:checked').val();
 
 	if (useFlag == 'Y')
 	{
@@ -67,17 +69,41 @@ function disableUserSetting(flag)
 	$('[id^="clock-"]').prop('disabled', flag);
 }
 
+function checkUsernameAndPassword()
+{
+	let username = $('#username').val();
+	let password = $('#password').val();
+
+	const userSession = new UserSession();
+	userSession.login(username, password, function(res) {
+		console.log(">>>>" + JSON.stringify(res))
+		if (res.code == '200')
+		{
+			showNotify('아이디/비밀번호 확인', '확인되었습니다.');
+		}
+		else
+		{
+			showNotify('아이디/비밀번호 확인', '아이디 혹은 비밀번호가 맞지 않습니다.');
+		}
+	});
+}
+
 function save()
 {
-	var useFlag = $('input[name="use-flag"]:checked').val();
-	var clockInHour = $('#clock-in-hour').val();
-	var clockInMinute = $('#clock-in-minute').val();
-	var clockOutHour = $('#clock-out-hour').val();
-	var clockOutMinute = $('#clock-out-minute').val();
-	var clockInBeforeMinute = $('#clock-in-before-minute').val();
-	var clockOutAfterMinute = $('#clock-out-after-minute').val();
+	const username = $('#username').val();
+	const password = $('#password').val();
 
-	var value = {
+	const useFlag = $('input[name="use-flag"]:checked').val();
+	const clockInHour = $('#clock-in-hour').val();
+	const clockInMinute = $('#clock-in-minute').val();
+	const clockOutHour = $('#clock-out-hour').val();
+	const clockOutMinute = $('#clock-out-minute').val();
+	const clockInBeforeMinute = $('#clock-in-before-minute').val();
+	const clockOutAfterMinute = $('#clock-out-after-minute').val();
+
+	const value = {
+		'username' : username,
+		'password' : password,
 		'use-flag' : useFlag,
 		'clock-in-hour' : clockInHour,
 		'clock-in-minute' : clockInMinute,
@@ -100,6 +126,9 @@ function reset()
 
 init();
 
+$('#username').on('blur', save);
+$('#password').on('blur', save);
+$('#btnCheckUsernameAndPassword').on('click', checkUsernameAndPassword);
 $('input[name="use-flag"]').on('click', saveUseFlag);
 $('#clock-in-hour').on('change', save);
 $('#clock-in-minute').on('change', save);
