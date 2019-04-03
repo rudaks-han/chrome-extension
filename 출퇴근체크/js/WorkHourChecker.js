@@ -25,7 +25,9 @@ class WorkHourChecker
 					}, 10);
 				})
 			})
+			.then(() => promiseStorageSync('clock-in-check-type', 'clockInCheckType'))
 			.then(() => promiseStorageSync('clock-in-before-minute', 'minuteBeforeClockIn'))
+			.then(() => promiseStorageSync('clock-out-check-type', 'clockOutCheckType'))
 			.then(() => promiseStorageSync('clock-out-after-minute', 'minuteAfterClockOut'))
 			.then(() => {
 				return new Promise(function(resolve, reject) {
@@ -35,26 +37,6 @@ class WorkHourChecker
 				})
 			});
 	}
-
-	// 사용자 세션정보 요청
-	/*requestUserSession()
-	{
-		const userSession = new UserSession();
-		userSession.getSession();
-		/!*
-		let options = {
-			method: 'get',
-			url: BASE_URL + '/api/user/session',
-			success : (res) => {
-				sessionUserId = res.data.id;
-				sessionUserName = res.data.name;
-
-				log(`>>> 사용자 세션정보 요청 : ${sessionUserName}[${sessionUserId}]`);
-			}
-		};
-
-		requestAjax(options);*!/
-	}*/
 
 	// 해당 달의 달력정보를 가져온다.
 	requestCalendar()
@@ -131,17 +113,77 @@ class WorkHourChecker
 			return;
 
 		// 출근체크 시간범위 안에 들어왔는지 여부 체크
-		if (!this.isMarkedClockInAlready() && this.isInRangeClockIn())
+		/*if (!this.isMarkedClockInAlready() && this.isInRangeClockIn())
 		{
 			const workHourChecker = new WorkHourMarker();
 			workHourChecker.markAsClockIn();
+		}*/
+
+		if (!this.isMarkedClockInAlready())
+		{
+			let minuteBeforeClockIn = parseInt(userConfig['minuteBeforeClockIn']);
+			let startWorkTimeDate = this.getStartWorkTimeDate();
+
+			if (userConfig['clockInCheckType'] === 'TIME')
+			{
+				if (this.isInRangeClockIn(startWorkTimeDate, minuteBeforeClockIn))
+				{
+					const workHourChecker = new WorkHourMarker();
+					workHourChecker.markAsClockIn();
+				}
+			}
+			else if (userConfig['clockInCheckType'] === 'RANDOM')
+			{
+				let currDate = getCurrDate();
+				let beforeTime = clockInRandomBeforeTime[currDate];
+				if (!beforeTime)
+				{
+					beforeTime = randomRange(1, randomTimeRangeMinute);
+					console.error('randomTime: ' + beforeTime)
+
+					clockInRandomBeforeTime[currDate] = beforeTime;
+				}
+
+				if (this.isInRangeClockIn(startWorkTimeDate, beforeTime))
+				{
+					const workHourChecker = new WorkHourMarker();
+					workHourChecker.markAsClockIn();
+				}
+			}
 		}
 
 		// 퇴근체크 시간범위 안에 들어왔는지 여부 체크
-		if (!this.isMarkedClockOutAlready() && this.isInRangeClockOut())
+		if (!this.isMarkedClockOutAlready())
 		{
-			const workHourChecker = new WorkHourMarker();
-			workHourChecker.markAsClockOut();
+			let minuteAfterClockOut = parseInt(userConfig['minuteAfterClockOut']);
+			let endWorkTimeDate = this.getEndWorkTimeDate();
+
+			if (userConfig['clockOutCheckType'] === 'TIME')
+			{
+				if (this.isInRangeClockOut(endWorkTimeDate, minuteAfterClockOut))
+				{
+					const workHourChecker = new WorkHourMarker();
+					workHourChecker.markAsClockOut();
+				}
+			}
+			else if (userConfig['clockOutCheckType'] === 'RANDOM')
+			{
+				let currDate = getCurrDate();
+				let afterTime = clockOutRandomBeforeTime[currDate];
+				if (!afterTime)
+				{
+					afterTime = randomRange(1, randomTimeRangeMinute);
+					console.error('afterTime: ' + afterTime)
+
+					clockOutRandomBeforeTime[currDate] = afterTime;
+				}
+
+				if (this.isInRangeClockOut(endWorkTimeDate, afterTime))
+				{
+					const workHourChecker = new WorkHourMarker();
+					workHourChecker.markAsClockOut();
+				}
+			}
 		}
 	}
 
@@ -250,27 +292,32 @@ class WorkHourChecker
 		return false;
 	}
 
-	// 출근시간 전 5분전 부터 출근시간 후 1시간 까지
-	isInRangeClockIn()
+	getStartWorkTimeDate()
 	{
-		log('[출근도장 범위내 여부 체크]')
-
 		// 출근시간 설정값
 		let arStartWorkTime = userConfig['startWorkTime'].split(':');
 		let startWorkTimeHour = arStartWorkTime[0];
 		let startWorkTimeMinute = arStartWorkTime[1];
 
-		// 이전시간 설정값
-		let minuteBeforeClockIn = parseInt(userConfig['minuteBeforeClockIn']);
+		return this.getCurrentDateWithTime(startWorkTimeHour, startWorkTimeMinute, 0);
+	}
+
+	getEndWorkTimeDate()
+	{
+		// 퇴근시간 설정값
+		let arEndWorkTime = userConfig['endWorkTime'].split(':');
+		let endWorkTimeHour = arEndWorkTime[0];
+		let endWorkTimeMinute = arEndWorkTime[1];
+
+		return this.getCurrentDateWithTime(endWorkTimeHour, endWorkTimeMinute, 0);
+	}
+
+	// 출근시간 전 5분전 부터 출근시간 후 1시간 까지
+	isInRangeClockIn(startWorkTimeDate, minuteBeforeClockIn)
+	{
+		log('[출근도장 범위내 여부 체크]')
 
 		let date = new Date();
-
-		// 임시코드
-		//let date = new Date(2019, 3, 22, 10, 57, 0);
-
-		//let startWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), startWorkTimeHour, startWorkTimeMinute, 0);
-		let startWorkTimeDate = this.getCurrentDateWithTime(startWorkTimeHour, startWorkTimeMinute, 0);
-		// 출근도장 찍을 시간
 		let clockInMarkingTime = null;
 
 		// 반차일 경우 시간 조정
@@ -297,25 +344,11 @@ class WorkHourChecker
 	}
 
 	// 퇴근시간 후 5분후 부터 1시간 까지
-	isInRangeClockOut()
+	isInRangeClockOut(endWorkTimeDate, minuteAfterClockOut)
 	{
 		log('[퇴근도장 범위내 여부 체크]')
 
-		// 출근시간 설정값
-		let arEndWorkTime = userConfig['endWorkTime'].split(':');
-		let endWorkTimeHour = arEndWorkTime[0];
-		let endWorkTimeMinute = arEndWorkTime[1];
-
-		// 이후시간 설정값
-		let minuteAfterClockOut = parseInt(userConfig['minuteAfterClockOut']);
-
 		let date = new Date();
-
-		// 임시코드
-		//let date = new Date(2019, 3, 22, 12, 5, 0);
-
-		//let endWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), endWorkTimeHour, endWorkTimeMinute, 0);
-		let endWorkTimeDate = this.getCurrentDateWithTime(endWorkTimeHour, endWorkTimeMinute, 0);
 		// 퇴근도장 찍을 시간
 		let clockOutMarkingTime = null;
 

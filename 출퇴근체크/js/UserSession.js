@@ -29,14 +29,11 @@ class UserSession
 		promiseStorageSync('username')
 			.then(() => promiseStorageSync('password'))
 			.then(() => {
-				console.error('username : ' + syncStorage['username']);
-
-				console.error('password : ' + syncStorage['password']);
 
 				let username = syncStorage['username'];
 				let password = syncStorage['password'];
 
-				login(username, password);
+				this.login(username, password);
 
 			})
 	}

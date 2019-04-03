@@ -36,24 +36,7 @@ class WorkHourMarker
 			error : (xhr) => {
 				let responseText = JSON.parse(xhr.responseText);
 
-				this.handleError(responseText.name);
-				/*
-				if (responseText.name == 'common.unauthenticated')
-				{
-					if (showNotification)
-					{
-						showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
-					}
-				}
-				else if (responseText.name == 'AlreadyClockInException')
-				{
-					if (showNotification)
-					{
-						//showNotify('출근도장', sessionUserName + '님, ' + ' 출근시간 등록 실패!!!.' + ' ==> ' + JSON.parse(xhr.responseText).message);
-						showNotify('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
-					}
-					saveLocalStorage('CLOCK_IN_DATE', currDate);
-				}*/
+				this.handleError(responseText);
 			},
 			complete : function(res) {
 			}
@@ -101,24 +84,7 @@ class WorkHourMarker
 			error : (xhr) => {
 				let responseText = JSON.parse(xhr.responseText);
 
-				this.handleError(responseText.name);
-
-				/*if (responseText.name == 'common.unauthenticated')
-				{
-					if (showNotification)
-					{
-						showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
-					}
-				}
-				else if (responseText.name == 'AlreadyClockOutException')
-				{
-					if (showNotification)
-					{
-						//showNotify('퇴근도장', sessionUserName + '님, ' + ' 퇴근시간 등록 실패!!!.' + ' ==> ' + JSON.parse(xhr.responseText).message);
-						showNotify('퇴근도장', `${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
-					}
-					saveLocalStorage('CLOCK_OUT_DATE', currDate);
-				}*/
+				this.handleError(responseText);
 			},
 			complete : function(res) {
 			}
@@ -133,22 +99,22 @@ class WorkHourMarker
 		*/
 	}
 
-	handleError(name)
+	handleError(responseText)
 	{
-
-		if (name == 'common.unauthenticated')
+		console.log('responseText : ' + JSON.stringify(responseText))
+		if (responseText.name === 'common.unauthenticated')
 		{
 			showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
 		}
-		else if (responseText.name == 'AlreadyClockInException')
+		else if (responseText.name === 'AlreadyClockInException')
 		{
-			showNotify('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
-			saveLocalStorage('CLOCK_IN_DATE', currDate);
+			showNotify('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${responseText.message}`);
+			saveLocalStorage('CLOCK_IN_DATE', getCurrDate());
 		}
-		else if (responseText.name == 'AlreadyClockOutException')
+		else if (responseText.name === 'AlreadyClockOutException')
 		{
-			showNotify('퇴근도장', `${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${JSON.parse(xhr.responseText).message}`);
-			saveLocalStorage('CLOCK_OUT_DATE', currDate);
+			showNotify('퇴근도장', `${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${responseText.message}`);
+			saveLocalStorage('CLOCK_OUT_DATE', getCurrDate());
 		}
 	}
 }

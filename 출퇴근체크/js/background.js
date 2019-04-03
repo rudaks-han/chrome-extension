@@ -1,10 +1,10 @@
 
 let GOSSOcookie = '';
 
-let checkInterval = 60 * 1000;
-let userSessionInterval = 5 * 60 * 1000; // 5분 마다
-//let userSessionInterval = 5 * 1000; // 10분 마다
+let checkInterval = 5 * 1000;
+let userSessionInterval = 1 * 60 * 1000; // 1분 마다
 let calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
+let randomTimeRangeMinute = 20; // 20분
 
 let sessionUserName;
 let sessionUserId;
@@ -17,6 +17,9 @@ let syncStorage = {};
 let userConfig = {}; // 로그인 사용자 정보
 let holidayList = {}; // 휴일정보
 let dayOffList = {}; // 연차
+
+let clockInRandomBeforeTime = {}; // 출근시간 마크시간(랜덤)
+let clockOutRandomBeforeTime = {}; // 퇴근시간 마크시간(랜덤)
 
 function init() {
     // 사용여부 체크
@@ -53,7 +56,7 @@ function check() {
     $.when.apply($, promises).then(() => {
         setInterval(() => {
             userSession.getSession()
-        }, userSessionInterval); // 세션정보 10분마다 가져온다.
+        }, userSessionInterval); // 세션정보 1분마다 가져온다.
 
         setInterval(() => {
             workHourChecker.requestCalendar()
@@ -82,7 +85,7 @@ var receiveMessage = function(request, sender, sendResponse)
     }
     else if (request.action == 'getUserSessionInfo')
     {
-        login();
+        //login();
     }
 }
 
@@ -103,8 +106,6 @@ function showNotify(title, message) {
         });
     }
     if (Notification && Notification.permission === "granted") {
-        //var n = new Notification(title + "\n" + message);
-
         var start = Date.now();
         var id = new Date().getTime() + '';
         var options = {
@@ -124,66 +125,8 @@ function showNotify(title, message) {
         });
 
         chrome.notifications.onClicked.addListener(function(notificationId, byUser) {
-            //chrome.tabs.create({url: "http://www.google.com"});
             chrome.notifications.clear(notificationId, function() {});
         });
     }
 
-}
-
-function login()
-{
-    var username = "2014001";
-    var password = "xkdla10@";
-
-    var param = '{"captcha": "", "username": "' + username + '", "password": "' + password + '", "returnUrl": ""}';
-    var guid = uuidv4();
-
-    var options = {
-        method: 'post',
-        url: BASE_URL + '/api/login',
-        xhrFields: {
-            withCredentials: true
-        },
-        crossDomain: true,
-        headers: {'Set-Cookie': guid + '; Path=/'},
-        param: param,
-        success : function(res) {
-            chrome.cookies.get({ url: 'https://spectra.daouoffice.com', name: 'GOSSOcookie' },
-                function (cookie) {
-                    if (cookie) {
-                        console.log("GOSSOcookie : " + cookie.value);
-                        //GOSSOcookie = cookie.value;
-
-                        requestUserSession();
-                    }
-                    else {
-                        console.log('Can\'t get cookie! Check the name!');
-                    }
-                });
-        },
-        error : function(xhr) {
-            console.log("Login error : " + JSON.stringify(xhr))
-        }
-    };
-
-    requestAjax(options);
-}
-
-function requestUserSession() {
-    let options = {
-        method: 'get',
-        url: BASE_URL + '/api/user/session',
-        success : function(res) {
-            sessionUserId = res.data.id;
-            sessionUserName = res.data.name;
-
-            console.log('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserId + ']');
-        },
-        error : function(xhr) {
-            console.error('사용자 세션정보 요청 실패 : ' + xhr);
-        }
-    };
-
-    requestAjax(options);
 }

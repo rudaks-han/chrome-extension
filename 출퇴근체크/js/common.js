@@ -136,6 +136,11 @@ function promiseStorageSync(syncStorageId, userConfigId)
     })
 }
 
+function randomRange(n1, n2) {
+    return Math.floor( (Math.random() * (n2 - n1 + 1)) + n1 );
+}
+
+
 /*
 let date = new Date();
 let endWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), '17', '00', 0);

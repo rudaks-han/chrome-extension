@@ -23,17 +23,19 @@ function init()
 		}
 	});
 
-	setElementValue('username', '');
-	setElementValue('password', '');
-	setElementValue('clock-in-hour', '09');
-	setElementValue('clock-in-minute', '00');
-	setElementValue('clock-out-hour', '18');
-	setElementValue('clock-out-minute', '00');
-	setElementValue('clock-in-before-minute', '5');
-	setElementValue('clock-out-after-minute', '1');
+	setInputValue('username', '');
+	setInputValue('password', '');
+	setInputValue('clock-in-hour', '09');
+	setInputValue('clock-in-minute', '00');
+	setInputValue('clock-out-hour', '18');
+	setInputValue('clock-out-minute', '00');
+	setRadioValue('clock-in-check-type', 'TIME');
+	setInputValue('clock-in-before-minute', '5');
+	setRadioValue('clock-out-check-type', 'TIME');
+	setInputValue('clock-out-after-minute', '1');
 }
 
-function setElementValue(id, defaultValue)
+function setInputValue(id, defaultValue)
 {
 	chrome.storage.sync.get(id, function(items) {
 
@@ -44,6 +46,20 @@ function setElementValue(id, defaultValue)
 		else
 		{
 			$('#' + id).val(defaultValue); // 9시
+		}
+	});
+}
+
+function setRadioValue(name, defaultValue)
+{
+	chrome.storage.sync.get(name, function(items) {
+		if (typeof items[name] != 'undefined')
+		{
+			$('input:radio[name=' + name + ']:input[value=' + items[name] + ']').attr('checked', true);
+		}
+		else
+		{
+			$('input:radio[name=' + name + ']:input[value=' + defaultValue + ']').attr('checked', true);
 		}
 	});
 }
@@ -67,6 +83,7 @@ function saveUseFlag()
 function disableUserSetting(flag)
 {
 	$('[id^="clock-"]').prop('disabled', flag);
+	$('input[name^="clock-"]').prop('disabled', flag);
 }
 
 function checkUsernameAndPassword()
@@ -76,7 +93,6 @@ function checkUsernameAndPassword()
 
 	const userSession = new UserSession();
 	userSession.login(username, password, function(res) {
-		console.log(">>>>" + JSON.stringify(res))
 		if (res.code == '200')
 		{
 			showNotify('아이디/비밀번호 확인', '확인되었습니다.');
@@ -98,7 +114,9 @@ function save()
 	const clockInMinute = $('#clock-in-minute').val();
 	const clockOutHour = $('#clock-out-hour').val();
 	const clockOutMinute = $('#clock-out-minute').val();
+	const clockInCheckType = $('input[name=clock-in-check-type]:checked').val();
 	const clockInBeforeMinute = $('#clock-in-before-minute').val();
+	const clockOutCheckType = $('input[name=clock-out-check-type]:checked').val();
 	const clockOutAfterMinute = $('#clock-out-after-minute').val();
 
 	const value = {
@@ -109,12 +127,15 @@ function save()
 		'clock-in-minute' : clockInMinute,
 		'clock-out-hour' : clockOutHour,
 		'clock-out-minute' : clockOutMinute,
+		'clock-in-check-type' : clockInCheckType,
 		'clock-in-before-minute' : clockInBeforeMinute,
+		'clock-out-check-type' : clockOutCheckType,
 		'clock-out-after-minute' : clockOutAfterMinute,
 	};
 
 	chrome.storage.sync.set(value, function() {
-      console.log('Settings saved : ' + JSON.stringify(value));
+      console.log('Settings saved');
+      console.log(value);
     });
 }
 
@@ -134,7 +155,10 @@ $('#clock-in-hour').on('change', save);
 $('#clock-in-minute').on('change', save);
 $('#clock-out-hour').on('change', save);
 $('#clock-out-minute').on('change', save);
+
+$('input[name=clock-in-check-type]').on('click', save);
 $('#clock-in-before-minute').on('change', save);
+$('input[name=clock-out-check-type]').on('click', save);
 $('#clock-out-after-minute').on('change', save);
 
 $('#btn-reset').on('click', reset);
