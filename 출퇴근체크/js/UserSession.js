@@ -24,7 +24,7 @@ class UserSession
 		requestAjax(options);
 	}
 
-	loginAfterGetStorage()
+	loginAfterGetStorage(callback)
 	{
 		promiseStorageSync('username')
 			.then(() => promiseStorageSync('password'))
@@ -33,7 +33,7 @@ class UserSession
 				let username = syncStorage['username'];
 				let password = syncStorage['password'];
 
-				this.login(username, password);
+				this.login(username, password, callback);
 
 			})
 	}
@@ -68,8 +68,9 @@ class UserSession
 					callback(res);
 			},
 			error : (xhr) => {
-				console.log("Login error : " + JSON.stringify(xhr))
-				callback(xhr);
+				console.log("Login error : " + JSON.stringify(xhr));
+				if (typeof callback == 'function')
+					callback(xhr);
 			}
 		};
 

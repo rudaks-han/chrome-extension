@@ -3,7 +3,7 @@ class WorkHourMarker
 	BASE_URL = 'https://spectra.daouoffice.com';
 
 	// 출근하기
-	markAsClockIn()
+	requestClockIn()
 	{
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
@@ -52,7 +52,7 @@ class WorkHourMarker
 	}
 
 	// 퇴근하기
-	markAsClockOut()
+	requestClockOut()
 	{
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();

@@ -1,10 +1,9 @@
 
 let GOSSOcookie = '';
 
-let checkInterval = 5 * 1000;
-let userSessionInterval = 1 * 60 * 1000; // 1분 마다
+let checkInterval = 60 * 1000;
+let userSessionInterval = 5 * 60 * 1000; // 5분 마다
 let calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
-let randomTimeRangeMinute = 20; // 20분
 
 let sessionUserName;
 let sessionUserId;
@@ -18,8 +17,8 @@ let userConfig = {}; // 로그인 사용자 정보
 let holidayList = {}; // 휴일정보
 let dayOffList = {}; // 연차
 
-let clockInRandomBeforeTime = {}; // 출근시간 마크시간(랜덤)
-let clockOutRandomBeforeTime = {}; // 퇴근시간 마크시간(랜덤)
+let clockInRandomTime = {}; // 출근시간 마크시간(랜덤)
+let clockOutRandomTime = {}; // 퇴근시간 마크시간(랜덤)
 
 function init() {
     // 사용여부 체크
@@ -83,9 +82,21 @@ var receiveMessage = function(request, sender, sendResponse)
     {
         showNotify(request.title, request.message);
     }
-    else if (request.action == 'getUserSessionInfo')
+    else if (request.action == 'btnClockIn')
     {
-        //login();
+        const userSession = new UserSession();
+        userSession.loginAfterGetStorage(function() {
+            const workHourMarker = new WorkHourMarker();
+            workHourMarker.requestClockIn();
+        });
+    }
+    else if (request.action == 'btnClockOut')
+    {
+        const userSession = new UserSession();
+        userSession.loginAfterGetStorage(function() {
+            const workHourMarker = new WorkHourMarker();
+            workHourMarker.requestClockOut();
+        });
     }
 }
 

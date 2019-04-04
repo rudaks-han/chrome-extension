@@ -27,8 +27,14 @@ class WorkHourChecker
 			})
 			.then(() => promiseStorageSync('clock-in-check-type', 'clockInCheckType'))
 			.then(() => promiseStorageSync('clock-in-before-minute', 'minuteBeforeClockIn'))
+			.then(() => promiseStorageSync('clock-in-random-from-minute', 'clockInRandomFromMinute'))
+			.then(() => promiseStorageSync('clock-in-random-to-minute', 'clockInRandomToMinute'))
+
 			.then(() => promiseStorageSync('clock-out-check-type', 'clockOutCheckType'))
 			.then(() => promiseStorageSync('clock-out-after-minute', 'minuteAfterClockOut'))
+			.then(() => promiseStorageSync('clock-out-random-from-minute', 'clockOutRandomFromMinute'))
+			.then(() => promiseStorageSync('clock-out-random-to-minute', 'clockOutRandomToMinute'))
+
 			.then(() => {
 				return new Promise(function(resolve, reject) {
 					setTimeout(function() {
@@ -84,19 +90,6 @@ class WorkHourChecker
 		}
 	}
 
-	// chrome.storage.sync에 저장된 정보를 promise로 가져온다.
-	/*promiseStorageSync(syncStorageId, userConfigId)
-	{
-		return new Promise(function(resolve, reject) {
-			chrome.storage.sync.get(syncStorageId, function(items) {
-				syncStorage[syncStorageId] = items[syncStorageId];
-				if (userConfigId) userConfig[userConfigId] = items[syncStorageId];
-
-				resolve('success')
-			});
-		})
-	}*/
-
 	// 출/퇴근시간 체크 시작
 	checkStartWorkTime()
 	{
@@ -112,78 +105,14 @@ class WorkHourChecker
 		if (this.isUserDayOff())
 			return;
 
-		// 출근체크 시간범위 안에 들어왔는지 여부 체크
-		/*if (!this.isMarkedClockInAlready() && this.isInRangeClockIn())
-		{
-			const workHourChecker = new WorkHourMarker();
-			workHourChecker.markAsClockIn();
-		}*/
-
 		if (!this.isMarkedClockInAlready())
 		{
-			let minuteBeforeClockIn = parseInt(userConfig['minuteBeforeClockIn']);
-			let startWorkTimeDate = this.getStartWorkTimeDate();
-
-			if (userConfig['clockInCheckType'] === 'TIME')
-			{
-				if (this.isInRangeClockIn(startWorkTimeDate, minuteBeforeClockIn))
-				{
-					const workHourChecker = new WorkHourMarker();
-					workHourChecker.markAsClockIn();
-				}
-			}
-			else if (userConfig['clockInCheckType'] === 'RANDOM')
-			{
-				let currDate = getCurrDate();
-				let beforeTime = clockInRandomBeforeTime[currDate];
-				if (!beforeTime)
-				{
-					beforeTime = randomRange(1, randomTimeRangeMinute);
-					console.error('randomTime: ' + beforeTime)
-
-					clockInRandomBeforeTime[currDate] = beforeTime;
-				}
-
-				if (this.isInRangeClockIn(startWorkTimeDate, beforeTime))
-				{
-					const workHourChecker = new WorkHourMarker();
-					workHourChecker.markAsClockIn();
-				}
-			}
+			this.markAsClockIn();
 		}
 
-		// 퇴근체크 시간범위 안에 들어왔는지 여부 체크
 		if (!this.isMarkedClockOutAlready())
 		{
-			let minuteAfterClockOut = parseInt(userConfig['minuteAfterClockOut']);
-			let endWorkTimeDate = this.getEndWorkTimeDate();
-
-			if (userConfig['clockOutCheckType'] === 'TIME')
-			{
-				if (this.isInRangeClockOut(endWorkTimeDate, minuteAfterClockOut))
-				{
-					const workHourChecker = new WorkHourMarker();
-					workHourChecker.markAsClockOut();
-				}
-			}
-			else if (userConfig['clockOutCheckType'] === 'RANDOM')
-			{
-				let currDate = getCurrDate();
-				let afterTime = clockOutRandomBeforeTime[currDate];
-				if (!afterTime)
-				{
-					afterTime = randomRange(1, randomTimeRangeMinute);
-					console.error('afterTime: ' + afterTime)
-
-					clockOutRandomBeforeTime[currDate] = afterTime;
-				}
-
-				if (this.isInRangeClockOut(endWorkTimeDate, afterTime))
-				{
-					const workHourChecker = new WorkHourMarker();
-					workHourChecker.markAsClockOut();
-				}
-			}
+			this.markAsClockOut();
 		}
 	}
 
@@ -263,6 +192,81 @@ class WorkHourChecker
 			}
 		}
 		return false;
+	}
+
+	markAsClockIn()
+	{
+		let minuteBeforeClockIn = parseInt(userConfig['minuteBeforeClockIn']);
+		let startWorkTimeDate = this.getStartWorkTimeDate();
+
+		if (userConfig['clockInCheckType'] === 'TIME')
+		{
+			if (this.isInRangeClockIn(startWorkTimeDate, minuteBeforeClockIn))
+			{
+				const workHourChecker = new WorkHourMarker();
+				workHourChecker.requestClockIn();
+			}
+		}
+		else if (userConfig['clockInCheckType'] === 'RANDOM')
+		{
+			let currDate = getCurrDate();
+			let beforeTime = clockInRandomTime[currDate];
+			if (!beforeTime)
+			{
+				const clockInRandomFromMinute = userConfig['clockInRandomFromMinute'];
+				const clockInRandomToMinute = userConfig['clockInRandomToMinute'];
+
+				console.error('clockInRandomFromMinute : ' + clockInRandomFromMinute)
+				console.error('clockInRandomToMinute : ' + clockInRandomToMinute)
+
+				beforeTime = randomRange(clockInRandomFromMinute, clockInRandomToMinute);
+				console.log('random randomTime: ' + beforeTime)
+
+				clockInRandomTime[currDate] = beforeTime;
+			}
+
+			if (this.isInRangeClockIn(startWorkTimeDate, beforeTime))
+			{
+				const workHourChecker = new WorkHourMarker();
+				workHourChecker.requestClockIn();
+			}
+		}
+	}
+
+	markAsClockOut()
+	{
+		let minuteAfterClockOut = parseInt(userConfig['minuteAfterClockOut']);
+		let endWorkTimeDate = this.getEndWorkTimeDate();
+
+		if (userConfig['clockOutCheckType'] === 'TIME')
+		{
+			if (this.isInRangeClockOut(endWorkTimeDate, minuteAfterClockOut))
+			{
+				const workHourChecker = new WorkHourMarker();
+				workHourChecker.requestClockOut();
+			}
+		}
+		else if (userConfig['clockOutCheckType'] === 'RANDOM')
+		{
+			let currDate = getCurrDate();
+			let afterTime = clockOutRandomTime[currDate];
+			if (!afterTime)
+			{
+				const clockOutRandomFromMinute = userConfig['clockOutRandomFromMinute'];
+				const clockOutRandomToMinute = userConfig['clockOutRandomFromMinute'];
+
+				afterTime = randomRange(clockOutRandomFromMinute, clockOutRandomToMinute);
+				console.log('random afterTime: ' + afterTime)
+
+				clockOutRandomTime[currDate] = afterTime;
+			}
+
+			if (this.isInRangeClockOut(endWorkTimeDate, afterTime))
+			{
+				const workHourChecker = new WorkHourMarker();
+				workHourChecker.requestClockOut();
+			}
+		}
 	}
 
 	// 반차인지 체크

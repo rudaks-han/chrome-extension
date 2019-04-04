@@ -19,14 +19,14 @@ var command =
 
     btnClockIn : function(e)
     {
-        //chrome.runtime.sendMessage({action: "btnClockIn"}, function(response) {});
-		clockIn(true);
+        chrome.runtime.sendMessage({action: "btnClockIn"}, function(response) {});
+		//clockIn(true);
     },
 
     btnClockOut : function(e)
     {
-        //chrome.runtime.sendMessage({action: "btnClockOut"}, function(response) {});
-        clockOut(true);
+        chrome.runtime.sendMessage({action: "btnClockOut"}, function(response) {});
+        //clockOut(true);
     },
 
 	getUserSessionInfo : function(e)
