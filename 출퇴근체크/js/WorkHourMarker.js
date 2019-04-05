@@ -100,15 +100,19 @@ class WorkHourMarker
 		if (responseText.name === 'common.unauthenticated')
 		{
 			showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
+			logger.info('스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.');
 		}
 		else if (responseText.name === 'AlreadyClockInException')
 		{
 			showNotify('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${responseText.message}`);
+			logger.info(`${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${responseText.message}`);
+
 			saveLocalStorage('CLOCK_IN_DATE', getCurrDate());
 		}
 		else if (responseText.name === 'AlreadyClockOutException')
 		{
 			showNotify('퇴근도장', `${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${responseText.message}`);
+			logger.info(`${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${responseText.message}`);
 			saveLocalStorage('CLOCK_OUT_DATE', getCurrDate());
 		}
 	}

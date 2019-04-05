@@ -11,12 +11,12 @@ class UserSession
 				sessionUserId = res.data.id;
 				sessionUserName = res.data.name;
 
-				logger.info('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserId + ']');
+				logger.info(`사용자 세션정보 요청 : ${sessionUserName} [${sessionUserId}]`);
 			},
 			error : (xhr) => {
-				console.error('사용자 세션정보 요청 실패 : ' + JSON.stringify(xhr));
+				logger.info(`사용자 세션정보 요청 실패 : ${sessionUserName} [${sessionUserId}]`);
 
-				console.error('다시 로그인 시도');
+				console.info('다시 로그인 시도');
 				this.loginAfterGetStorage();
 			}
 		};
@@ -68,7 +68,7 @@ class UserSession
 					callback(res);
 			},
 			error : (xhr) => {
-				logger.error("Login error : " + JSON.stringify(xhr));
+				logger.info(`사용자 로그인 실패 : ${username}`);
 				if (typeof callback == 'function')
 					callback(xhr);
 			}
