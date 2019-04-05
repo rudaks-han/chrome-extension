@@ -1,7 +1,7 @@
 {
-  "name": "출퇴근체크",
-  "version": "1.0.0",
-  "description": "출퇴근 자동체크 프로그램",
+  "name": "스펙트라 그룹웨어",
+  "version": "1.0.3",
+  "description": "다우오피스 접속 프로그램",
   "browser_action": {
     "default_icon": "images/icon.png",
     "default_popup": "popup.html"
@@ -9,15 +9,15 @@
   "content_scripts": [
     {
       "matches": ["https://spectra.daouoffice.com/**"],
-      "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js"]
+      "js": ["js/jquery-1.9.1.min.js", "js/contents-script.js", "js/common.js"]
     }
   ],
   "background": {
-    "scripts": ["background.js", "js/jquery-1.9.1.min.js"]
+    "page" : "background.html"
   },
   "permissions" : [
-    "notifications",    "http://*/*",    "background", "tabs", "storage"
+    "notifications", "https://spectra.daouoffice.com/**", "background", "storage", "cookies"
   ],
-   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
-	"manifest_version": 2
+  "content_security_policy": "script-src 'self' https://www.gstatic.com https://www.gstatic.com; object-src 'self'",
+  "manifest_version" : 2
 }
