@@ -136,14 +136,3 @@ function randomRange(n1, n2) {
     n2 = parseInt(n2);
     return Math.floor( (Math.random() * (n2 - n1 + 1)) + n1 );
 }
-
-
-/*
-let date = new Date();
-let endWorkTimeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), '17', '00', 0);
-console.error('endWorkTimeDate : ' + endWorkTimeDate);
-
-clockOutMarkingTime = endWorkTimeDate.addMinutes(-5 * 60 + "1");
-
-console.error('clockOutMarkingTime : ' + clockOutMarkingTime);
-*/

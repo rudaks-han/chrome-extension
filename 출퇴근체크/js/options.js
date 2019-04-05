@@ -8,9 +8,6 @@ function init()
 
 		useFlag = useFlag || 'N';
 
-		//$('input:radio[name=use-flag]:input[value=' + useFlag + ']').attr("checked", true);
-		//$('input:checkbox[id=use-flag]').is('checked') ? .attr("checked", true);
-
 		if (useFlag == 'Y') {
 			$('.ui.toggle.checkbox.use-flag').checkbox('set checked');
 		} else {
@@ -26,16 +23,6 @@ function init()
 			disableUserSetting(false);
 		}
 	});
-
-
-	/*$('#clock-in-before-minute').append(getOptionTime(60));
-	$('#clock-out-after-minute').append(getOptionTime(60));*/
-
-	/*$('#clock-in-random-from-minute').append(getOptionTime(60));
-	$('#clock-in-random-to-minute').append(getOptionTime(60));
-
-	$('#clock-out-random-from-minute').append(getOptionTime(60));
-	$('#clock-out-random-to-minute').append(getOptionTime(60));*/
 
 	setInputValue('username', '');
 	setInputValue('password', '');
@@ -91,24 +78,6 @@ function setRadioValue(name, defaultValue)
 	});
 }
 
-function saveUseFlag()
-{
-	$(this).toggleClass('active');
-
-	/*let useFlag = $('input[name="use-flag"]:checked').val();
-
-	if (useFlag == 'Y')
-	{
-		disableUserSetting(false);
-	}
-	else
-	{
-		disableUserSetting(true);
-	}*/
-
-	save();
-}
-
 function disableUserSetting(flag)
 {
 	$('[id^="clock-"]').prop('disabled', flag);
@@ -124,86 +93,13 @@ function checkUsernameAndPassword()
 	userSession.login(username, password, function(res) {
 		if (res.code == '200')
 		{
-			showNotify('아이디/비밀번호 확인', '확인되었습니다.');
+			showNotify('사원번호/비밀번호 확인', '사원정보가 정상적으로 확인되었습니다.');
 		}
 		else
 		{
-			showNotify('아이디/비밀번호 확인', '아이디 혹은 비밀번호가 맞지 않습니다.');
+			showNotify('사원번호/비밀번호 확인', '사원번호 혹은 비밀번호가 맞지 않습니다.');
 		}
 	});
-}
-
-function validateClockInRandomMinute()
-{
-	let from = parseInt($('#clock-in-random-from-minute').val());
-	let to = parseInt($('#clock-in-random-to-minute').val());
-
-	if (from < to)
-	{
-		alert('시작시간이 종료시간보다 이전이어야 합니다.');
-		$('#clock-in-random-from-minute').val(to);
-	}
-
-	save();
-}
-
-function validateClockOutRandomMinute()
-{
-	let from = parseInt($('#clock-out-random-from-minute').val());
-	let to = parseInt($('#clock-out-random-to-minute').val());
-
-	if (from > to)
-	{
-		alert('시작시간이 종료시간보다 이전이어야 합니다.');
-		$('#clock-out-random-from-minute').val(to);
-	}
-
-	save();
-}
-
-function save()
-{
-	const username = $('#username').val();
-	const password = $('#password').val();
-
-	//const useFlag = $('input[name="use-flag"]:checked').val();
-	const useFlag = $('#use-flag').is(':checked') ? 'Y' : 'N'
-
-	const clockInHour = $('#clock-in-hour').val();
-	const clockInMinute = $('#clock-in-minute').val();
-	const clockOutHour = $('#clock-out-hour').val();
-	const clockOutMinute = $('#clock-out-minute').val();
-	const clockInCheckType = $('input[name=clock-in-check-type]:checked').val();
-	const clockInBeforeMinute = $('#clock-in-before-minute').val();
-	const clockInRandomFromMinute = $('#clock-in-random-from-minute').val();
-	const clockInRandomToMinute = $('#clock-in-random-to-minute').val();
-	const clockOutCheckType = $('input[name=clock-out-check-type]:checked').val();
-	const clockOutAfterMinute = $('#clock-out-after-minute').val();
-	const clockOutRandomFromMinute = $('#clock-out-random-from-minute').val();
-	const clockOutRandomToMinute = $('#clock-out-random-to-minute').val();
-
-	const value = {
-		'username' : username,
-		'password' : password,
-		'use-flag' : useFlag,
-		'clock-in-hour' : clockInHour,
-		'clock-in-minute' : clockInMinute,
-		'clock-out-hour' : clockOutHour,
-		'clock-out-minute' : clockOutMinute,
-		'clock-in-check-type' : clockInCheckType,
-		'clock-in-before-minute' : clockInBeforeMinute,
-		'clock-in-random-from-minute' : clockInRandomFromMinute,
-		'clock-in-random-to-minute' : clockInRandomToMinute,
-		'clock-out-check-type' : clockOutCheckType,
-		'clock-out-after-minute' : clockOutAfterMinute,
-		'clock-out-random-from-minute' : clockOutRandomFromMinute,
-		'clock-out-random-to-minute' : clockOutRandomToMinute
-	};
-
-	chrome.storage.sync.set(value, function() {
-		logger.debug('Settings saved');
-		logger.debug(value);
-    });
 }
 
 function reset()
@@ -211,38 +107,6 @@ function reset()
 	chrome.storage.sync.clear();
 	location.reload();
 }
-
-$(() => {
-
-	init();
-
-	/*
-	$('#username').on('blur', save);
-	$('#password').on('blur', save);
-	$('#btnCheckUsernameAndPassword').on('click', checkUsernameAndPassword);
-//$('input[name="use-flag"]').on('click', saveUseFlag);
-	$('#use-flag').on('click', saveUseFlag);
-	$('#clock-in-hour').on('change', save);
-	$('#clock-in-minute').on('change', save);
-	$('#clock-out-hour').on('change', save);
-	$('#clock-out-minute').on('change', save);
-
-	$('input[name=clock-in-check-type]').on('click', save);
-	$('#clock-in-before-minute').on('change', save);
-
-	$('#clock-in-random-from-minute').on('change', validateClockInRandomMinute);
-	$('#clock-in-random-to-minute').on('change', validateClockInRandomMinute);
-
-	$('input[name=clock-out-check-type]').on('click', save);
-	$('#clock-out-after-minute').on('change', save);
-
-	$('#clock-out-random-from-minute').on('change', validateClockOutRandomMinute);
-	$('#clock-out-random-to-minute').on('change', validateClockOutRandomMinute);
-
-*/
-});
-
-
 
 function saveConfig()
 {
@@ -261,6 +125,22 @@ function saveConfig()
 	const clockOutAfterMinute = $('#clock-out-after-minute').val();
 	const clockOutRandomFromMinute = $('#clock-out-random-from-minute').val();
 	const clockOutRandomToMinute = $('#clock-out-random-to-minute').val();
+
+	if (parseInt(clockInRandomFromMinute) < parseInt(clockInRandomToMinute))
+	{
+		alert('시작시간이 종료시간보다 이전이어야 합니다.');
+		$('#clock-in-random-from-minute').focus();
+		//$('#clock-in-random-from-minute').val(clockInRandomToMinute);
+		return;
+	}
+
+	if (parseInt(clockOutRandomFromMinute) < parseInt(clockOutRandomToMinute))
+	{
+		alert('시작시간이 종료시간보다 이전이어야 합니다.');
+		$('#clock-out-random-from-minute').focus();
+		//$('#clock-in-random-from-minute').val(clockOutRandomToMinute);
+		return;
+	}
 
 	const jsonValue = {
 		'username' : username,
@@ -286,6 +166,8 @@ function saveConfig()
 		logger.debug('Settings saved');
 		//logger.debug(JSON.stringify(jsonValue));
 		console.log(jsonValue);
+
+		showNotify('설정', '설정정보가 저장되었습니다.');
 	});
 };
 
@@ -313,8 +195,11 @@ $(() => {
 	$('#clock-out-random-from-minute').append(getOptionTime(60, "분 후"));
 	$('#clock-out-random-to-minute').append(getOptionTime(60, "분 후"));
 
+	$('#btnCheckUsernameAndPassword').on('click', checkUsernameAndPassword);
 	$('#btnSave').on('click', saveConfig);
 	$('#btnReset').on('click', reset);
+
+	init();
 
 });
 

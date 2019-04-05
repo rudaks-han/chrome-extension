@@ -3,49 +3,35 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" type="text/css" href="css/popup.css" />
+      <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+      <script type="text/javascript" src="js/semantic.min.js"></script>
+      <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+      <script type="text/javascript" src="js/popup.js"></script>
+      <script type="text/javascript" src="js/common.js"></script>
+      <script type="text/javascript" src="js/contents-script.js"></script>
 
   </head>
   <body>
-    <header>
-      <div id="action-bar">        
-        <img src="images/ic_settings_white_24dp.png" id="showOptions" class="i18n" title="환경설정">
-      </div>
-      <div class="popup-title">
-        <a data-href="calendar_ui_url" target="_blank">
-          <span class="i18n" id="logo_text">스펙트라 그룹웨어 (다우오피스)</span>
-        </a>
-      </div>
-      
-    </header>
-    <div class="header-placeholder"></div>
-    <div>
-      <ul>
-			<li>
-                <a id="gotoDaouoffice">
-                    <div class="text" style="text-decoration:underline">다우오피스 그룹웨어 접속</div>
-                </a>
-			</li>
-            <li>
-                <div class="text">출퇴근 자동체크
-                <span id="clockUseFlagText">(사용중)</span>
-                </div>
-            </li>
-          <li>
-              <div class="text">
-                  <button id="btnClockIn" class="button btn-default">출근하기</button>
-                  <button id="btnClockOut" class="button btn-default">퇴근하기</button>
+  <div class="ui cards">
+      <div class="card">
+          <div class="content">
+              <i class="right floated cog icon" id="showOptions" style="cursor:pointer;" title="설정화면으로"></i>
+              <div class="header">
+                  스펙트라 그룹웨어
               </div>
-          </li>
-          <!--<li>
-              <div><button id="btnUserSessionInfo" class="button btn-default">사용자 정보</button></div>
-          </li>-->
-        </ul>
-    </div>
-
-    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/popup.js"></script>
-    <script type="text/javascript" src="js/common.js"></script>
-    <script type="text/javascript" src="js/contents-script.js"></script>
+              <div class="description">
+                  출퇴근 자동체크
+                  <span id="clockUseFlagText">(사용중)</span>
+              </div>
+          </div>
+          <div class="extra content">
+              <div class="ui two buttons">
+                  <div class="ui basic green button" id="btnClockIn">출근하기</div>
+                  <div class="ui basic red button" id="btnClockOut">퇴근하기</div>
+              </div>
+          </div>
+      </div>
+  </div>
 
   </body>
 </html>
