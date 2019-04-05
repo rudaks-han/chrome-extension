@@ -1,6 +1,6 @@
 class Logger
 {
-	LOG_LEVEL = 2;
+	LOG_LEVEL = 1;
 
 	DEBUG = 1;
 	INFO = 2;

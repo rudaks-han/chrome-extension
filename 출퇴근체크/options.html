@@ -4,11 +4,16 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
     
     <title class="i18n" data-msg="google_calendar_extension_name">Options</title>
+
+	  <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 	  <script type="text/javascript" src="js/logger.js"></script>
 	  <script type="text/javascript" src="js/common.js"></script>
 	  <script type="text/javascript" src="js/UserSession.js"></script>
+	  <script type="text/javascript" src="js/semantic.min.js"></script>
+	  <script type="text/javascript" src="js/options.js"></script>
 	  <style>
+		  body {margin: 20px;}
 		  h2 {
 			  font-size:20px;
 		  }
@@ -25,24 +30,203 @@
 	  </style>
   </head>
   <body>
+
+  <form class="two ui form">
+
+	  <h1 class="ui header">그룹웨어 정보 세팅</h1>
+	  <div class="ui bulleted list">
+		  <div class="item">출/퇴근시간 1시간 후에는 자동으로 출/퇴근체크를 하지 않습니다.</div>
+		  <div class="item">예) 출근 9시일 경우 10시 이후에는 체크하지 않음</div>
+		  <div class="item">예) 퇴근 18시일 경우 19시 이후에는 체크하지 않음</div>
+
+
+	  </div>
+
+	  <div class="ui divider"></div>
+
+	  <h4 class="ui dividing header">로그인 정보</h4>
+	  <div class="fields">
+		  <div class="field">
+			  <label>사원번호</label>
+			  <input type="text" name="username" id="username" placeholder="예) 2001001">
+		  </div>
+		  <div class="field">
+			  <label>비밀번호</label>
+			  <input type="password" name="password" id="password" placeholder="">
+		  </div>
+		  <div class="field">
+			  <label>&nbsp;</label>
+			  <div class="ui button primary" id="btnCheckUsernameAndPassword">확인</div>
+		  </div>
+	  </div>
+
+	  <h4 class="ui dividing header">출퇴근 시간 자동설정 사용여부</h4>
+	  <div class="inline field">
+		  <div class="ui toggle checkbox use-flag">
+			  <input type="checkbox" tabindex="0" id="use-flag">
+			  <label>사용여부</label>
+		  </div>
+	  </div>
+
+	  <h4 class="ui dividing header">출근 시간</h4>
+	  <div class="fields">
+		  <div class="field">
+			  <select class="ui dropdown" id="clock-in-hour">
+				  <option value="07">7시</option>
+				  <option value="08">8시</option>
+				  <option value="09">9시</option>
+				  <option value="10">10시</option>
+			  </select>
+		  </div>
+		  <div class="field">
+			  <select class="ui dropdown" id="clock-in-minute">
+				  <option value="00">0분</option>
+				  <option value="30">30분</option>
+			  </select>
+		  </div>
+	  </div>
+
+	  <h4 class="ui dividing header">퇴근 시간</h4>
+	  <div class="fields">
+		  <div class="field">
+			  <select class="ui dropdown" id="clock-out-hour">
+				  <option value="16">16시</option>
+				  <option value="17">17시</option>
+				  <option value="18">18시</option>
+				  <option value="19">19시</option>
+			  </select>
+		  </div>
+		  <div class="field">
+			  <select class="ui dropdown" id="clock-out-minute">
+				  <option value="00">0분</option>
+				  <option value="30">30분</option>
+			  </select>
+		  </div>
+	  </div>
+
+	  <h4 class="ui dividing header">출근 시간 체크 방법</h4>
+	  <div>
+		  <h5 class="ui top attached header">
+			  <input type="radio" name="clock-in-check-type" value="TIME">
+			  <label>정해진 시간</label>
+			  <select id="clock-in-before-minute" style="width:auto; display:inline"></select>
+		  </h5>
+		  <div class="ui attached segment comment">
+
+
+			  예) 출근시간 9시에 5분전으로 설정하면 8:55분에 출근시간으로 설정이 됩니다.
+		  </div>
+		  <h5 class="ui attached header">
+			  <input type="radio" name="clock-in-check-type" value="RANDOM">
+			  <label>랜덤 시간</label>
+
+			  (출근시간 <select id="clock-in-random-from-minute" style="width:auto; display:inline"></select> ~
+			  <select id="clock-in-random-to-minute" style="width:auto; display:inline"></select>)
+
+		  </h5>
+		  <div class="ui attached segment comment">
+			  <p>출근시간 9시(10분 ~ 5분) ==> 08:50 ~ 08:55분 사이 랜덤으로 설정</p>
+		  </div>
+	  </div>
+
+	  <h4 class="ui dividing header">퇴근 시간 체크 방법</h4>
+	  <div>
+		  <h5 class="ui top attached header">
+			  <input type="radio" name="clock-out-check-type" value="TIME">
+			  <label>정해진 시간</label>
+			  <select id="clock-out-after-minute" style="width:auto; display:inline"></select>
+		  </h5>
+		  <div class="ui attached segment comment">
+			  예) 퇴근시간 18시에 5분후로 설정하면 18:05분에 퇴근시간으로 설정이 됩니다.
+		  </div>
+		  <h5 class="ui attached header">
+			  <input type="radio" name="clock-out-check-type" value="RANDOM">
+			  <label>랜덤 시간</label>
+
+			  (출근시간 <select id="clock-out-random-from-minute" style="width:auto; display:inline"></select> ~
+			  <select id="clock-out-random-to-minute" style="width:auto; display:inline"></select>)
+
+		  </h5>
+		  <div class="ui attached segment comment">
+			  <p>퇴근시간 18시(5분 ~ 10분) ==> 18:05 ~ 18:10분 사이 랜덤으로 설정</p>
+		  </div>
+	  </div>
+
+
+
+	  <!--<div class="ui form">
+		  <div class="grouped fields">
+			  <label>How often do you use checkboxes?</label>
+			  <div class="field">
+				  <div class="ui radio checkbox">
+					  <input type="radio" name="clock-in-check-type" value="TIME">
+					  <label>정해진 시간</label>
+					  <div>
+						  <select class="ui dropdown" id="clock-out-hour">
+							  <option value="16">16시</option>
+							  <option value="17">17시</option>
+							  <option value="18">18시</option>
+							  <option value="19">19시</option>
+						  </select>
+					  </div>
+				  </div>
+			  </div>
+			  <div class="field">
+				  <div class="ui radio checkbox">
+					  <input type="radio" name="clock-in-check-type" value="RANDOM">
+					  <label>랜덤 시간</label>
+				  </div>
+			  </div>
+
+
+&lt;!&ndash;
+			  <input type="radio" name="clock-in-check-type" value="TIME">정해진 시간에
+			  <select id="clock-in-before-minute"></select>분 전
+			  <span class="comment">예) 출근시간 9시에 5분전으로 설정하면 8:55분에 출근시간으로 설정이 됩니다.</span>
+
+			  <div></div>
+			  <input type="radio" name="clock-in-check-type" value="RANDOM">매일 다르게
+			  (출근시간 <select id="clock-in-random-from-minute"></select>분 전 ~
+			  <select id="clock-in-random-to-minute"></select>분 전)
+
+			  <span class="comment">출근시간 9시(10분 ~ 5분) ==> 08:50 ~ 08:55분 사이 랜덤으로 설정</span>
+&ndash;&gt;
+
+		  </div>
+	  </div>-->
+
+	  <!--<h4 class="ui dividing header">퇴근 시간 체크 방법</h4>-->
+
+	  <div class="ui divider"></div>
+
+	  <div class="ui button primary" id="btnSave">저장하기</div>
+	  <div class="ui button" id="btnReset">초기화</div>
+
+
+  </form>
+
+
+<!--
     <header>
       <h1 class="i18n" data-msg="google_calendar_extension_name">스펙트라 그룹웨어 출퇴근 체크</h1>
     </header>
 	<div class="comment">
 		<ul>
-			<!--<li>크롬 브라우저에서 그룹웨어 자동로그인이 되어 있어야 합니다.</li>-->
+			&lt;!&ndash;<li>크롬 브라우저에서 그룹웨어 자동로그인이 되어 있어야 합니다.</li>&ndash;&gt;
 			<li>출/퇴근시간 1시간 후에는 자동으로 출/퇴근체크를 하지 않습니다.
 				<br/>예) 출근 9시일 경우 10시 이후에는 체크하지 않음
 				<br/>예) 퇴근 18시일 경우 19시 이후에는 체크하지 않음
 			</li>
 		</ul>
-	</div>
-	<article>
+	</div>-->
+	<!--<article>
 		<h2 class="i18n" data-msg="toolbar_icon">그룹웨어 로그인 정보</h2>
 		<section>
-			아이디: <input type='text' name="username" id="username"/>
-			비밀번호: <input type='password' name="password" id="password" />
-			<button id="btnCheckUsernameAndPassword">확인</button>
+			<span id="inputUserInfoText" class="comment">아이디/비밀번호를 입력 후 확인버튼을 클릭해 주세요.</span><br/>
+			아이디: <input type='text' name="username" id="username"/><br/>
+			비밀번호: <input type='password' name="password" id="password" /><br/>
+			&lt;!&ndash;<button id="btnCheckUsernameAndPassword">확인</button>&ndash;&gt;
+
 			<div class="comment red">* 아이디/비밀번호는 크롬 브라우저내에서만 저장됩니다.</div>
 		</section>
 	</article>
@@ -53,9 +237,9 @@
 			<input type='radio' name="use-flag" value="N" />사용안함
 			<div class="comment">* 사용여부를 '사용'으로 하셔야 자동으로 출퇴근이 기록됩니다.</div>
 		</section>
-	</article>
+	</article>-->
 
-    <article>
+    <!--<article>
       <h2 class="i18n" data-msg="toolbar_icon">출근 시간 설정</h2>
       <section>
         <select id="clock-in-hour">
@@ -85,9 +269,9 @@
 				<option value="30">30</option>
 			</select>분
 		</section>
-	</article>
+	</article>-->
 
-	<article>
+	<!--<article>
 		<h2 class="i18n" data-msg="toolbar_icon">출근시간 체크</h2>
 		<section>
 			<input type="radio" name="clock-in-check-type" value="TIME">정해진 시간에
@@ -120,13 +304,11 @@
 			<span class="comment">퇴근시간 18시(5분 ~ 10분) ==> 18:05 ~ 18:10분 사이 랜덤으로 설정</span>
 
 		</section>
-	</article>
+	</article>-->
 
 	<article>
-      <h2 class="i18n" data-msg="toolbar_icon"><a href="javascript:;" id="btn-reset">초기화</a></h2>
+      <!--<h2 class="i18n" data-msg="toolbar_icon"><a href="javascript:;" id="btn-reset">초기화</a></h2>-->
 	</article>
-	
-	<script src="js/options.js"></script>
-	
+
   </body>
 </html>

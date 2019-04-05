@@ -6,12 +6,16 @@ function init()
 
 		let useFlag = items['use-flag'];
 
-		if (typeof useFlag == 'undefined')
-		{
-			useFlag = 'N';
-		}
+		useFlag = useFlag || 'N';
 
-		$('input:radio[name=use-flag]:input[value=' + useFlag + ']').attr("checked", true);
+		//$('input:radio[name=use-flag]:input[value=' + useFlag + ']').attr("checked", true);
+		//$('input:checkbox[id=use-flag]').is('checked') ? .attr("checked", true);
+
+		if (useFlag == 'Y') {
+			$('.ui.toggle.checkbox.use-flag').checkbox('set checked');
+		} else {
+			$('.ui.toggle.checkbox.use-flag').checkbox('set unchecked');
+		}
 
 		if (useFlag == 'N')
 		{
@@ -24,14 +28,14 @@ function init()
 	});
 
 
-	$('#clock-in-before-minute').append(getOptionTime(60));
-	$('#clock-out-after-minute').append(getOptionTime(60));
+	/*$('#clock-in-before-minute').append(getOptionTime(60));
+	$('#clock-out-after-minute').append(getOptionTime(60));*/
 
-	$('#clock-in-random-from-minute').append(getOptionTime(60));
+	/*$('#clock-in-random-from-minute').append(getOptionTime(60));
 	$('#clock-in-random-to-minute').append(getOptionTime(60));
 
 	$('#clock-out-random-from-minute').append(getOptionTime(60));
-	$('#clock-out-random-to-minute').append(getOptionTime(60));
+	$('#clock-out-random-to-minute').append(getOptionTime(60));*/
 
 	setInputValue('username', '');
 	setInputValue('password', '');
@@ -49,11 +53,11 @@ function init()
 	setInputValue('clock-out-random-to-minute', '5');
 }
 
-function getOptionTime(toMinute)
+function getOptionTime(toMinute, suffix)
 {
 	let str = '';
 	for (let i=1; i<=parseInt(toMinute); i++)
-		str += '<option value="' + i + '">' + i + '</option>\n';
+		str += '<option value="' + i + '">' + i + (suffix ? suffix : '') +'</option>\n';
 
 	return str;
 }
@@ -89,7 +93,9 @@ function setRadioValue(name, defaultValue)
 
 function saveUseFlag()
 {
-	let useFlag = $('input[name="use-flag"]:checked').val();
+	$(this).toggleClass('active');
+
+	/*let useFlag = $('input[name="use-flag"]:checked').val();
 
 	if (useFlag == 'Y')
 	{
@@ -98,7 +104,7 @@ function saveUseFlag()
 	else
 	{
 		disableUserSetting(true);
-	}
+	}*/
 
 	save();
 }
@@ -160,7 +166,9 @@ function save()
 	const username = $('#username').val();
 	const password = $('#password').val();
 
-	const useFlag = $('input[name="use-flag"]:checked').val();
+	//const useFlag = $('input[name="use-flag"]:checked').val();
+	const useFlag = $('#use-flag').is(':checked') ? 'Y' : 'N'
+
 	const clockInHour = $('#clock-in-hour').val();
 	const clockInMinute = $('#clock-in-minute').val();
 	const clockOutHour = $('#clock-out-hour').val();
@@ -204,28 +212,109 @@ function reset()
 	location.reload();
 }
 
-init();
+$(() => {
 
-$('#username').on('blur', save);
-$('#password').on('blur', save);
-$('#btnCheckUsernameAndPassword').on('click', checkUsernameAndPassword);
-$('input[name="use-flag"]').on('click', saveUseFlag);
-$('#clock-in-hour').on('change', save);
-$('#clock-in-minute').on('change', save);
-$('#clock-out-hour').on('change', save);
-$('#clock-out-minute').on('change', save);
+	init();
 
-$('input[name=clock-in-check-type]').on('click', save);
-$('#clock-in-before-minute').on('change', save);
+	/*
+	$('#username').on('blur', save);
+	$('#password').on('blur', save);
+	$('#btnCheckUsernameAndPassword').on('click', checkUsernameAndPassword);
+//$('input[name="use-flag"]').on('click', saveUseFlag);
+	$('#use-flag').on('click', saveUseFlag);
+	$('#clock-in-hour').on('change', save);
+	$('#clock-in-minute').on('change', save);
+	$('#clock-out-hour').on('change', save);
+	$('#clock-out-minute').on('change', save);
 
-$('#clock-in-random-from-minute').on('change', validateClockInRandomMinute);
-$('#clock-in-random-to-minute').on('change', validateClockInRandomMinute);
+	$('input[name=clock-in-check-type]').on('click', save);
+	$('#clock-in-before-minute').on('change', save);
 
-$('input[name=clock-out-check-type]').on('click', save);
-$('#clock-out-after-minute').on('change', save);
+	$('#clock-in-random-from-minute').on('change', validateClockInRandomMinute);
+	$('#clock-in-random-to-minute').on('change', validateClockInRandomMinute);
 
-$('#clock-out-random-from-minute').on('change', validateClockOutRandomMinute);
-$('#clock-out-random-to-minute').on('change', validateClockOutRandomMinute);
+	$('input[name=clock-out-check-type]').on('click', save);
+	$('#clock-out-after-minute').on('change', save);
 
-$('#btn-reset').on('click', reset);
+	$('#clock-out-random-from-minute').on('change', validateClockOutRandomMinute);
+	$('#clock-out-random-to-minute').on('change', validateClockOutRandomMinute);
+
+*/
+});
+
+
+
+function saveConfig()
+{
+	const username = $('#username').val();
+	const password = $('#password').val();
+	const useFlag = $('#use-flag').is(':checked') ? 'Y' : 'N';
+	const clockInHour = $('#clock-in-hour').val();
+	const clockInMinute = $('#clock-in-minute').val();
+	const clockOutHour = $('#clock-out-hour').val();
+	const clockOutMinute = $('#clock-out-minute').val();
+	const clockInCheckType = $('input[name=clock-in-check-type]:checked').val();
+	const clockInBeforeMinute = $('#clock-in-before-minute').val();
+	const clockInRandomFromMinute = $('#clock-in-random-from-minute').val();
+	const clockInRandomToMinute = $('#clock-in-random-to-minute').val();
+	const clockOutCheckType = $('input[name=clock-out-check-type]:checked').val();
+	const clockOutAfterMinute = $('#clock-out-after-minute').val();
+	const clockOutRandomFromMinute = $('#clock-out-random-from-minute').val();
+	const clockOutRandomToMinute = $('#clock-out-random-to-minute').val();
+
+	const jsonValue = {
+		'username' : username,
+		'password' : password,
+		'use-flag' : useFlag,
+		'clock-in-hour' : clockInHour,
+		'clock-in-minute' : clockInMinute,
+		'clock-out-hour' : clockOutHour,
+		'clock-out-minute' : clockOutMinute,
+		'clock-in-check-type' : clockInCheckType,
+		'clock-in-before-minute' : clockInBeforeMinute,
+		'clock-in-random-from-minute' : clockInRandomFromMinute,
+		'clock-in-random-to-minute' : clockInRandomToMinute,
+		'clock-out-check-type' : clockOutCheckType,
+		'clock-out-after-minute' : clockOutAfterMinute,
+		'clock-out-random-from-minute' : clockOutRandomFromMinute,
+		'clock-out-random-to-minute' : clockOutRandomToMinute
+	};
+
+	console.error(jsonValue)
+
+	chrome.storage.sync.set(jsonValue, function() {
+		logger.debug('Settings saved');
+		//logger.debug(JSON.stringify(jsonValue));
+		console.log(jsonValue);
+	});
+};
+
+$(() => {
+	$('select.dropdown').dropdown();
+
+	const btnUseFlag = $('.ui.toggle.checkbox.use-flag');
+	btnUseFlag.checkbox({
+		onChecked:  () => {
+			btnUseFlag.find('label').html('사용중');
+			disableUserSetting(false);
+		},
+		onUnchecked: () => {
+			btnUseFlag.find('label').html('사용안함');
+			disableUserSetting(true);
+		}
+	});
+
+	$('#clock-in-before-minute').append(getOptionTime(60, "분 전"));
+	$('#clock-out-after-minute').append(getOptionTime(60, "분 후"));
+
+	$('#clock-in-random-from-minute').append(getOptionTime(60, "분 전"));
+	$('#clock-in-random-to-minute').append(getOptionTime(60, "분 전"));
+
+	$('#clock-out-random-from-minute').append(getOptionTime(60, "분 후"));
+	$('#clock-out-random-to-minute').append(getOptionTime(60, "분 후"));
+
+	$('#btnSave').on('click', saveConfig);
+	$('#btnReset').on('click', reset);
+
+});
 
