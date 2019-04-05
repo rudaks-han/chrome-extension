@@ -11,7 +11,7 @@ class UserSession
 				sessionUserId = res.data.id;
 				sessionUserName = res.data.name;
 
-				console.log('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserId + ']');
+				logger.info('사용자 세션정보 요청 : ' + sessionUserName + '[' + sessionUserId + ']');
 			},
 			error : (xhr) => {
 				console.error('사용자 세션정보 요청 실패 : ' + JSON.stringify(xhr));
@@ -56,11 +56,11 @@ class UserSession
 				chrome.cookies.get({ url: 'https://spectra.daouoffice.com', name: 'GOSSOcookie' },
 					function (cookie) {
 						if (cookie) {
-							console.log("GOSSOcookie : " + cookie.value);
+							logger.debug("GOSSOcookie : " + cookie.value);
 							//GOSSOcookie = cookie.value;
 						}
 						else {
-							console.log('Can\'t get cookie! Check the name!');
+							logger.error('Can\'t get cookie! Check the name!');
 						}
 					});
 
@@ -68,7 +68,7 @@ class UserSession
 					callback(res);
 			},
 			error : (xhr) => {
-				console.log("Login error : " + JSON.stringify(xhr));
+				logger.error("Login error : " + JSON.stringify(xhr));
 				if (typeof callback == 'function')
 					callback(xhr);
 			}

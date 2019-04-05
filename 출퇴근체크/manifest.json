@@ -18,6 +18,6 @@
   "permissions" : [
     "notifications", "https://spectra.daouoffice.com/**", "background", "storage", "cookies"
   ],
-  "content_security_policy": "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://www.gstatic.com https://www.gstatic.com; object-src 'self'",
   "manifest_version" : 2
 }

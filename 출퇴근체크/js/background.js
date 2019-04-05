@@ -32,7 +32,7 @@ function init() {
         }
         else
         {
-            log('>>> 출퇴근 체크가 사용하지 않음으로 설정되어 있습니다.');
+            logger.info('>>> 출퇴근 체크가 사용하지 않음으로 설정되어 있습니다.', LOG.INFO);
         }
     });
 }
@@ -72,8 +72,8 @@ function check() {
  */
 var receiveMessage = function(request, sender, sendResponse)
 {
-	console.log('receiveMessage');
-	console.log(request);
+	logger.debug('receiveMessage');
+    logger.debug(request);
 	if (request.action == 'gotoDaouoffice')
 	{
 		window.open('https://spectra.daouoffice.com');

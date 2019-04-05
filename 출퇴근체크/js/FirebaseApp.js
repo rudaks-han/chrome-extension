@@ -15,6 +15,10 @@ class FirebaseApp
 
 	writeLog(date, user, key, value)
 	{
+		logger.debug('firebaes writeLog');
+		logger.debug('key: ' + key);
+		logger.debug('value: ' + value);
+
 		firebase.database().ref('worktime_checker/' + date + '/' + user + '/' + key).set({
 			value
 		});

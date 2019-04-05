@@ -24,13 +24,13 @@ class WorkHourMarker
 					showNotify('출근도장', `${sessionUserName}님, ${currDate} ${currTime}에 출근시간으로 표시되었습니다.`);
 					saveLocalStorage('CLOCK_IN_DATE', currDate);
 					firebaseApp.writeLog(currDate, sessionUserName, '출근시간', `시간: ${currTime}`);
-					log('>>> [' + currDate + '] 출근도장 OK.')
+					logger.info('>>> [' + currDate + '] 출근도장 OK.')
 				}
 				else
 				{
 					// 실패
 					showNotify('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${res.message}`);
-					log('>>> [' + currDate + '] 출근도장 Fail.')
+					logger.info('>>> [' + currDate + '] 출근도장 Fail.')
 				}
 			},
 			error : (xhr) => {
@@ -72,13 +72,13 @@ class WorkHourMarker
 					showNotify('퇴근도장', `${sessionUserName}님, ${currDate} ${currTime}에 퇴근시간 체크되었습니다. 즐퇴하세요~`);
 					saveLocalStorage('CLOCK_OUT_DATE', currDate);
 					firebaseApp.writeLog(currDate, sessionUserName, '퇴근시간', `시간: ${currTime}`);
-					log('>>> [' + currDate + '] 퇴근도장 OK.')
+					logger.info('>>> [' + currDate + '] 퇴근도장 OK.')
 				}
 				else
 				{
 					// 실패
 					showNotify('퇴근도장', `${sessionUserName}님, 퇴근시간 등록 실패!!!.`);
-					log('>>> [' + currDate + '] 퇴근도장 Fail.')
+					logger.info('>>> [' + currDate + '] 퇴근도장 Fail.')
 				}
 			},
 			error : (xhr) => {
@@ -92,16 +92,11 @@ class WorkHourMarker
 
 		requestAjax(options);
 
-		/*var currDate = getCurrDate();
-		//saveLocalStorage('CLOCK_OUT_DATE', currDate);
-		log('[' + currDate + '] 퇴근도장 OK.')
-		showNotify('퇴근도장', sessionUserName + '님, ' + currDate  + ' ' + currTime + '에 퇴근시간 체크되었습니다. 즐퇴하세요~');
-		*/
 	}
 
 	handleError(responseText)
 	{
-		console.log('responseText : ' + JSON.stringify(responseText))
+		//console.log('responseText : ' + JSON.stringify(responseText))
 		if (responseText.name === 'common.unauthenticated')
 		{
 			showNotify('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");

@@ -11,14 +11,14 @@ function getLocalStorage(key)
 
 function requestAjax(options)
 {
-    log('======= Ajax Request ======');
-    log('[url] ' + options.url);
-    log('[method] ' + options.method);
+    logger.debug('======= Ajax Request ======');
+    logger.debug('[url] ' + options.url);
+    logger.debug('[method] ' + options.method);
     if (options.headers)
-        log('[headers] ' + options.headers);
+        logger.debug('[headers] ' + options.headers);
     if (options.data)
-        log('[data] ' + options.data);
-    log('=========================');
+        logger.debug('[data] ' + options.data);
+    logger.debug('=========================');
 
     return $.ajax({
         type: options.method,
@@ -31,11 +31,6 @@ function requestAjax(options)
         error : options.error,
         complete : options.complete
     });
-}
-
-function log(str)
-{
-    console.log('[' + getCurrDate()  + ' ' + getCurrTime() + '] ' + str);
 }
 
 function getCurrDate()
@@ -118,7 +113,7 @@ Date.prototype.addHours = function(hours)
 function showNotify(title, message) {
 
     chrome.runtime.sendMessage({action: "notification", title: title, message: message}, function(response) {
-        console.log("Response: ", response);
+        logger.debug("Response: ", response);
     });
 
 }

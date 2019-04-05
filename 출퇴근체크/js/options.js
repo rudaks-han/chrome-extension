@@ -193,8 +193,8 @@ function save()
 	};
 
 	chrome.storage.sync.set(value, function() {
-      console.log('Settings saved');
-      console.log(value);
+		logger.debug('Settings saved');
+		logger.debug(value);
     });
 }
 
