@@ -1,2 +1,2 @@
 
-zip install.zip css images js *.json *.html *.js
+zip install.zip css/* images/* js/* *.json *.html *.js
