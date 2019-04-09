@@ -128,15 +128,15 @@ function saveConfig()
 
 	if (parseInt(clockInRandomFromMinute) < parseInt(clockInRandomToMinute))
 	{
-		alert('시작시간이 종료시간보다 이전이어야 합니다.');
+		alert('시작시간이 종료시간 보다 이전이어야 합니다.');
 		$('#clock-in-random-from-minute').focus();
 		//$('#clock-in-random-from-minute').val(clockInRandomToMinute);
 		return;
 	}
 
-	if (parseInt(clockOutRandomFromMinute) < parseInt(clockOutRandomToMinute))
+	if (parseInt(clockOutRandomFromMinute) > parseInt(clockOutRandomToMinute))
 	{
-		alert('시작시간이 종료시간보다 이전이어야 합니다.');
+		alert('종료시간이 시작시간 보다 이전이어야 합니다.');
 		$('#clock-out-random-from-minute').focus();
 		//$('#clock-in-random-from-minute').val(clockOutRandomToMinute);
 		return;
