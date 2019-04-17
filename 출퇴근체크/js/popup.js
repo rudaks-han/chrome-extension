@@ -1,6 +1,6 @@
 function debug(str)
 {
-	chrome.extension.getBackgroundPage().console.error('[popup.js] ' + str);
+	chrome.extension.getBackgroundPage().console.log('[popup.js] ' + str);
 }
 
 var command =

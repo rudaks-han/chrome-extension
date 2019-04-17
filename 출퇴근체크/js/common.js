@@ -110,10 +110,15 @@ Date.prototype.addHours = function(hours)
     return dat;
 }
 
-function showNotify(title, message) {
+function showNotify(title, message, requireInteraction = false) {
 
-    chrome.runtime.sendMessage({action: "notification", title: title, message: message}, function(response) {
-        logger.debug("Response: ", response);
+    chrome.runtime.sendMessage({
+        action: "notification",
+        title: title,
+        message: message,
+        requireInteraction: requireInteraction
+    }, function(response) {
+        logger.debug("showNotify Response: ", response);
     });
 
 }
@@ -135,4 +140,9 @@ function randomRange(n1, n2) {
     n1 = parseInt(n1);
     n2 = parseInt(n2);
     return Math.floor( (Math.random() * (n2 - n1 + 1)) + n1 );
+}
+
+function getChromeStorageSync(item, callback)
+{
+    chrome.storage.sync.get(item, callback);
 }

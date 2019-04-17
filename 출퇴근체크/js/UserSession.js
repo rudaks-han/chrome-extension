@@ -14,9 +14,8 @@ class UserSession
 				logger.info(`사용자 세션정보 요청 : ${sessionUserName} [${sessionUserId}]`);
 			},
 			error : (xhr) => {
-				logger.info(`사용자 세션정보 요청 실패 : ${sessionUserName} [${sessionUserId}]`);
+				logger.error(`사용자 세션정보 요청 실패 : ${sessionUserName} [${sessionUserId}]`);
 
-				console.info('다시 로그인 시도');
 				this.loginAfterGetStorage();
 			}
 		};

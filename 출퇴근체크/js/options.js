@@ -1,6 +1,6 @@
 function init()
 {
-	var backgroundPage = chrome.extension.getBackgroundPage();
+	//var backgroundPage = chrome.extension.getBackgroundPage();
 
 	chrome.storage.sync.get('use-flag', function(items) {
 
@@ -108,6 +108,13 @@ function reset()
 	location.reload();
 }
 
+function notification()
+{
+	showNotify('Test Notification', 'notified.', true);
+	//firebaseApp.writeLog("2019-01-01", 'bbb', '출근', '1111')
+
+}
+
 function saveConfig()
 {
 	const username = $('#username').val();
@@ -160,8 +167,6 @@ function saveConfig()
 		'clock-out-random-to-minute' : clockOutRandomToMinute
 	};
 
-	console.error(jsonValue)
-
 	chrome.storage.sync.set(jsonValue, function() {
 		logger.debug('Settings saved');
 		//logger.debug(JSON.stringify(jsonValue));
@@ -198,6 +203,7 @@ $(() => {
 	$('#btnCheckUsernameAndPassword').on('click', checkUsernameAndPassword);
 	$('#btnSave').on('click', saveConfig);
 	$('#btnReset').on('click', reset);
+	$('#btnNotification').on('click', notification);
 
 	init();
 

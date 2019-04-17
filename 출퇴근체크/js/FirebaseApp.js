@@ -1,8 +1,10 @@
 class FirebaseApp
 {
+	app;
+
 	init()
 	{
-		var config = {
+		const config = {
 			apiKey: "AIzaSyBeWHyVqAAk-kXXPtsEg-4IK66P9Xjma4A",
 			authDomain: "spectra-groupware.firebaseapp.com",
 			databaseURL: "https://spectra-groupware.firebaseio.com",
@@ -10,7 +12,7 @@ class FirebaseApp
 			storageBucket: "spectra-groupware.appspot.com",
 			messagingSenderId: "785900078227"
 		};
-		const app = firebase.initializeApp(config);
+		this.app = firebase.initializeApp(config);
 	}
 
 	writeLog(date, user, key, value)
@@ -19,7 +21,7 @@ class FirebaseApp
 		logger.debug('key: ' + key);
 		logger.debug('value: ' + value);
 
-		firebase.database().ref('worktime_checker/' + date + '/' + user + '/' + key).set({
+		this.app.database().ref('worktime_checker/' + date + '/' + user + '/' + key).set({
 			value
 		});
 	}
