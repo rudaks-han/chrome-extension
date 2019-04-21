@@ -1,6 +1,9 @@
 class FirebaseApp
 {
-	app;
+	firebase;
+
+	worktime_checker = "worktime_checker";
+	user_config = "user_config";
 
 	init()
 	{
@@ -12,17 +15,26 @@ class FirebaseApp
 			storageBucket: "spectra-groupware.appspot.com",
 			messagingSenderId: "785900078227"
 		};
-		this.app = firebase.initializeApp(config);
+		this.firebase = firebase.initializeApp(config);
 	}
 
-	writeLog(date, user, key, value)
+	//writeLog(date, user, key, value)
+	set(key, value)
 	{
-		logger.debug('firebaes writeLog');
+		logger.debug('firebase set');
 		logger.debug('key: ' + key);
 		logger.debug('value: ' + value);
 
-		this.app.database().ref('worktime_checker/' + date + '/' + user + '/' + key).set({
+		this.firebase.database().ref(key).set({
 			value
+		});
+	}
+
+	get(key, callback)
+	{
+		var ref = this.firebase.database().ref(key);
+		ref.on('value', function(snapshot) {
+			callback(snapshot);
 		});
 	}
 }

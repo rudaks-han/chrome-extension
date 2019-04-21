@@ -4,35 +4,44 @@ let GOSSOcookie = '';
 let checkInterval = 60 * 1000;
 let userSessionInterval = 5 * 60 * 1000; // 5분 마다
 let calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
+let firebaseConfigCheckerInterval = 60 * 1000; // 1분마다.
+
+let firebaseConfigTimer;
 
 let sessionUserName;
 let sessionUserId;
 
-// 로그인 정보
-let username;
-let password;
+let userInfo = {
+    username: '',
+    password: ''
+}
 
 let syncStorage = {};
 let userConfig = {}; // 로그인 사용자 정보
 let holidayList = {}; // 휴일정보
 let dayOffList = {}; // 연차
 
+holidayList['2019-05-06'] = 'holiday'; // 대체공휴일
+
+
 let clockInRandomTime = {}; // 출근시간 마크시간(랜덤)
 let clockOutRandomTime = {}; // 퇴근시간 마크시간(랜덤)
 
 function init() {
+	firebaseConfigTimer = setInterval(() => {
+        firebaseConfigChecker.get(userInfo.username)
+    }, firebaseConfigCheckerInterval); // 세션정보 5분마다 가져온다.
+
     // 사용여부 체크
     getChromeStorageSync('use-flag', (items) => {
         let useFlag = items['use-flag'];
 
-        if (useFlag == 'Y')
-        {
-            check();
-        }
-        else
+		if (useFlag !== 'Y')
         {
             logger.info('>>> 출퇴근 체크가 사용하지 않음으로 설정되어 있습니다.');
         }
+
+		check();
     });
 }
 
@@ -54,7 +63,7 @@ function check() {
     $.when.apply($, promises).then(() => {
         setInterval(() => {
             userSession.getSession()
-        }, userSessionInterval); // 세션정보 1분마다 가져온다.
+        }, userSessionInterval); // 세션정보 5분마다 가져온다.
 
         setInterval(() => {
             workHourChecker.requestCalendar()

@@ -23,7 +23,11 @@ class WorkHourMarker
 					// 출근도장 OK
 					showBgNotification('출근도장', `${sessionUserName}님, ${currDate} ${currTime}에 출근시간으로 표시되었습니다.`, true);
 					saveLocalStorage('CLOCK_IN_DATE', currDate);
-					firebaseApp.writeLog(currDate, sessionUserName, '출근시간', `시간: ${currTime}`);
+
+					const firebaseKey = `${firebaseApp.worktime_checker}/${currDate}/${sessionUserName}/출근시간`;
+					const firebaseValue = currTime;
+
+					firebaseApp.set(firebaseKey, firebaseValue);
 					logger.info('>>> [' + currDate + '] 출근도장 OK.')
 				}
 				else
@@ -71,7 +75,12 @@ class WorkHourMarker
 					// 퇴근도장 OK
 					showBgNotification('퇴근도장', `${sessionUserName}님, ${currDate} ${currTime}에 퇴근시간 체크되었습니다. 즐퇴하세요~`, true);
 					saveLocalStorage('CLOCK_OUT_DATE', currDate);
-					firebaseApp.writeLog(currDate, sessionUserName, '퇴근시간', `시간: ${currTime}`);
+
+					const firebaseKey = `${firebaseApp.worktime_checker}/${currDate}/${sessionUserName}/퇴근시간`;
+					const firebaseValue = currTime;
+
+					firebaseApp.set(firebaseKey, firebaseValue);
+
 					logger.info('>>> [' + currDate + '] 퇴근도장 OK.')
 				}
 				else

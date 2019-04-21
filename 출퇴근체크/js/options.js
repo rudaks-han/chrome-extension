@@ -110,8 +110,11 @@ function reset()
 
 function notification()
 {
-	showNotify('Test Notification', 'notified.', true);
+	//showNotify('Test Notification', 'notified.', true);
 	//firebaseApp.writeLog("2019-01-01", 'bbb', '출근', '1111')
+	const key = firebaseApp.worktime_checker + '/' + "2019-01-01" + '/' + '한경만' + '/' + '_출근시간';
+	const value = '09:00:00'
+	firebaseApp.set(key, value);
 
 }
 
@@ -173,6 +176,11 @@ function saveConfig()
 		console.log(jsonValue);
 
 		showNotify('설정', '설정정보가 저장되었습니다.');
+
+		const firebaseKey = firebaseApp.user_config + '/' + username;
+		const firebaseValue = {'use-flag' : useFlag};
+
+		firebaseApp.set(firebaseKey, firebaseValue);
 	});
 };
 

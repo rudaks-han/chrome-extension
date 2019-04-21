@@ -10,8 +10,7 @@ class UserSession
 			success : (res) => {
 				sessionUserId = res.data.id;
 				sessionUserName = res.data.name;
-
-				logger.info(`사용자 세션정보 요청 : ${sessionUserName} [${sessionUserId}]`);
+				userInfo.username = res.data.employeeNumber;
 			},
 			error : (xhr) => {
 				logger.error(`사용자 세션정보 요청 실패 : ${sessionUserName} [${sessionUserId}]`);
@@ -32,7 +31,14 @@ class UserSession
 				let username = syncStorage['username'];
 				let password = syncStorage['password'];
 
-				this.login(username, password, callback);
+				if (username && password) {
+					this.login(username, password, callback);
+				}
+				else
+				{
+					logger.info('username and password does not exist.');
+					return;
+				}
 
 			})
 	}
@@ -52,6 +58,8 @@ class UserSession
 			headers: {'Set-Cookie': guid + '; Path=/'},
 			param: param,
 			success : (res) => {
+				userInfo.username = username;
+
 				chrome.cookies.get({ url: 'https://spectra.daouoffice.com', name: 'GOSSOcookie' },
 					function (cookie) {
 						if (cookie) {

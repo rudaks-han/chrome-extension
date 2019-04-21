@@ -73,7 +73,9 @@ class WorkHourChecker
 					let type = eventList[j].type; // holiday: 휴일, company: 연차/공가)
 					let summary = eventList[j].summary; // 연차 : 서형태, 반차: 이승엽(오후), 공가 : 유민(오후)
 
-					if (type == 'holiday')
+					//console.error('date : ' + date + ', type : ' + type + ', summary : ' + summary);
+
+					if (type == 'holiday' || type == 'anniversary') // anniversary : 근로자의 날
 					{
 						holidayList[date] = type;
 					}
@@ -82,7 +84,7 @@ class WorkHourChecker
 						if (!dayOffList[date])
 							dayOffList[date] = [];
 
-						dayOffList[date].push(summary);
+						dayOffList[date].push(summary); // summary => 연차 : 한경만
 					}
 
 				}
