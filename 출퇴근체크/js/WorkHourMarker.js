@@ -8,9 +8,11 @@ class WorkHourMarker
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		let url = this.BASE_URL + '/api/ehr/attnd/clockin';
+		//let url = this.BASE_URL + '/api/ehr/attnd/clockin';
+		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockIn`;
 		//let param = '{"clockInTime": "' + currDate + 'T' + currTime + '.000+09:00"}';
-		let param = `{"clockInTime": "${currDate}T${currTime}.000+09:00"}`;
+		//let param = `{"clockInTime": "${currDate}T${currTime}.000+09:00"}`;
+		let param = `{"checkTime":"${currDate}T${currTime}.000Z"},"timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 
 		let options = {
 			method: 'put',
@@ -61,8 +63,10 @@ class WorkHourMarker
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		let url = this.BASE_URL + '/api/ehr/attnd/clockout';
-		let param = `{"clockOutTime": "${currDate}T${currTime}.000+09:00"}`;
+		//let url = this.BASE_URL + '/api/ehr/attnd/clockout';
+		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockOut`;
+		//let param = `{"clockOutTime": "${currDate}T${currTime}.000+09:00"}`;
+		let param = `{"checkTime":"${currDate}T${currTime}.000Z"},"timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 
 		let options = {
 			method: 'put',
