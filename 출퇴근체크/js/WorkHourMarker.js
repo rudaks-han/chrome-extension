@@ -12,10 +12,10 @@ class WorkHourMarker
 		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockIn`;
 		//let param = '{"clockInTime": "' + currDate + 'T' + currTime + '.000+09:00"}';
 		//let param = `{"clockInTime": "${currDate}T${currTime}.000+09:00"}`;
-		let param = `{"checkTime":"${currDate}T${currTime}.000Z"},"timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
+		let param = `{"checkTime":"${currDate}T${currTime}.000Z","timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 
 		let options = {
-			method: 'put',
+			method: 'post',
 			url: url,
 			headers: {'TimeZoneOffset': '540'},
 			param: param,
@@ -66,10 +66,10 @@ class WorkHourMarker
 		//let url = this.BASE_URL + '/api/ehr/attnd/clockout';
 		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockOut`;
 		//let param = `{"clockOutTime": "${currDate}T${currTime}.000+09:00"}`;
-		let param = `{"checkTime":"${currDate}T${currTime}.000Z"},"timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
+		let param = `{"checkTime":"${currDate}T${currTime}.000Z","timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 
 		let options = {
-			method: 'put',
+			method: 'post',
 			url: url,
 			headers: {'TimeZoneOffset': '540'},
 			param: param,
