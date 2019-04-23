@@ -11,6 +11,7 @@ class UserSession
 				sessionUserId = res.data.id;
 				sessionUserName = res.data.name;
 				userInfo.username = res.data.employeeNumber;
+				userInfo.userId = sessionUserId;
 			},
 			error : (xhr) => {
 				logger.error(`사용자 세션정보 요청 실패 : ${sessionUserName} [${sessionUserId}]`);

@@ -8,10 +8,8 @@ class WorkHourMarker
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		//let url = this.BASE_URL + '/api/ehr/attnd/clockin';
-		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockIn`;
-		//let param = '{"clockInTime": "' + currDate + 'T' + currTime + '.000+09:00"}';
-		//let param = `{"clockInTime": "${currDate}T${currTime}.000+09:00"}`;
+		let userId = userInfo.userId;
+		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockIn?userId=${userId}&baseDate=${currDate}`;
 		let param = `{"checkTime":"${currDate}T${currTime}.000Z","timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 
 		let options = {
@@ -49,12 +47,6 @@ class WorkHourMarker
 		};
 
 		requestAjax(options);
-
-		/*var currDate = getCurrDate();
-		//saveLocalStorage('CLOCK_IN_DATE', currDate);
-		log('[' + currDate + '] 출근도장 OK.')
-		showNotify('출근도장', sessionUserName + '님, ' + currDate + '에 출근시간으로 표시되었습니다.');*/
-
 	}
 
 	// 퇴근하기
@@ -63,9 +55,8 @@ class WorkHourMarker
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		//let url = this.BASE_URL + '/api/ehr/attnd/clockout';
-		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockOut`;
-		//let param = `{"clockOutTime": "${currDate}T${currTime}.000+09:00"}`;
+		let userId = userInfo.userId;
+		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockOut?userId=${userId}&baseDate=${currDate}`;
 		let param = `{"checkTime":"${currDate}T${currTime}.000Z","timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 
 		let options = {
@@ -115,18 +106,23 @@ class WorkHourMarker
 			showBgNotification('출근도장', "스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.");
 			logger.info('스펙트라 그룹웨어에 로그인 되지 않았습니다. 브라우저에서 로그인 해주시기 바랍니다.');
 		}
-		else if (responseText.name === 'AlreadyClockInException')
+		else if (responseText.name === 'timeline.clockin.duplication')
 		{
 			showBgNotification('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${responseText.message}`);
 			logger.info(`${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${responseText.message}`);
 
 			saveLocalStorage('CLOCK_IN_DATE', getCurrDate());
 		}
-		else if (responseText.name === 'AlreadyClockOutException')
+		else if (responseText.name === 'timeline.clockout.duplication')
 		{
 			showBgNotification('퇴근도장', `${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${responseText.message}`);
 			logger.info(`${sessionUserName}님, 퇴근도장 등록 실패!!!. ==> ${responseText.message}`);
 			saveLocalStorage('CLOCK_OUT_DATE', getCurrDate());
+		}
+		else
+		{
+			showBgNotification('Error', `${sessionUserName}님, WorkHourMarker Error. ==> ${responseText.message}`);
+			logger.info(`${sessionUserName}님, WorkHourMarker Error. ==> ${responseText.message}`);
 		}
 	}
 }
