@@ -36,8 +36,8 @@ function init()
 	setInputValue('clock-in-random-to-minute', '5');
 	setRadioValue('clock-out-check-type', 'TIME');
 	setInputValue('clock-out-after-minute', '1');
-	setInputValue('clock-out-random-from-minute', '10');
-	setInputValue('clock-out-random-to-minute', '5');
+	setInputValue('clock-out-random-from-minute', '5');
+	setInputValue('clock-out-random-to-minute', '10');
 }
 
 function getOptionTime(toMinute, suffix)
