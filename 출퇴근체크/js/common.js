@@ -9,7 +9,7 @@ function getLocalStorage(key)
     return localStorage[key];
 }
 
-function aa() {}
+function aa() { }
 
 function requestAjax(options)
 {
