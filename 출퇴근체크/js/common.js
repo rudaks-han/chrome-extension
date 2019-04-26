@@ -9,6 +9,8 @@ function getLocalStorage(key)
     return localStorage[key];
 }
 
+function aa() {}
+
 function requestAjax(options)
 {
     logger.debug('======= Ajax Request ======');
