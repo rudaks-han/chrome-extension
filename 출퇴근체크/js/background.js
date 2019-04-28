@@ -65,7 +65,20 @@ function check() {
         }, calendarCheckInterval); // 달력정보 1시간마다 가져온다.
 
         setInterval(() => {
-            workHourChecker.checkStartWorkTime();
+            getChromeStorageSync('use-flag', (items) => {
+                let useFlag = items['use-flag'];
+
+                if (useFlag === 'Y')
+                {
+                    workHourChecker.checkStartWorkTime();
+                }
+                else
+                {
+                    logger.info('출퇴근 체크가 사용하지 않음으로 설정되어 있습니다.');
+                }
+            });
+
+
         }, checkInterval); // 출퇴근시간 체크 (1분마다 체크)
     });
 }
