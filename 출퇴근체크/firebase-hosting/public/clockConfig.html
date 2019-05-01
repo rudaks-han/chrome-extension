@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Semantic UI CDN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
+    <script src="/js/logger.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/FirebaseApp.js"></script>
+
+    <style>
+        body { margin: 30px;}
+    </style>
+</head>
+<body>
+
+<form class="two ui form">
+
+    <h1 class="ui header">그룹웨어 출퇴근 자동체크</h1>
+    <div class="ui bulleted list">
+        <div class="item">사용여부를 설정하시면 PC에 출퇴근 사용여부 정보가 변경됩니다.</div>
+    </div>
+
+    <div class="ui divider"></div>
+
+    <h4 class="ui dividing header">로그인 정보</h4>
+    <div class="fields">
+        <div class="field">
+            <label>사원번호</label>
+            <input type="text" name="username" id="username" placeholder="예) 2001001">
+        </div>
+        <!--<div class="field">
+            <label>비밀번호</label>
+            <input type="password" name="password" id="password" placeholder="">
+        </div>-->
+        <div class="field">
+            <label>&nbsp;</label>
+            <div class="ui button primary" id="btnCheckUsernameAndPassword">확인</div>
+        </div>
+    </div>
+
+    <h4 class="ui dividing header">출퇴근 시간 자동설정 사용여부</h4>
+    <div class="inline field">
+        <div class="ui toggle checkbox use-flag">
+            <input type="checkbox" tabindex="0" id="use-flag">
+            <label>사용여부</label>
+        </div>
+    </div>
+
+    <div class="ui button primary" id="btnSave">저장하기</div>
+
+</form>
+
+
+
+<script>
+    $(function() {
+		$('#btnCheckUsernameAndPassword').on('click', () => {
+			const username = $('#username').val();
+
+			if (username == '') {
+				alert('사번을 입력하세요.')
+				return;
+			}
+
+			getUserConfig($('#username').val())
+
+		});
+
+		$('#btnSave').on('click', () => {
+			const username = $('#username').val();
+			const useFlag = $('#use-flag').is(':checked') ? 'Y' : 'N';
+
+			updateUserConfig(username, useFlag);
+        });
+	});
+
+	function getUserConfig(username) {
+		firebaseApp.get(firebaseApp.user_config + '/' + username, snapshot => {
+			if (snapshot.val() == null)
+			{
+				return;
+			}
+
+			let { value } = snapshot.val();
+
+			let useFlag = value['use-flag'];
+
+			console.error("useFlag:" + useFlag)
+			if (useFlag === 'Y') {
+				$('.ui.toggle.checkbox.use-flag').checkbox('set checked');
+			} else {
+				$('.ui.toggle.checkbox.use-flag').checkbox('set unchecked');
+			}
+
+			console.error(value)
+		});
+	}
+
+	function updateUserConfig(username, useFlag) {
+		const firebaseKey = firebaseApp.user_config + '/' + username;
+		const firebaseValue = {'use-flag' : useFlag};
+
+		firebaseApp.set(firebaseKey, firebaseValue);
+		alert('변경되었습니다.')
+    }
+
+</script>
+</body>
+</html>

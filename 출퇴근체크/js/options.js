@@ -178,9 +178,10 @@ function saveConfig()
 		showNotify('설정', '설정정보가 저장되었습니다.');
 
 		const firebaseKey = firebaseApp.user_config + '/' + username;
-		const firebaseValue = {'use-flag' : useFlag};
+		//const firebaseValue = {'use-flag' : useFlag};
+		delete jsonValue['password'];
 
-		firebaseApp.set(firebaseKey, firebaseValue);
+		firebaseApp.set(firebaseKey, jsonValue);
 	});
 };
 
