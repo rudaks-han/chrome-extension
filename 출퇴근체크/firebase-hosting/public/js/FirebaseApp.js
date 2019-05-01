@@ -1,9 +1,10 @@
 class FirebaseApp
 {
-	firebase;
-
-	worktime_checker = "worktime_checker";
-	user_config = "user_config";
+	constructor(props) {
+		this.firebase = null;
+		this.worktime_checker = "worktime_checker";
+		this.user_config = "user_config";
+	}
 
 	init()
 	{
@@ -21,10 +22,6 @@ class FirebaseApp
 	//writeLog(date, user, key, value)
 	set(key, value)
 	{
-		logger.debug('firebase set');
-		logger.debug('key: ' + key);
-		logger.debug('value: ' + value);
-
 		this.firebase.database().ref(key).set({
 			value
 		});
@@ -39,5 +36,3 @@ class FirebaseApp
 	}
 }
 
-const firebaseApp = new FirebaseApp();
-firebaseApp.init();

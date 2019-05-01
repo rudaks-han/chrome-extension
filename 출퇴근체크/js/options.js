@@ -9,9 +9,9 @@ function init()
 		useFlag = useFlag || 'N';
 
 		if (useFlag == 'Y') {
-			$('.ui.toggle.checkbox.use-flag').checkbox('set checked');
+			setUseFlagChecked(true);
 		} else {
-			$('.ui.toggle.checkbox.use-flag').checkbox('set unchecked');
+			setUseFlagChecked(false);
 		}
 
 		if (useFlag == 'N')
@@ -38,6 +38,20 @@ function init()
 	setInputValue('clock-out-after-minute', '1');
 	setInputValue('clock-out-random-from-minute', '5');
 	setInputValue('clock-out-random-to-minute', '10');
+
+	chrome.storage.sync.get('username', function(items) {
+		let username = items['username'];
+		if (username) {
+			onUpdateFirebaseConfig(username);
+		}
+	});
+}
+
+function setUseFlagChecked(flag) {
+	if (flag)
+		$('.ui.toggle.checkbox.use-flag').checkbox('set checked');
+	else
+		$('.ui.toggle.checkbox.use-flag').checkbox('set unchecked');
 }
 
 function getOptionTime(toMinute, suffix)
@@ -116,6 +130,32 @@ function notification()
 	const value = '09:00:00'
 	firebaseApp.set(key, value);
 
+}
+
+function onUpdateFirebaseConfig(username) {
+	const firebaseKey = firebaseApp.user_config + '/' + username;
+	firebaseApp.get(firebaseApp.user_config + '/' + username, snapshot => {
+
+		if (snapshot.val() == null)
+		{
+			return;
+		}
+
+		let {value} = snapshot.val();
+
+		const jsonValue = {
+			'use-flag': value['use-flag']
+		};
+		chrome.storage.sync.set(jsonValue, function () {
+			//logger.debug(JSON.stringify(jsonValue));
+			console.log('config updated : ' + JSON.stringify(jsonValue));
+
+			if (value['use-flag'] == 'Y')
+				setUseFlagChecked(true);
+			else
+				setUseFlagChecked(false);
+		});
+	});
 }
 
 function saveConfig()

@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.9.1/firebase.js"></script>
-    <script src="/js/logger.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <!--<script src="/js/logger.js"></script>-->
     <script src="/js/common.js"></script>
     <script src="/js/FirebaseApp.js"></script>
 
@@ -63,6 +63,11 @@
     let userConfigVal = {};
     const cookieName = 'c_userNo'; // 사전
     let userConfigLoaded = false;
+	let firebaseApp;
+	let _firebase;
+
+	const worktime_checker = "worktime_checker";
+	const user_config = "user_config";
 
     $(function() {
 		$('#btnCheckUsernameAndPassword').on('click', () => {
@@ -90,6 +95,10 @@
         }
 
 		enableBtnSave(false);
+
+		//firebaseInit();
+		firebaseApp = new FirebaseApp();
+		firebaseApp.init();
 	});
 
 	function getUserConfig(username) {
@@ -131,7 +140,7 @@
      }
 
 	function updateUserConfig(username, useFlag) {
-		const firebaseKey = firebaseApp.user_config + '/' + username;
+		const firebaseKey = user_config + '/' + username;
 
 		const useFlagJson = {'use-flag' : useFlag};
 		let val = {...userConfigVal, ...useFlagJson};
@@ -153,8 +162,36 @@
                     "</div>";
 
 		$(str).appendTo('body').fadeIn('slow').delay(3000).fadeOut('slow');
-
     }
+/*
+	function firebaseInit()
+	{
+		const config = {
+			apiKey: "AIzaSyBeWHyVqAAk-kXXPtsEg-4IK66P9Xjma4A",
+			authDomain: "spectra-groupware.firebaseapp.com",
+			databaseURL: "https://spectra-groupware.firebaseio.com",
+			projectId: "spectra-groupware",
+			storageBucket: "spectra-groupware.appspot.com",
+			messagingSenderId: "785900078227"
+		};
+		_firebase = firebase.initializeApp(config);
+	}
+
+	//writeLog(date, user, key, value)
+	function setFirebase(key, value)
+	{
+		_firebase.database().ref(key).set({
+			value
+		});
+	}
+
+	function getFirebase(key, callback)
+	{
+		var ref = _firebase.database().ref(key);
+		ref.on('value', function(snapshot) {
+			callback(snapshot);
+		});
+	}*/
 </script>
 
 

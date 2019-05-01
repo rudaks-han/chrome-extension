@@ -32,7 +32,7 @@ class FirebaseApp
 
 	get(key, callback)
 	{
-		var ref = this.firebase.database().ref(key);
+		let ref = this.firebase.database().ref(key);
 		ref.on('value', function(snapshot) {
 			callback(snapshot);
 		});
