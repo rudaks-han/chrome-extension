@@ -9,21 +9,16 @@ function getLocalStorage(key)
     return localStorage[key];
 }
 
-function log(str) {
-    if (true)
-        console.log(str);
-}
-
 function requestAjax(options)
 {
-    log('======= Ajax Request ======');
-    log('[url] ' + options.url);
-    log('[method] ' + options.method);
+    logger.debug('======= Ajax Request ======');
+    logger.debug('[url] ' + options.url);
+    logger.debug('[method] ' + options.method);
     if (options.headers)
-        log('[headers] ' + options.headers);
+        logger.debug('[headers] ' + (options.headers ? JSON.stringify(options.headers) : options.headers));
     if (options.data)
-        log('[data] ' + options.data);
-    log('=========================');
+        logger.debug('[data] ' + options.data);
+    logger.debug('=========================');
 
     return $.ajax({
         type: options.method,
@@ -123,7 +118,7 @@ function showNotify(title, message, requireInteraction = false) {
         message: message,
         requireInteraction: requireInteraction
     }, function(response) {
-        log("showNotify Response: ", response);
+        logger.debug("showNotify Response: ", response);
     });
 
 }

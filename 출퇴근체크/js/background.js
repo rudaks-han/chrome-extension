@@ -68,7 +68,7 @@ function check() {
             getChromeStorageSync('use-flag', (items) => {
                 let useFlag = items['use-flag'];
 
-                if (useFlag === 'Y')
+                if (useFlag == 'Y')
                 {
                     workHourChecker.checkStartWorkTime();
                 }
@@ -96,7 +96,6 @@ let receiveMessage = function(request, sender, sendResponse)
 	}
 	else if (request.action == 'notification')
     {
-        console.error('action notification')
         showBgNotification(request.title, request.message, request.requireInteraction);
     }
     else if (request.action == 'btnClockIn')

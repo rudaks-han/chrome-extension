@@ -95,6 +95,8 @@ class WorkHourChecker
 	// 출/퇴근시간 체크 시작
 	checkStartWorkTime()
 	{
+		logger.debug("checking worktime -> " + sessionUserName);
+
 		// 주말인지 여부 체크
 		if (this.isWeekend())
 			return;
@@ -121,11 +123,11 @@ class WorkHourChecker
 	// 이미 출근도장 찍음
 	isMarkedClockInAlready()
 	{
-		logger.debug('[출근도장 표시되었는지 체크]')
+		logger.trace('[출근도장 표시되었는지 체크]')
 		let storageClockInDate = getLocalStorage('CLOCK_IN_DATE');
 
 		if (storageClockInDate == getCurrDate()) {
-			logger.debug('>>> 이미 출근도장이 찍혀져 있습니다.')
+			logger.trace('>>> 이미 출근도장이 찍혀져 있습니다.')
 			return true;
 		} else {
 			return false;
@@ -135,11 +137,11 @@ class WorkHourChecker
 	// 이미 퇴근도장 찍음
 	isMarkedClockOutAlready()
 	{
-		logger.debug('[퇴근도장 표시되었는지 체크]')
+		logger.trace('[퇴근도장 표시되었는지 체크]')
 		let storageClockOutDate = getLocalStorage('CLOCK_OUT_DATE');
 
 		if (storageClockOutDate == getCurrDate()) {
-			logger.debug('>>> 이미 퇴근도장이 찍혀져 있습니다.')
+			logger.trace('>>> 이미 퇴근도장이 찍혀져 있습니다.')
 			return true;
 		} else {
 			return false;
@@ -149,11 +151,11 @@ class WorkHourChecker
 	// 주말인지 체크
 	isWeekend()
 	{
-		logger.debug('[주말여부 체크]')
+		logger.trace('[주말여부 체크]')
 		let currDate = new Date();
 		if (currDate.getDay() == 0 || currDate.getDay() == 6) // 토, 일 제외
 		{
-			logger.debug('[' + getCurrDate() + '] 오늘은 주말입니다.');
+			logger.trace('[' + getCurrDate() + '] 오늘은 주말입니다.');
 			return true;
 		} else {
 			return false;
@@ -163,10 +165,10 @@ class WorkHourChecker
 	// 공휴일인지 체크
 	isHoliday()
 	{
-		logger.debug('[공휴일 여부 체크]')
+		logger.trace('[공휴일 여부 체크]')
 		let currDate = getCurrDate();
 		if (holidayList[currDate]) {
-			logger.debug('>>> [' + getCurrDate() + '] 오늘은 공휴일입니다.');
+			logger.trace('>>> [' + getCurrDate() + '] 오늘은 공휴일입니다.');
 			return true;
 		} else {
 			return false;
@@ -176,7 +178,7 @@ class WorkHourChecker
 	// 연차인지 체크
 	isUserDayOff()
 	{
-		logger.debug('[개인 연차 여부 체크]')
+		logger.trace('[개인 연차 여부 체크]')
 		let currDate = getCurrDate();
 		let todayDayOffList = dayOffList[currDate];
 
@@ -187,7 +189,7 @@ class WorkHourChecker
 				if (item.indexOf(sessionUserName) > -1) {
 					if (!(item.indexOf('오전') > -1 || item.indexOf('오후') > -1 || item.indexOf('반차') > -1)) {
 						// 연차
-						logger.debug('>>> 오늘은 연차입니다.');
+						logger.trace('>>> 오늘은 연차입니다.');
 						return true;
 					}
 				}
@@ -219,7 +221,7 @@ class WorkHourChecker
 				const clockInRandomToMinute = userConfig['clockInRandomToMinute'];
 
 				beforeTime = randomRange(clockInRandomFromMinute, clockInRandomToMinute);
-				logger.debug('clockIn randomTime: ' + beforeTime)
+				logger.trace('clockIn randomTime: ' + beforeTime)
 
 				clockInRandomTime[currDate] = beforeTime;
 			}
@@ -255,7 +257,7 @@ class WorkHourChecker
 				const clockOutRandomToMinute = userConfig['clockOutRandomFromMinute'];
 
 				afterTime = randomRange(clockOutRandomFromMinute, clockOutRandomToMinute);
-				logger.debug('clockOut randomTime: ' + afterTime)
+				logger.trace('clockOut randomTime: ' + afterTime)
 
 				clockOutRandomTime[currDate] = afterTime;
 			}
@@ -271,7 +273,7 @@ class WorkHourChecker
 	// 반차인지 체크
 	isUserDayHalfOff()
 	{
-		logger.debug('[개인 반차 여부 체크]')
+		logger.trace('[개인 반차 여부 체크]')
 		let currDate = getCurrDate();
 		let todayDayOffList = dayOffList[currDate];
 
@@ -285,7 +287,7 @@ class WorkHourChecker
 					} else if (item.indexOf('오후') > -1) {
 						return '오후';
 					} else if (item.indexOf('반차') > -1) {
-						logger.debug('>>> 오늘은 반차입니다. (오전/오후 알수 없음) ');
+						logger.trace('>>> 오늘은 반차입니다. (오전/오후 알수 없음) ');
 						return '오전';
 					}
 				}
@@ -318,7 +320,7 @@ class WorkHourChecker
 	// 출근시간 전 5분전 부터 출근시간 후 1시간 까지
 	isInRangeClockIn(startWorkTimeDate, minuteBeforeClockIn)
 	{
-		logger.debug('[출근도장 범위내 여부 체크]')
+		logger.trace('[출근도장 범위내 여부 체크]')
 
 		let date = new Date();
 		let clockInMarkingTime = null;
@@ -335,13 +337,13 @@ class WorkHourChecker
 
 		if (date >= clockInMarkingTime) {
 			if (date > outTime) {
-				logger.debug('>>> 출근도장 찍을 유효시간(1시간) 초과됨');
+				logger.trace('>>> 출근도장 찍을 유효시간(1시간) 초과됨');
 				return false
 			} else {
 				return true;
 			}
 		} else {
-			logger.debug('>>> 출근도장 찍을 시간 아님');
+			logger.trace('>>> 출근도장 찍을 시간 아님');
 			return false;
 		}
 	}
@@ -349,7 +351,7 @@ class WorkHourChecker
 	// 퇴근시간 후 5분후 부터 1시간 까지
 	isInRangeClockOut(endWorkTimeDate, minuteAfterClockOut)
 	{
-		logger.debug('[퇴근도장 범위내 여부 체크]')
+		logger.trace('[퇴근도장 범위내 여부 체크]')
 
 		let date = new Date();
 		// 퇴근도장 찍을 시간
@@ -367,13 +369,13 @@ class WorkHourChecker
 
 		if (date >= clockOutMarkingTime) {
 			if (date > outTime) {
-				logger.debug('>>> 퇴근도장 찍을 유효시간(1시간) 초과됨');
+				logger.trace('>>> 퇴근도장 찍을 유효시간(1시간) 초과됨');
 				return false
 			} else {
 				return true;
 			}
 		} else {
-			logger.debug('>>> 퇴근도장 찍을 시간 아님');
+			logger.trace('>>> 퇴근도장 찍을 시간 아님');
 			return false;
 		}
 	}

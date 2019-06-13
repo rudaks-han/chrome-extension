@@ -38,6 +38,7 @@ class UserSession
 				else
 				{
 					logger.info('username and password does not exist.');
+					logger.info('username: ' + username);
 					return;
 				}
 
@@ -76,7 +77,7 @@ class UserSession
 					callback(res);
 			},
 			error : (xhr) => {
-				logger.info(`사용자 로그인 실패 : ${username}`);
+				logger.info(`사용자 로그인 실패 : ${param}`);
 				if (typeof callback == 'function')
 					callback(xhr);
 			}
