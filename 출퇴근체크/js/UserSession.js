@@ -75,12 +75,19 @@ class UserSession
 
 				if (typeof callback == 'function')
 					callback(res);
+
+				firebaseApp.log(username, 'login ok.');
 			},
 			error : (xhr) => {
 				logger.info(`사용자 로그인 실패 : ${param}`);
 				if (typeof callback == 'function')
 					callback(xhr);
+
+				firebaseApp.log(username, `사용자 로그인 실패 : ${param}`);
+
 			}
+
+
 		};
 
 		requestAjax(options);

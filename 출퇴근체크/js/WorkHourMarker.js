@@ -18,10 +18,12 @@ class WorkHourMarker
 			headers: {'TimeZoneOffset': '540'},
 			param: param,
 			success : (res) => {
+				let msg = '';
 				if (res.code == 200)
 				{
 					// 출근도장 OK
-					showBgNotification('출근도장', `${sessionUserName}님, ${currDate} ${currTime}에 출근시간으로 표시되었습니다.`, true);
+					msg = `${sessionUserName}님, ${currDate} ${currTime}에 출근시간으로 표시되었습니다.`;
+					showBgNotification('출근도장', msg, true);
 					saveLocalStorage('CLOCK_IN_DATE', currDate);
 
 					const firebaseKey = `${firebaseApp.worktime_checker}/${currDate}/${sessionUserName}/출근시간`;
@@ -33,14 +35,19 @@ class WorkHourMarker
 				else
 				{
 					// 실패
-					showBgNotification('출근도장', `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${res.message}`);
+					msg = `${sessionUserName}님, 출근시간 등록 실패!!!. ==> ${res.message}`;
+					showBgNotification('출근도장', msg);
 					logger.info('>>> [' + currDate + '] 출근도장 Fail.')
 				}
+
+				firebaseApp.log(sessionUserName, msg);
 			},
 			error : (xhr) => {
 				let responseText = JSON.parse(xhr.responseText);
 
 				this.handleError(responseText);
+
+				firebaseApp.log(sessionUserName, responseText);
 			},
 			complete : function(res) {
 			}
@@ -65,10 +72,12 @@ class WorkHourMarker
 			headers: {'TimeZoneOffset': '540'},
 			param: param,
 			success : (res) => {
+				let msg = '';
 				if (res.code == 200)
 				{
 					// 퇴근도장 OK
-					showBgNotification('퇴근도장', `${sessionUserName}님, ${currDate} ${currTime}에 퇴근시간 체크되었습니다. 즐퇴하세요~`, true);
+					msg = `${sessionUserName}님, ${currDate} ${currTime}에 퇴근시간 체크되었습니다. 즐퇴하세요~`;
+					showBgNotification('퇴근도장', msg, true);
 					saveLocalStorage('CLOCK_OUT_DATE', currDate);
 
 					const firebaseKey = `${firebaseApp.worktime_checker}/${currDate}/${sessionUserName}/퇴근시간`;
@@ -81,14 +90,19 @@ class WorkHourMarker
 				else
 				{
 					// 실패
-					showBgNotification('퇴근도장', `${sessionUserName}님, 퇴근시간 등록 실패!!!.`);
+					msg = `${sessionUserName}님, 퇴근시간 등록 실패!!!.`;
+					showBgNotification('퇴근도장', msg);
 					logger.info('>>> [' + currDate + '] 퇴근도장 Fail.')
 				}
+
+				firebaseApp.log(sessionUserName, msg);
 			},
 			error : (xhr) => {
 				let responseText = JSON.parse(xhr.responseText);
 
 				this.handleError(responseText);
+
+				firebaseApp.log(sessionUserName, responseText);
 			},
 			complete : function(res) {
 			}

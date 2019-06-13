@@ -4,6 +4,7 @@ class FirebaseApp
 
 	worktime_checker = "worktime_checker";
 	user_config = "user_config";
+	api_log = "api_log";
 
 	init()
 	{
@@ -36,6 +37,13 @@ class FirebaseApp
 		ref.on('value', function(snapshot) {
 			callback(snapshot);
 		});
+	}
+
+	log(itemId, value)
+	{
+		const key = `${this.api_log}/${getCurrDate()}/${itemId}/${getCurrTime()}`;
+
+		this.set(key, value);
 	}
 }
 
