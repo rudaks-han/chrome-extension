@@ -20,7 +20,7 @@ class FirebaseConfigChecker
 					}
 					chrome.storage.sync.set(jsonValue, function () {
 						//logger.debug(JSON.stringify(jsonValue));
-						console.log('config updated : ' + JSON.stringify(jsonValue));
+						console.log('firebase config updated');
 					});
 				});
 

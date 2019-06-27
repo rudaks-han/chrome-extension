@@ -1,3 +1,6 @@
+let sessionUserId = '';
+let sessionUserName = '';
+
 function init()
 {
 	//var backgroundPage = chrome.extension.getBackgroundPage();
@@ -105,8 +108,10 @@ function checkUsernameAndPassword()
 
 	const userSession = new UserSession();
 	userSession.login(username, password, function(res) {
+		console.log(res)
 		if (res.code == '200')
 		{
+			userSession.getSession();
 			showNotify('사원번호/비밀번호 확인', '사원정보가 정상적으로 확인되었습니다.');
 		}
 		else
@@ -192,7 +197,14 @@ function saveConfig()
 		return;
 	}
 
+	if (!sessionUserName) {
+		alert('사원번호/비밀번호 확인이 필요합니다. 사원번호/비밀번호를 입력 후 확인버튼을 눌러주세요.');
+		$('#username').focus();
+		return;
+	}
+
 	const jsonValue = {
+		'sessionUserName': sessionUserName,
 		'username' : username,
 		'password' : password,
 		'use-flag' : useFlag,

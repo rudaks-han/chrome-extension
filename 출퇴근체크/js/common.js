@@ -11,14 +11,14 @@ function getLocalStorage(key)
 
 function requestAjax(options)
 {
-    logger.debug('======= Ajax Request ======');
-    logger.debug('[url] ' + options.url);
-    logger.debug('[method] ' + options.method);
+    logger.trace('======= Ajax Request ======');
+    logger.trace('[url] ' + options.url);
+    logger.trace('[method] ' + options.method);
     if (options.headers)
-        logger.debug('[headers] ' + (options.headers ? JSON.stringify(options.headers) : options.headers));
+        logger.trace('[headers] ' + (options.headers ? JSON.stringify(options.headers) : options.headers));
     if (options.data)
-        logger.debug('[data] ' + options.data);
-    logger.debug('=========================');
+        logger.trace('[data] ' + options.data);
+    logger.trace('=========================');
 
     return $.ajax({
         type: options.method,

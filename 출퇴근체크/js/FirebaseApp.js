@@ -22,9 +22,9 @@ class FirebaseApp
 	//writeLog(date, user, key, value)
 	set(key, value)
 	{
-		logger.debug('firebase set');
-		logger.debug('key: ' + key);
-		logger.debug('value: ' + value);
+		logger.trace('firebase set');
+		logger.trace('key: ' + key);
+		logger.trace('value: ' + value);
 
 		this.firebase.database().ref(key).set({
 			value

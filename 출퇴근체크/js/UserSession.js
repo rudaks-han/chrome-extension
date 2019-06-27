@@ -4,6 +4,7 @@ class UserSession
 
 	getSession()
 	{
+		logger.debug("UserSession#getSession")
 		let options = {
 			method: 'get',
 			url: this.BASE_URL + '/api/user/session',
@@ -12,6 +13,14 @@ class UserSession
 				sessionUserName = res.data.name;
 				userInfo.username = res.data.employeeNumber;
 				userInfo.userId = sessionUserId;
+
+				if (sessionUserName) {
+					let firebaseKey = firebaseApp.api_log + '/' + getCurrDate() + '/' + sessionUserName + '/get_session_updated';
+					firebaseApp.set(firebaseKey, getCurrTime());
+				} else if (userInfo.username) {
+					let firebaseKey = firebaseApp.api_log + '/' + getCurrDate() + '/' + userInfo.username + '/get_session_updated';
+					firebaseApp.set(firebaseKey, getCurrTime());
+				}
 			},
 			error : (xhr) => {
 				logger.error(`사용자 세션정보 요청 실패 : ${sessionUserName} [${sessionUserId}]`);
@@ -25,6 +34,7 @@ class UserSession
 
 	loginAfterGetStorage(callback)
 	{
+		logger.debug("UserSession#loginAfterGetStorage")
 		promiseStorageSync('username')
 			.then(() => promiseStorageSync('password'))
 			.then(() => {
@@ -47,6 +57,8 @@ class UserSession
 
 	login(username, password, callback)
 	{
+		logger.debug("UserSession#login")
+
 		let param = '{"captcha": "", "username": "' + username + '", "password": "' + password + '", "returnUrl": ""}';
 		let guid = this.uuidv4();
 

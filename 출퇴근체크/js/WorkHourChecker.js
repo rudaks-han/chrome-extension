@@ -5,6 +5,8 @@ class WorkHourChecker
 	// 사용자의 개인설정 정보를 가져온다.
 	getUserConfig()
 	{
+		logger.debug("WorkHourChecker#getUserConfig")
+
 		promiseStorageSync('clock-in-hour')
 			.then(() => promiseStorageSync('clock-in-minute'))
 			.then(() => {
@@ -47,6 +49,8 @@ class WorkHourChecker
 	// 해당 달의 달력정보를 가져온다.
 	requestCalendar()
 	{
+		logger.debug("WorkHourChecker#requestCalendar")
+
 		let url = `${this.BASE_URL}/api/calendar/user/me/event/daily?year=${getCurrYear()}&month=${getCurrMonth()}`;
 
 		let options = {
@@ -61,6 +65,8 @@ class WorkHourChecker
 	// requestCalendar에 대한 Callback
 	requestCalendarCallback(response)
 	{
+		logger.debug("WorkHourChecker#requestCalendarCallback")
+
 		let list = response.data.list;
 		for (let i = 0; i < list.length; i++) {
 			let datetime = list[i].datetime;
@@ -95,7 +101,7 @@ class WorkHourChecker
 	// 출/퇴근시간 체크 시작
 	checkStartWorkTime()
 	{
-		logger.debug("checking worktime -> " + sessionUserName);
+		logger.debug("WorkHourChecker#checkStartWorkTime -> " + sessionUserName);
 
 		// 주말인지 여부 체크
 		if (this.isWeekend())

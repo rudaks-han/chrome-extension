@@ -5,6 +5,8 @@ class WorkHourMarker
 	// 출근하기
 	requestClockIn()
 	{
+		logger.debug("WorkHourMarker#requestClockIn");
+
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
@@ -59,6 +61,8 @@ class WorkHourMarker
 	// 퇴근하기
 	requestClockOut()
 	{
+		logger.debug("WorkHourMarker#requestClockOut");
+
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
