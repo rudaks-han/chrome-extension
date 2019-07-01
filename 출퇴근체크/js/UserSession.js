@@ -15,10 +15,10 @@ class UserSession
 				userInfo.userId = sessionUserId;
 
 				if (sessionUserName) {
-					let firebaseKey = firebaseApp.api_log + '/' + getCurrDate() + '/' + sessionUserName + '/get_session_updated';
+					let firebaseKey = firebaseApp.api_log + '/' + getCurrDateToMonth() + '/' + getCurrDay() + '/' + sessionUserName + '/get_session_updated';
 					firebaseApp.set(firebaseKey, getCurrTime());
 				} else if (userInfo.username) {
-					let firebaseKey = firebaseApp.api_log + '/' + getCurrDate() + '/' + userInfo.username + '/get_session_updated';
+					let firebaseKey = firebaseApp.api_log + '/' + getCurrDateToMonth() + '/' + getCurrDay() + '/' + userInfo.username + '/get_session_updated';
 					firebaseApp.set(firebaseKey, getCurrTime());
 				}
 			},

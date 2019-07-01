@@ -35,16 +35,11 @@ function requestAjax(options)
 
 function getCurrDate()
 {
-    var currDate = new Date();
-    var year = currDate.getFullYear();
-    var month = (currDate.getMonth() + 1);
-    if (month < 10)
-        month = '0' + month;
-    var day = currDate.getDate();
-    if (day < 10)
-        day = '0' + day;
+    return getCurrYear() + '-' + getCurrMonth() + '-' + getCurrDay();
+}
 
-    return year + '-' + month + '-' + day;
+function getCurrDateToMonth() {
+    return getCurrYear() + '-' + getCurrMonth();
 }
 
 function getCurrTime()

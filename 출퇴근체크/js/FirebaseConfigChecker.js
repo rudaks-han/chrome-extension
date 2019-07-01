@@ -5,6 +5,8 @@ class FirebaseConfigChecker
 	get(username)
 	{
 		if (username) {
+			logger.debug('FirebaseConfigChecker#get');
+
 			if (!this.eventAttached)
 			{
 				firebaseApp.get(firebaseApp.user_config + '/' + username, snapshot => {
@@ -24,9 +26,8 @@ class FirebaseConfigChecker
 					});
 				});
 
-				this.eventAttached = true;
-
-				clearTimeout(firebaseConfigTimer);
+				//this.eventAttached = true;
+				//clearTimeout(firebaseConfigTimer);
 			}
 
 		} else {

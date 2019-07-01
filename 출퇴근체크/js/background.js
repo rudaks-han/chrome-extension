@@ -1,8 +1,8 @@
 
 let GOSSOcookie = '';
 
-let checkInterval = 5 * 1000;
-let userSessionInterval = 10 * 1000; // 5분 마다
+let checkInterval = 60 * 1000;
+let userSessionInterval = 5 * 60 * 1000; // 5분 마다
 let calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
 let firebaseConfigCheckerInterval = 60 * 1000; // 1분마다.
 
@@ -21,6 +21,19 @@ holidayList['2019-05-06'] = 'holiday'; // 대체공휴일
 
 let clockInRandomTime = {}; // 출근시간 마크시간(랜덤)
 let clockOutRandomTime = {}; // 퇴근시간 마크시간(랜덤)
+
+function checkNoticeMessage() {
+    const key = 'notification-id';
+    const expectedValue = '190627-notification';
+
+    const value = getLocalStorage(key);
+
+    if (!value || value !== expectedValue) {
+        const msg = '그룹웨어(출퇴근 체크) 정보가 변경되어 설정화면으로 이동 후 다시 저장버튼을 클릭해주세요.';
+        showBgNotification('그룹웨어 출퇴근체크', msg, true);
+        saveLocalStorage(key, expectedValue)
+    }
+}
 
 function init() {
 	firebaseConfigTimer = setInterval(() => {
@@ -58,6 +71,8 @@ function check() {
     $.when.apply($, promises).then(() => {
         setInterval(() => {
             userSession.getSession()
+
+            checkNoticeMessage();
         }, userSessionInterval); // 세션정보 5분마다 가져온다.
 
         setInterval(() => {

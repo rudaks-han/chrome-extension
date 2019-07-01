@@ -28,7 +28,7 @@ class WorkHourMarker
 					showBgNotification('출근도장', msg, true);
 					saveLocalStorage('CLOCK_IN_DATE', currDate);
 
-					const firebaseKey = `${firebaseApp.worktime_checker}/${currDate}/${sessionUserName}/출근시간`;
+					const firebaseKey = `${firebaseApp.worktime_checker}/${getCurrDateToMonth()}/${getCurrDay()}/${sessionUserName}/출근시간`;
 					const firebaseValue = currTime;
 
 					firebaseApp.set(firebaseKey, firebaseValue);
@@ -84,7 +84,7 @@ class WorkHourMarker
 					showBgNotification('퇴근도장', msg, true);
 					saveLocalStorage('CLOCK_OUT_DATE', currDate);
 
-					const firebaseKey = `${firebaseApp.worktime_checker}/${currDate}/${sessionUserName}/퇴근시간`;
+					const firebaseKey = `${firebaseApp.worktime_checker}/${getCurrDateToMonth()}/${getCurrDay()}/${sessionUserName}/퇴근시간`;
 					const firebaseValue = currTime;
 
 					firebaseApp.set(firebaseKey, firebaseValue);
