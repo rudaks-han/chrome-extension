@@ -260,7 +260,7 @@ class WorkHourChecker
 			if (!afterTime)
 			{
 				const clockOutRandomFromMinute = userConfig['clockOutRandomFromMinute'];
-				const clockOutRandomToMinute = userConfig['clockOutRandomFromMinute'];
+				const clockOutRandomToMinute = userConfig['clockOutRandomToMinute'];
 
 				afterTime = randomRange(clockOutRandomFromMinute, clockOutRandomToMinute);
 				logger.trace('clockOut randomTime: ' + afterTime)
