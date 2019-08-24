@@ -34,7 +34,7 @@ setTimeout(function() {
 }, 1000);
 
 	
-  var interval = 6000; // The display interval, in minutes.
+  var interval = 60*1000; // The display interval, in minutes.
 
 	//setTimeout(function() {
   setInterval(function() {
@@ -65,9 +65,14 @@ function checkIfReserved(startDate)
             //console.log(res);
 
             if (res.indexOf('<span>객실 선택</span>') > -1) {
-            	console.log(startDate + ' 객실 있음....')
+
+				var title = '[' + startDate + '] 힐링파크 객실이 있네요. 언능 예약하세요';
+                console.error(startDate + ' ');
+
+                pushBullet(title, title);
 			} else {
-            	console.log(startDate + ' no...')
+            	console.log(startDate + ' 객실이 없어요.ㅠㅠ')
+
 			}
 
         },
