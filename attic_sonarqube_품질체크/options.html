@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html data-context="options-page">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+
+	<title class="i18n" data-msg="google_calendar_extension_name">Options</title>
+
+	<link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/semantic.min.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/options.js"></script>
+	<style>
+		body {margin: 20px;}
+
+		.comment {
+			color: gray;
+			font-size: 13px;
+		}
+
+	</style>
+</head>
+<body>
+
+<form class="two ui form">
+
+	<h1 class="ui header">Attic 품질현황 기준</h1>
+	<div class="ui bulleted list">
+	</div>
+
+	<div class="ui divider"></div>
+
+	<h4 class="ui dividing header">품질현황 체크 사용여부</h4>
+	<div class="inline field">
+		<div class="ui toggle checkbox use-flag">
+			<input type="checkbox" tabindex="0" id="saveUseFlag">
+			<label>사용여부</label>
+		</div>
+	</div>
+
+	<h4 class="ui dividing header">알림 시간</h4>
+	<div class="two fields">
+		<div class="field">
+			<label>시</label>
+			<select id="saveSelectHour" class="ui search dropdown">
+			</select>
+		</div>
+		<div class="field">
+			<label>분</label>
+			<select id="saveSelectMinute" class="ui search dropdown">
+			</select>
+		</div>
+	</div>
+
+	<h4 class="ui dividing header">품질 기준</h4>
+	<div class="field">
+		<label>Reliability</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Bugs 개수" id="saveInputBugs">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Security (Vulnerabilities)</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilities">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Security (Security Hotspots)</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspots">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Code Smells</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Smells 개수" id="saveCodeSmells">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Coverage</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Coverage Percentage" id="saveCoverage">
+			<a class="ui tag label">
+				% 이하
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Duplications</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Duplications Percentage" id="saveDuplications">
+			<a class="ui tag label">
+				% 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="ui divider"></div>
+
+
+	<div class="ui button primary" id="btnSave">저장하기</div>
+	<div class="ui button" id="btnReset">초기화</div>
+
+	<!--<<div class="ui button" id="btnNotification">Notification</div>-->
+
+
+</form>
+
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+<div>&nbsp;</div>
+
+</body>
+</html>
