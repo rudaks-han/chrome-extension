@@ -60,8 +60,8 @@ function checkValidDate() {
 	currDate = new Date();
 	if (!(currDate.getDay() === 0 || currDate.getDay() === 6)) // 토, 일 제외
 	{
-		const selectHour = saveStorageSync['saveSelectHour'];
-		const selectMinute = saveStorageSync['saveSelectMinute'];
+		const selectHour = parseInt(saveStorageSync['saveSelectHour']);
+		const selectMinute = parseInt(saveStorageSync['saveSelectMinute']);
 
 		if (currDate.getHours() === selectHour && currDate.getMinutes() === selectMinute) {
 			return true;
