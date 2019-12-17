@@ -9,7 +9,7 @@
 	"content_security_policy": "script-src 'self'; object-src 'self'",
     "permissions" : [               
         "notifications",
-		"http://*/*",
+		"http://211.63.24.41:9000/*",
 		"background",
 		"storage"
     ],
