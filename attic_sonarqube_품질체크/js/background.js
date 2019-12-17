@@ -58,7 +58,7 @@ function checkQuality() {
 
 function checkValidDate() {
 	currDate = new Date();
-	if (!(currDate.getDay() == 0 || currDate.getDay() == 6)) // 토, 일 제외
+	if (!(currDate.getDay() === 0 || currDate.getDay() === 6)) // 토, 일 제외
 	{
 		const selectHour = saveStorageSync['saveSelectHour'];
 		const selectMinute = saveStorageSync['saveSelectMinute'];
@@ -140,20 +140,24 @@ function parseSonarQube(response)
 	let vulnerabilityHistory = [];
 	let duplicatedLineDensitiy = [];
 
+	if (!response.hasOwnProperty('measures')) {
+		return {};
+	}
+
 	response.measures.map(measure => {
-		if (measure.metric == "coverage") {
+		if (measure.metric === "coverage") {
 			coverageHistory = measure.history
-		} else if (measure.metric == "ncloc") {
+		} else if (measure.metric === "ncloc") {
 			lineOfCodeHistory = measure.history
-		} else if (measure.metric == "sqale_index") {
+		} else if (measure.metric === "sqale_index") {
 			sqaleIndexHistory = measure.history
-		} else if (measure.metric == "code_smells") {
+		} else if (measure.metric === "code_smells") {
 			codeSmellHistory = measure.history
-		} else if (measure.metric == "bugs") {
+		} else if (measure.metric === "bugs") {
 			bugsHistory = measure.history
-		} else if (measure.metric == "vulnerabilities") {
+		} else if (measure.metric === "vulnerabilities") {
 			vulnerabilityHistory = measure.history
-		} else if (measure.metric == "duplicated_lines_density") {
+		} else if (measure.metric === "duplicated_lines_density") {
 			duplicatedLineDensitiy = measure.history
 		}
 	});
@@ -167,7 +171,7 @@ function parseSonarQube(response)
 	const vulnerability = vulnerabilityHistory.pop().value;
 	const duplicatedLine = duplicatedLineDensitiy.pop().value;
 
-	const result = {
+	return {
 		coverage,
 		lineOfCode,
 		sqaleIndex,
@@ -176,8 +180,6 @@ function parseSonarQube(response)
 		vulnerability,
 		duplicatedLine
 	};
-
-	return result;
 }
 
 function appendMessageLine(message) {
@@ -244,15 +246,15 @@ function notifySonarqubeResult(result) {
  */
 const receiveMessage = function(request, sender, sendResponse)
 {
-	if (request.action == 'checkQuality')
+	if (request.action === 'checkQuality')
 	{
 		checkQuality();
 	}
-	else if (request.action == 'gotoJenkins')
+	else if (request.action === 'gotoJenkins')
 	{
 		window.open('http://211.63.24.41:8080/view/attic/job/platform/');
 	}
-	else if (request.action == 'gotoSonarqube')
+	else if (request.action === 'gotoSonarqube')
 	{
 		window.open('http://211.63.24.41:9000/dashboard?id=spectra.attic%3Aplatform');
 	}
