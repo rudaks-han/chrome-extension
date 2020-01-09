@@ -1,17 +1,25 @@
 {
-    "name" : "Attic 품질현황 알리미",
+    "manifest_version" : 2,
+    "short_name": "Attic Project Sonarqube notifier Extension",
+    "name" : "Attic Project Sonarqube notifier",
+    "author": "rudaks",
+    "version": "0.0.10",
+    "description": "This extension measures the quality of the sonarqube used in the attic project(internal) and informs the user.",
+    "content_security_policy": "script-src 'self'; object-src 'self'",
 	"browser_action": {
 		"default_icon": "images/happy.png",
 		"default_popup": "popup.html"
     },
-    "version": "0.0.2",
-    "manifest_version" : 2,
-	"content_security_policy": "script-src 'self'; object-src 'self'",
+    "icons": {
+      "16": "images/icon-16.png",
+      "48": "images/icon-48.png",
+      "128": "images/icon-128.png"
+    },
     "permissions" : [               
         "notifications",
-		"http://211.63.24.41:9000/*",
 		"background",
-		"storage"
+		"storage",
+        "http://211.63.24.41:9000/api/measures/search_history"
     ],
     "background": { "scripts": ["js/background.js", "js/jquery-1.9.1.min.js"] }
 }
