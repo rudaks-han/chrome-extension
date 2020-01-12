@@ -108,8 +108,8 @@ const SONARQUBE_URL = 'http://211.63.24.41:9000';
 let hasError = false;
 let saveStorageSync = {};
 
-// http://211.63.24.41:9000/api/measures/component?additionalFields=metrics%2Cperiods&component=spectra.attic%3Aplatform&metricKeys=alert_status%2Cquality_gate_details%2Cbugs%2Cnew_bugs%2Creliability_rating%2Cnew_reliability_rating%2Cvulnerabilities%2Cnew_vulnerabilities%2Csecurity_rating%2Cnew_security_rating%2Csecurity_hotspots%2Cnew_security_hotspots%2Ccode_smells%2Cnew_code_smells%2Csqale_rating%2Cnew_maintainability_rating%2Csqale_index%2Cnew_technical_debt%2Ccoverage%2Cnew_coverage%2Cnew_lines_to_cover%2Ctests%2Cduplicated_lines_density%2Cnew_duplicated_lines_density%2Cduplicated_blocks%2Cncloc%2Cncloc_language_distribution%2Cprojects%2Cnew_lines
-const SONARQUBE_CHECK_URL = `${SONARQUBE_URL}/api/measures/search_history?component=spectra.attic%3Aplatform&metrics=bugs%2Cvulnerabilities%2Csqale_index%2Cduplicated_lines_density%2Cncloc%2Ccoverage%2Ccode_smells&ps=1000`;
+const SONARQUBE_CHECK_URL = `${SONARQUBE_URL}/api/measures/component?additionalFields=metrics%2Cperiods&component=spectra.attic%3Aplatform&metricKeys=alert_status%2Cquality_gate_details%2Cbugs%2Cnew_bugs%2Creliability_rating%2Cnew_reliability_rating%2Cvulnerabilities%2Cnew_vulnerabilities%2Csecurity_rating%2Cnew_security_rating%2Csecurity_hotspots%2Cnew_security_hotspots%2Ccode_smells%2Cnew_code_smells%2Csqale_rating%2Cnew_maintainability_rating%2Csqale_index%2Cnew_technical_debt%2Ccoverage%2Cnew_coverage%2Cnew_lines_to_cover%2Ctests%2Cduplicated_lines_density%2Cnew_duplicated_lines_density%2Cduplicated_blocks%2Cncloc%2Cncloc_language_distribution%2Cprojects%2Cnew_lines`;
+//const SONARQUBE_CHECK_URL = `${SONARQUBE_URL}/api/measures/search_history?component=spectra.attic%3Aplatform&metrics=bugs%2Cvulnerabilities%2Csqale_index%2Cduplicated_lines_density%2Cncloc%2Ccoverage%2Ccode_smells&ps=1000`;
 
 function check()
 {
@@ -123,142 +123,25 @@ function check()
 		function(resultSonarqube) {
 			Promise.resolve()
 				.then(() => {
-					return parseSonarQube(resultSonarqube);
+					//return SonarqubeParser.parse(resultSonarqube)
+					return SonarqubeNewCodeParser.parse(resultSonarqube)
 				}).then((res) => {
-					notifySonarqubeResult(res);
+					QualityResultNotifier.notify(res);
 			});
 		}
 
 	);
 }
 
-function parseSonarQube(response)
-{
-	let coverageHistory = [];
-	let lineOfCodeHistory = [];
-	let sqaleIndexHistory = [];
-	let codeSmellHistory = [];
-	let bugsHistory = [];
-	let vulnerabilityHistory = [];
-	let duplicatedLineDensitiy = [];
-
-	if (!response.hasOwnProperty('measures')) {
-		return {};
-	}
-
-	response.measures.map(measure => {
-		if (measure.metric === "coverage") {
-			coverageHistory = measure.history
-		} else if (measure.metric === "ncloc") {
-			lineOfCodeHistory = measure.history
-		} else if (measure.metric === "sqale_index") {
-			sqaleIndexHistory = measure.history
-		} else if (measure.metric === "code_smells") {
-			codeSmellHistory = measure.history
-		} else if (measure.metric === "bugs") {
-			bugsHistory = measure.history
-		} else if (measure.metric === "vulnerabilities") {
-			vulnerabilityHistory = measure.history
-		} else if (measure.metric === "duplicated_lines_density") {
-			duplicatedLineDensitiy = measure.history
-		}
-	});
-
-
-	const coverage = coverageHistory.pop().value;
-	const lineOfCode = lineOfCodeHistory.pop().value;
-	const sqaleIndex = sqaleIndexHistory.pop().value;
-	const codeSmell = codeSmellHistory.pop().value;
-	const bugs = bugsHistory.pop().value;
-	const vulnerability = vulnerabilityHistory.pop().value;
-	const duplicatedLine = duplicatedLineDensitiy.pop().value;
-
-	return {
-		coverage,
-		lineOfCode,
-		sqaleIndex,
-		codeSmell,
-		bugs,
-		vulnerability,
-		duplicatedLine
-	};
-}
-
-function appendMessageLine(message) {
-	return message.length > 0 ? `${message}, ` : '';
-}
-
-function notifySonarqubeResult(result) {
-
-	let message = '';
-	if (result.coverage < parseInt(saveStorageSync['saveCoverage'])) {
-		message += appendMessageLine(message) + `coverage: ${result.coverage}%`;
-		hasError = true;
-	}
-
-	if (result.codeSmell > parseInt(saveStorageSync['saveCodeSmells'])) {
-		message += message.length > 0 ? ', ' : '';
-		message += appendMessageLine(message) + `codeSmell: ${result.codeSmell}개`;
-		hasError = true;
-	}
-
-	if (result.bugs > parseInt(saveStorageSync['saveBugs'])) {
-		message += message.length > 0 ? ', ' : '';
-		message += appendMessageLine(message) + `bugs: ${result.bugs}개`;
-		hasError = true;
-	}
-
-	if (result.vulnerability > parseInt(saveStorageSync['saveVulnerability'])) {
-		message += message.length > 0 ? ', ' : '';
-		message += appendMessageLine(message) + `vulnerability: ${result.vulnerability}개`;
-		hasError = true;
-	}
-
-	if (result.duplicatedLine > parseInt(saveStorageSync['saveDuplications'])) {
-		message += message.length > 0 ? ', ' : '';
-		message += appendMessageLine(message) + `duplications: ${result.duplicatedLine}%`;
-		hasError = true;
-	}
-
-	console.log('# saveStorageSync');
-	console.table(saveStorageSync);
-	console.log('# actual value');
-	console.table(result);
-
-	if (hasError) {
-		showBgNotification("품질체크 결과 --> Fail", message, true);
-
-		chrome.browserAction.setIcon({
-			path: '/images/sad.png'
-		});
-	}
-	else {
-		showBgNotification("품질체크 결과", '정상입니다.');
-
-		chrome.browserAction.setIcon({
-			path: '/images/happy.png'
-		});
-	}
-
-
-
-}
 /**
  * popup에서 오는 메시지를 받는 함수
  */
 const receiveMessage = function(request, sender, sendResponse)
 {
-	if (request.action === 'checkQuality')
-	{
+	if (request.action === 'checkQuality') {
 		checkQuality();
-	}
-	else if (request.action === 'gotoJenkins')
-	{
-		window.open('http://211.63.24.41:8080/view/attic/job/platform/');
-	}
-	else if (request.action === 'gotoSonarqube')
-	{
-		window.open('http://211.63.24.41:9000/dashboard?id=spectra.attic%3Aplatform');
+	} else if (request.action === 'openWindow') {
+		window.open(request.url);
 	}
 }
 

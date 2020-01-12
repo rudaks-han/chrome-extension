@@ -8,6 +8,7 @@
         <script type="text/javascript" src="js/semantic.min.js"></script>
 	    <script type="text/javascript" src="js/popup.js"></script>
 	    <script type="text/javascript" src="js/contents-script.js"></script>
+
     </head>
 
     <body>
@@ -20,15 +21,12 @@
                     <div class="header">
                         Attic 품질현황
                     </div>
-                    <div class="description">
-                        <a id="gotoJenkins">
-                            <div class="text" style="text-decoration:underline">Jenkins 접속</div>
-                        </a>
-
-                        <a id="gotoSonarqube">
-                            <div class="text" style="text-decoration:underline">SonarQube 접속</div>
-                        </a>
+                    <div class="ui list">
+                        <a id="gotoJenkins" class="item">Jenkins 접속</a>
+                        <a id="gotoSonarqube" class="item">SonarQube 접속</a>
+                        <a id="gotoJira" class="item">Jira 접속</a>
                     </div>
+
                 </div>
                 <div class="extra content">
                     <div class="ui two buttons">
