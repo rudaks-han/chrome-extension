@@ -13,6 +13,7 @@ class SonarqubeNewCodeParser {
 			if (measure.metric === 'quality_gate_details') {
 				const value = JSON.parse(measure.value);
 
+				console.error(value)
 				value.conditions.map(condition => {
 					if (condition.metric === 'new_code_smells') {
 						codeSmell = condition.actual;
@@ -20,10 +21,11 @@ class SonarqubeNewCodeParser {
 						bugs = condition.actual;
 					} else if (condition.metric === 'new_vulnerabilities') {
 						vulnerability = condition.actual;
-					} else if (condition.metric === 'new_duplicated_lines') {
-						duplicatedLine = condition.actual;
 					}
 				});
+			} else if (measure.metric === 'new_duplicated_lines_density') {
+				duplicatedLine = Number(measure.periods[0].value);
+				duplicatedLine = duplicatedLine.toFixed(1);
 			} else if (measure.metric === 'coverage') {
 				coverage = measure.value;
 			}

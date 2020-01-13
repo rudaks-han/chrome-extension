@@ -1,7 +1,14 @@
 
 body {
-
+  margin: 5px;
   padding: 0;
-  margin: 5px 10px 5px;
-  max-width: 320px;
+  min-width: 300px;
+  width: 300px;
+  height: auto;
+}
+
+
+.ui.cards {
+  padding: 0;
+  margin: 5px;
 }

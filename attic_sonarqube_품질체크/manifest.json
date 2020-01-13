@@ -3,7 +3,7 @@
     "short_name": "Attic Project Sonarqube notifier Extension",
     "name" : "Attic Project Sonarqube notifier",
     "author": "rudaks",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "This extension measures the quality of the sonarqube used in the attic project(internal) and informs the user.",
     "content_security_policy": "script-src 'self'; object-src 'self'",
 	"browser_action": {

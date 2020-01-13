@@ -1,33 +1,31 @@
 class QualityResultNotifier {
 	static notify(result) {
 
+		console.log(result);
 		let message = '';
+
 		if (result.coverage < parseInt(saveStorageSync['saveCoverage'])) {
-			message += this.appendMessageLine(message) + `coverage: ${result.coverage}%`;
+			message += this.addComma(message) + `coverage: ${result.coverage}%`;
 			hasError = true;
 		}
 
 		if (result.codeSmell > parseInt(saveStorageSync['saveCodeSmells'])) {
-			message += message.length > 0 ? ', ' : '';
-			message += this.appendMessageLine(message) + `codeSmell: ${result.codeSmell}개`;
+			message += this.addComma(message) + `codeSmell: ${result.codeSmell}개`;
 			hasError = true;
 		}
 
 		if (result.bugs > parseInt(saveStorageSync['saveBugs'])) {
-			message += message.length > 0 ? ', ' : '';
-			message += this.appendMessageLine(message) + `bugs: ${result.bugs}개`;
+			message += this.addComma(message) + `bugs: ${result.bugs}개`;
 			hasError = true;
 		}
 
 		if (result.vulnerability > parseInt(saveStorageSync['saveVulnerability'])) {
-			message += message.length > 0 ? ', ' : '';
-			message += this.appendMessageLine(message) + `vulnerability: ${result.vulnerability}개`;
+			message += this.addComma(message) + `vulnerability: ${result.vulnerability}개`;
 			hasError = true;
 		}
 
 		if (result.duplicatedLine > parseInt(saveStorageSync['saveDuplications'])) {
-			message += message.length > 0 ? ', ' : '';
-			message += this.appendMessageLine(message) + `duplications: ${result.duplicatedLine}%`;
+			message += this.addComma(message) + `duplications: ${result.duplicatedLine}%`;
 			hasError = true;
 		}
 
@@ -35,6 +33,8 @@ class QualityResultNotifier {
 		console.table(saveStorageSync);
 		console.log('# actual value');
 		console.table(result);
+
+		console.log('fail message : ' + message);
 
 		if (hasError) {
 			showBgNotification("품질체크 결과 --> Fail", message, true);
@@ -52,7 +52,17 @@ class QualityResultNotifier {
 		}
 	}
 
-	static appendMessageLine(message) {
-		return message.length > 0 ? `${message}, ` : '';
+	static addComma(message) {
+		return message.length > 0 ? ', ' : '';
 	}
+
+	static checkHasError(resultValue, storageValue) {
+		if (resultValue > parseInt(saveStorageSync[storageValue])) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
 }
