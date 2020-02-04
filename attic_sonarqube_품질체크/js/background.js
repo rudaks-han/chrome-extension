@@ -68,9 +68,6 @@ function checkQuality() {
 		qualityChecker.startCheck()
 			.then(responses => {
 
-				console.error('responses')
-				console.error(responses)
-
 				let hasError = false;
 				let messages = '';
 				responses.map(response => {

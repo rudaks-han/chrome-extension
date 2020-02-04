@@ -8,6 +8,8 @@ class QualityChecker {
 		let data = [];
 
 		return Promise.all(this.urls.map(url => {
+			console.log('# ajax request : ' + url);
+
 			return $.ajax(url);
 		})).then(responses => {
 			console.log('# ajax response')
@@ -35,9 +37,7 @@ class QualityChecker {
 	}
 
 	check(url) {
-		//hasError = false;
-
-		console.error('check url : ' + url)
+		console.log('check url : ' + url)
 
 		return new Promise((resolve, reject) => {
 			$.get(url, response => {
