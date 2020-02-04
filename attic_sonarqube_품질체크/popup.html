@@ -7,7 +7,10 @@
 	    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
         <script type="text/javascript" src="js/semantic.min.js"></script>
 	    <script type="text/javascript" src="js/popup.js"></script>
-	    <script type="text/javascript" src="js/contents-script.js"></script>
+        <script src="js/storageSync.js"></script>
+        <script type="text/javascript" src="js/quality/QualityChecker.js"></script>
+        <script type="text/javascript" src="js/quality/NewCodeParser.js"></script>
+        <script type="text/javascript" src="js/quality/ErrorChecker.js"></script>
 
     </head>
 
@@ -26,8 +29,14 @@
                         <a id="gotoSonarqube" class="item">SonarQube 접속</a>
                         <a id="gotoJira" class="item">Jira 접속</a>
                     </div>
+                </div>
+
+                <div class="extra content">
+                <div class="ui" id="component-errors">
 
                 </div>
+
+            </div>
                 <div class="extra content">
                     <div class="ui two buttons">
                         <div class="ui basic green button" id="checkQuality">품질현황 체크</div>

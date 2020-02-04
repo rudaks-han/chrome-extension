@@ -52,12 +52,12 @@
 		</div>
 	</div>
 
-	<h4 class="ui dividing header">품질 기준</h4>
+	<h4 class="ui dividing header">Platform 품질 기준</h4>
 	<div class="field">
-		<label>Reliability</label>
+		<label>Reliability > new bugs</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Bugs 개수" id="saveInputBugs">
+			<input type="text" placeholder="Bugs 개수" id="saveInputBugsPlatform">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -65,10 +65,10 @@
 	</div>
 
 	<div class="field">
-		<label>Security (Vulnerabilities)</label>
+		<label>Security > New Vulnerabilities</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilities">
+			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilitiesPlatform">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -76,10 +76,10 @@
 	</div>
 
 	<div class="field">
-		<label>Security (Security Hotspots)</label>
+		<label>Security > New Security Hotspots</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspots">
+			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspotsPlatform">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -87,10 +87,10 @@
 	</div>
 
 	<div class="field">
-		<label>Code Smells</label>
+		<label>Maintainability > New Code Smells</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Smells 개수" id="saveCodeSmells">
+			<input type="text" placeholder="Smells 개수" id="saveCodeSmellsPlatform">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -101,7 +101,7 @@
 		<label>Coverage</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Coverage Percentage" id="saveCoverage">
+			<input type="text" placeholder="Coverage Percentage" id="saveCoveragePlatform">
 			<a class="ui tag label">
 				% 이하
 			</a>
@@ -112,7 +112,7 @@
 		<label>Duplications</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Duplications Percentage" id="saveDuplications">
+			<input type="text" placeholder="Duplications Percentage" id="saveDuplicationsPlatform">
 			<a class="ui tag label">
 				% 초과
 			</a>
@@ -121,6 +121,72 @@
 
 	<div class="ui divider"></div>
 
+	<h4 class="ui dividing header">Application 품질 기준</h4>
+	<div class="field">
+		<label>Reliability > new bugs</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Bugs 개수" id="saveInputBugsApplication">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Security > New Vulnerabilities</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilitiesApplication">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Security > New Security Hotspots</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspotsApplication">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Maintainability > New Code Smells</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Smells 개수" id="saveCodeSmellsApplication">
+			<a class="ui tag label">
+				개 초과
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Coverage</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Coverage Percentage" id="saveCoverageApplication">
+			<a class="ui tag label">
+				% 이하
+			</a>
+		</div>
+	</div>
+
+	<div class="field">
+		<label>Duplications</label>
+		<div class="ui right labeled left icon input">
+			<i class="tags icon"></i>
+			<input type="text" placeholder="Duplications Percentage" id="saveDuplicationsApplication">
+			<a class="ui tag label">
+				% 초과
+			</a>
+		</div>
+	</div>
 
 	<div class="ui button primary" id="btnSave">저장하기</div>
 	<div class="ui button" id="btnReset">초기화</div>

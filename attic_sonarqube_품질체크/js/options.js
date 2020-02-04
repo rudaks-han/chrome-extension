@@ -13,6 +13,20 @@ function initAlarmTime() {
 	$('#saveSelectMinute').html(minuteHtml);
 }
 
+const inputItems = [
+	'saveInputBugs',
+	'saveInputVulnerabilities',
+	'saveSecurityHotspots',
+	'saveCodeSmells',
+	'saveCoverage',
+	'saveDuplications'
+];
+
+const componentNames = [
+	'Platform',
+	'Application'
+];
+
 function init()
 {
 	//var backgroundPage = chrome.extension.getBackgroundPage();
@@ -22,12 +36,18 @@ function init()
 	setInputValue('saveSelectHour');
 	setInputValue('saveSelectMinute');
 
-	setInputValue('saveInputBugs', '0');
-	setInputValue('saveInputVulnerabilities', '0');
-	setInputValue('saveSecurityHotspots', '0');
-	setInputValue('saveCodeSmells', '0');
-	setInputValue('saveCoverage', '0');
-	setInputValue('saveDuplications', '0');
+	/*setInputValue('saveInputBugsPlatform', '0');
+	setInputValue('saveInputVulnerabilitiesPlatform', '0');
+	setInputValue('saveSecurityHotspotsPlatform', '0');
+	setInputValue('saveCodeSmellsPlatform', '0');
+	setInputValue('saveCoveragePlatform', '0');
+	setInputValue('saveDuplicationsPlatform', '0');*/
+
+	componentNames.forEach((componentName) => {
+		inputItems.forEach(inputItem => {
+			setInputValue(inputItem + componentName, '0');
+		});
+	});
 }
 
 function setInputValue(id, defaultValue)
@@ -76,24 +96,19 @@ function saveConfig()
 	const saveSelectHour = $('#saveSelectHour').val();
 	const saveSelectMinute = $('#saveSelectMinute').val();
 
-	const saveInputBugs = $('#saveInputBugs').val();
-	const saveInputVulnerabilities = $('#saveInputVulnerabilities').val();
-	const saveSecurityHotspots = $('#saveSecurityHotspots').val();
-	const saveCodeSmells = $('#saveCodeSmells').val();
-	const saveCoverage = $('#saveCoverage').val();
-	const saveDuplications = $('#saveDuplications').val();
+	const jsonValue = {};
 
-	const jsonValue = {
-		saveUseFlag,
-		saveSelectHour,
-		saveSelectMinute,
-		saveInputBugs,
-		saveInputVulnerabilities,
-		saveSecurityHotspots,
-		saveCodeSmells,
-		saveCoverage,
-		saveDuplications
-	};
+	jsonValue['saveUseFlag'] = saveUseFlag;
+	jsonValue['saveSelectHour'] = saveSelectHour;
+	jsonValue['saveSelectMinute'] = saveSelectMinute;
+
+	componentNames.forEach((componentName) => {
+		inputItems.forEach(inputItem => {
+			const elementName = inputItem + componentName;
+
+			jsonValue[elementName] = $('#' + elementName).val();
+		});
+	})
 
 	chrome.storage.local.set(jsonValue, function() {
 		console.log('Settings saved');

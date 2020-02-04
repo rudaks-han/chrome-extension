@@ -38,17 +38,17 @@ setTimeout(function() {
 
 	//setTimeout(function() {
   setInterval(function() {
-    if (
-      JSON.parse(localStorage.isActivated) &&
-        localStorage.frequency <= interval
-    )
-	{
+ //    if (
+ //      JSON.parse(localStorage.isActivated) &&
+ //        localStorage.frequency <= interval
+ //    )
+	// {
 
 	//pushBullet('test', 'test');
     	console.error('checking... ' + new Date());    			
-		checkIfReserved('별관>콘도', 'all', '100200010000', '2017-05-04');
-		checkIfReserved('별관>콘도', 'all', '100200010000', '2017-05-05');
-		checkIfReserved('별관>콘도', 'all', '100200010000', '2017-05-06');
+		checkIfReserved('별관>콘도', 'all', '100200010000', '2020-05-23');
+		checkIfReserved('별관>콘도', 'all', '100200010000', '2020-05-30');
+		checkIfReserved('별관>콘도', 'all', '100200010000', '2020-06-06');
 				
 		//checkIfReserved('별관>투투', 'all', '100200020000', '2016-04-02');
 		//checkIfReserved('별관>투투', 'all', '100200020000', '2016-04-09');
@@ -58,7 +58,7 @@ setTimeout(function() {
 		
 
 		//interval = 0;
-    }
+    //}
   }, interval);
 //}
 

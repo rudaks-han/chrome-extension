@@ -44,7 +44,8 @@ class WorkHourMarker
 
 				firebaseApp.log(sessionUserName, msg);
 			},
-			error : (xhr) => {
+			error : (xhr, e) => {
+				console.error(e);
 				let responseText = JSON.parse(xhr.responseText);
 
 				this.handleError(responseText);
