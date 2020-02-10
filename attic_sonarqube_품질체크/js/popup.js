@@ -42,13 +42,12 @@ function checkQuality() {
 					if (response.hasError) {
 						hasError = true;
 						messages += '[' + response.componentName + '] <font color="red">Failed</font>' + '<br/>';
+					} else {
+						messages += '[' + response.componentName + '] <font color="blue">Passed</font>' + '<br/>';
 					}
 				});
 
-				if (hasError) {
-					$('#component-errors').html('<b>SonarQube Quality</b><br/>' + messages);
-				} else {
-				}
+				$('#component-errors').html('<b>SonarQube Quality</b><br/>' + messages);
 			});
 	});
 }
