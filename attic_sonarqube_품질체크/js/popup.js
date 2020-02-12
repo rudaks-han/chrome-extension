@@ -32,23 +32,31 @@ function startChecking(callback)
 
 function checkQuality() {
 	startChecking(() => {
-		const qualityChecker = new QualityChecker();
 
-		qualityChecker.startCheck()
-			.then(responses => {
-				let hasError = false;
-				let messages = '';
-				responses.map(response => {
-					if (response.hasError) {
-						hasError = true;
-						messages += '[' + response.componentName + '] <font color="red">Failed</font>' + '<br/>';
-					} else {
-						messages += '[' + response.componentName + '] <font color="blue">Passed</font>' + '<br/>';
-					}
+		console.error(":" + saveStorageSync['saveUseFlag']);
+
+		if (saveStorageSync['saveUseFlag'] != 'Y') {
+			$('#component-errors').html('품질현황 체크: <font color="red">사용안함</font>');
+		} else {
+			const qualityChecker = new QualityChecker();
+
+			qualityChecker.startCheck()
+				.then(responses => {
+					let hasError = false;
+					let messages = '';
+					responses.map(response => {
+						console.error(response)
+						if (response.hasError) {
+							hasError = true;
+							messages += '[' + response.componentName + '] <font color="red">Failed</font>' + '<br/>';
+						} else {
+							messages += '[' + response.componentName + '] <font color="blue">Passed</font>' + '<br/>';
+						}
+					});
+
+					$('#component-errors').html('<b>SonarQube Quality</b><br/>' + messages);
 				});
-
-				$('#component-errors').html('<b>SonarQube Quality</b><br/>' + messages);
-			});
+		}
 	});
 }
 
