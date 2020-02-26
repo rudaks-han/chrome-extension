@@ -11,8 +11,8 @@
     "web_accessible_resources" : [
         "48.png"
     ],
-    "content_security_policy": "script-src 'self' https://smartstore.naver.com",
-    "background": { "scripts": ["background.js", "jquery-1.9.1.min.js"] }
+    "content_security_policy": "script-src 'self' https://smartstore.naver.com; object-src 'self'",
+    "background": { "scripts": ["background.js", "jquery-1.9.1.min.js", "jquery.ajaxQueue.min.js"] }
 }
 
 

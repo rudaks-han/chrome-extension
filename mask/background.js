@@ -33,57 +33,143 @@ setTimeout(function() {
 
 }, 1000);
 
-var interval = 5*1000; // The display interval, in minutes.
+var interval = 60*1000; // The display interval, in minutes.
 
 function checkSite() {
-	var name = '웹킵스몰 뉴스마트 황사마스크 대형 KF94 50개'
-	var url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1000798&xcode=023&mcode=002&scode=&type=X&sort=manual&cur_code=023&GfDT=bW13UFg%3D';
+	welKipsMallCount = 0;
 
-	/*
-	checkUrl(url, 'html', function(res) {
-		if ($(res).find('.info').find('.soldout').length == 0) {
-			pushBullet(name, url);
-		}
-	});
+	var name = '';
+	var url = '';
 
-	name = '웹킵스몰 리얼블랙 황사마스크 대형 KF94 25개';
-	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=997637&xcode=023&mcode=003&scode=&type=X&sort=manual&cur_code=023&GfDT=ZmZ3UFs%3D';
-	checkUrl(url, 'html', function(res) {
-		if ($(res).find('.info').find('.soldout').length == 0) {
-			pushBullet(name, url);
-		}
-	});
+	name = '웹킵스몰 스마트블랙 KF94 45개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007193&xcode=023&mcode=002&scode=&type=X&sort=manual&cur_code=023&GfDT=bm95W1g%3D';
+	checkWelKipsMall(name, url);
 
-	name ='웹킵스몰 리얼블랙 황사마스크 대형 KF94 50개';
-	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1001308&xcode=023&mcode=003&scode=&type=X&sort=manual&cur_code=023&GfDT=bml5W15F';
-	checkUrl(url, 'html', function(res) {
-		if ($(res).find('.info').find('.soldout').length == 0) {
-			pushBullet(name, url);
-		}
-	});
+	name = '웹킵스몰 뉴스마트 KF94 25개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=997662&xcode=023&mcode=002&scode=&type=X&sort=manual&cur_code=023&GfDT=amx3VA%3D%3D';
+	checkWelKipsMall(name, url);
 
-	name = '네이버스토어 아에르 스탠다스 베이직 마스크'
-	url = 'https://smartstore.naver.com/aer-shop/products/4722827602';
-	checkUrl(url, 'html', function(res) {
-		if ($(res).find('.prd_type3').html().indexOf('구매하실 수 없는') == -1) {
-			pushBullet(name, url);
-		}
-	});
+	name = '웹킵스몰 프리미엄 KF94 25개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=920693&xcode=023&mcode=001&scode=&type=X&sort=manual&cur_code=023&GfDT=bWh3UF0%3D';
+	checkWelKipsMall(name, url);
+
+	name = '웹킵스몰 프리미엄 KF80 25개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=922816&xcode=023&mcode=001&scode=&type=X&sort=manual&cur_code=023&GfDT=bm91W11G';
+	checkWelKipsMall(name, url);
+
+	name = '웹킵스몰 뉴스마트 KF80 50개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1000801&xcode=023&mcode=002&scode=&type=X&sort=manual&cur_code=023&GfDT=bm19W11H';
+	checkWelKipsMall(name, url);
+
+	name = '웹킵스몰 뉴스마트 KF94 50개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1000798&xcode=023&mcode=002&scode=&type=X&sort=manual&cur_code=023&GfDT=bWd3UFg%3D';
+	checkWelKipsMall(name, url);
+
+	name = '웹킵스몰 리얼블랙 KF94 25개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=997637&xcode=023&mcode=003&scode=&type=X&sort=manual&cur_code=023&GfDT=Zm93UFs%3D';
+	checkWelKipsMall(name, url);
+
+	name ='[아동용] 웹킵스몰 마스크 소형 KF80 25개';
+	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007206&xcode=023&mcode=001&scode=&special=1&GfDT=bm9%2FW1w%3D';
+	checkWelKipsMall(name, url);
 
 	name = '블리라이프 황사마스크'
 	url = 'http://bling-market.com/m/html/dh_product/prod_view/1807';
 	checkUrl(url, 'html', function(res) {
 		if (res.indexOf('/_data/file/goodsImages/f9ffc089ea48c99878fd710a36bbf938.jpg') == -1) {
 			pushBullet(name, url);
+			console.log('[판매중] ' + name + ' : ' + url);
+		} else {
+			console.log('[재고없음] ' + name);
+		}
+	});
+
+	name = '네이버스토어 아에르 스탠다스 베이직 마스크'
+	url = 'https://smartstore.naver.com/aer-shop/products/4722827602';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 닥터퓨리 뽑아쓰는';
+	url = 'https://smartstore.naver.com/mfbshop/products/4072573492';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 닥터퓨리 미세먼지지';
+	url = 'https://smartstore.naver.com/mfbshop/products/4072435942?NaPm=';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 상공양행 마스크';
+	url = 'https://smartstore.naver.com/sangkong/products/4762917002';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 국대 마스크';
+	url = 'https://smartstore.naver.com/korea-mask/products/4825762296#DEFAULT';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 에티카 마스크';
+	url = 'https://smartstore.naver.com/etiqa/products/4817982860';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 공감이 뉴네퓨어 마스크';
+	url = 'https://smartstore.naver.com/gonggami/products/4705579501?NaPm=#QNA';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 동국제약';
+	url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4810907388?NaPm=';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 금아덴탈';
+	url = 'https://smartstore.naver.com/kumaelectron/products/4754238400';
+	checkNaverStore(name, url);
+
+	name = '금아덴탈 마스크';
+	url = 'http://item.gmarket.co.kr/?goodscode=1319742635&jaehuid=200010777';
+	checkUrl(url, 'html', function(res) {
+		//console.log(res);
+		if (res.indexOf('<strong class="price_real">일시품절</strong>') == -1) {
+			console.log('[판매중] ' + name + ' : ' + url);
+		} else {
+			console.log('[재고없음] ' + name);
+		}
+	});
+
+
+	
+	/*
+	name = '카카오스토어 뉴네퓨어 마스크';
+	url = 'https://store.kakao.com/laomete/products/55563134';
+	checkUrl(url, 'html', function(res) {
+		if ($(res).find('.prd_type3').html().indexOf('구매하실 수 없는') == -1) {
+			pushBullet(name, url);
 		}
 	});
 	 */
 
-	name = '네이버스토어 닥터퓨리 미세먼지지';
-	url = 'https://smartstore.naver.com/mfbshop/products/4072435942?NaPm=';
+}
+
+var welKipsMallCount = 0;
+
+function checkWelKipsMall(name, url) {
+	welKipsMallCount++;
+
+	setTimeout(function() {
+		checkUrl(url, 'html', function(res) {
+			//if ($(res).find('.info').find('.soldout').length == 0) {
+			if (res.indexOf('<div class="soldout">SOLD OUT</div>') == -1) {
+				pushBullet(name, url);
+				console.log('[판매중] ' + name + ' : ' + url);
+			} else {
+				console.log('[재고없음] ' + name);
+			}
+		})
+	}, welKipsMallCount * 1000);
+}
+
+function checkNaverStore(name, url) {
 	checkUrl(url, 'html', function(res) {
 		if ($(res).find('.prd_type3').html().indexOf('구매하실 수 없는') == -1) {
 			pushBullet(name, url);
+			console.log('[판매중] ' + name + ' : ' + url);
+		} else {
+			console.log('[재고없음] ' + name);
 		}
 	});
 }
@@ -95,10 +181,9 @@ setInterval(function() {
 
 }, interval);
 
-
 function checkUrl(url, datatype, callback)
 {
-	$.ajax({
+	$.ajaxQueue({
 		type:"GET",
 		dataType: datatype,
 		//contentType: "application/x-www-form-urlencoded; charset=euc-kr",
