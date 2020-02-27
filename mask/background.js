@@ -20,8 +20,8 @@ setTimeout(function() {
 		url:'https://api.pushbullet.com/v2/contacts',
 		//data:params,
 		beforeSend: function (xhr) {
-			//xhr.setRequestHeader('Authorization', 'Bearer 8yH3ytxOI7Bqu3bVbUqHKsVATSCpujVX');
-			xhr.setRequestHeader('Authorization', 'Bearer nXmkzdhFQae9zY6YRGScOPTmoKnoT77m');
+			xhr.setRequestHeader('Authorization', 'Bearer 8yH3ytxOI7Bqu3bVbUqHKsVATSCpujVX');
+			//xhr.setRequestHeader('Authorization', 'Bearer nXmkzdhFQae9zY6YRGScOPTmoKnoT77m');
 		},
 		success:function(res){
 			console.log(JSON.stringify(res))
@@ -73,16 +73,6 @@ function checkSite() {
 	url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007206&xcode=023&mcode=001&scode=&special=1&GfDT=bm9%2FW1w%3D';
 	checkWelKipsMall(name, url);
 
-	name = '블리라이프 황사마스크'
-	url = 'http://bling-market.com/m/html/dh_product/prod_view/1807';
-	checkUrl(url, 'html', function(res) {
-		if (res.indexOf('/_data/file/goodsImages/f9ffc089ea48c99878fd710a36bbf938.jpg') == -1) {
-			pushBullet(name, url);
-			console.log('[판매중] ' + name + ' : ' + url);
-		} else {
-			console.log('[재고없음] ' + name);
-		}
-	});
 
 	name = '네이버스토어 아에르 스탠다스 베이직 마스크'
 	url = 'https://smartstore.naver.com/aer-shop/products/4722827602';
@@ -120,7 +110,35 @@ function checkSite() {
 	url = 'https://smartstore.naver.com/kumaelectron/products/4754238400';
 	checkNaverStore(name, url);
 
-	name = '금아덴탈 마스크';
+	name = '네이버스토어 마이케어';
+	url = 'https://smartstore.naver.com/heattem/products/4172159700';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 마이케어2';
+	url = 'https://smartstore.naver.com/heattem/products/4824368953';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 금아스토어';
+	url = 'https://smartstore.naver.com/kumaelectron/products/4754244746';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 닥터퓨리';
+	url = 'https://smartstore.naver.com/mfbshop/products/4735164530';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 금아스토어';
+	url = 'https://smartstore.naver.com/kumaelectron/products/4754246120';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 금아스토어 메디라인';
+	url = 'https://smartstore.naver.com/kumaelectron/products/4754248104';
+	checkNaverStore(name, url);
+
+	name = '네이버스토어 금아스토어 블랙';
+	url = 'https://smartstore.naver.com/kumaelectron/products/4813999869';
+	checkNaverStore(name, url);
+
+	/*name = '금아덴탈 마스크';
 	url = 'http://item.gmarket.co.kr/?goodscode=1319742635&jaehuid=200010777';
 	checkUrl(url, 'html', function(res) {
 		//console.log(res);
@@ -129,9 +147,7 @@ function checkSite() {
 		} else {
 			console.log('[재고없음] ' + name);
 		}
-	});
-
-
+	});*/
 	
 	/*
 	name = '카카오스토어 뉴네퓨어 마스크';
@@ -143,6 +159,18 @@ function checkSite() {
 	});
 	 */
 
+
+	/*name = '블리라이프 황사마스크'
+	url = 'http://bling-market.com/m/html/dh_product/prod_view/1807';
+	checkUrl(url, 'html', function(res) {
+		if (res.indexOf('/_data/file/goodsImages/f9ffc089ea48c99878fd710a36bbf938.jpg') == -1) {
+			pushBullet(name, url);
+			console.log('[판매중] ' + name + ' : ' + url);
+		} else {
+			console.log('[재고없음] ' + name);
+		}
+	});*/
+
 }
 
 var welKipsMallCount = 0;
@@ -153,7 +181,7 @@ function checkWelKipsMall(name, url) {
 	setTimeout(function() {
 		checkUrl(url, 'html', function(res) {
 			//if ($(res).find('.info').find('.soldout').length == 0) {
-			if (res.indexOf('<div class="soldout">SOLD OUT</div>') == -1) {
+			if (res.indexOf('총 상품 금액') > -1 && res.indexOf('<div class="soldout">SOLD OUT</div>') == -1) {
 				pushBullet(name, url);
 				console.log('[판매중] ' + name + ' : ' + url);
 			} else {
@@ -165,7 +193,9 @@ function checkWelKipsMall(name, url) {
 
 function checkNaverStore(name, url) {
 	checkUrl(url, 'html', function(res) {
-		if ($(res).find('.prd_type3').html().indexOf('구매하실 수 없는') == -1) {
+		//if ($(res).find('.prd_type3').html().indexOf('구매하실 수 없는') == -1) {
+		//console.log(res.indexOf('<em class="fc_point">구매하실 수 없는</em> 상품입니다') == -1);
+		if (res.indexOf('배송비결제') > -1 && res.indexOf('<em class="fc_point">구매하실 수 없는</em> 상품입니다') == -1 && res.indexOf('현재 주문 폭주로 구매가 어렵습니다') == -1) {
 			pushBullet(name, url);
 			console.log('[판매중] ' + name + ' : ' + url);
 		} else {

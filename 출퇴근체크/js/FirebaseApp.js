@@ -1,6 +1,6 @@
 class FirebaseApp
 {
-	firebase;
+	_firebase;
 
 	worktime_checker = "worktime_checker";
 	user_config = "user_config";
@@ -16,7 +16,7 @@ class FirebaseApp
 			storageBucket: "spectra-groupware.appspot.com",
 			messagingSenderId: "785900078227"
 		};
-		this.firebase = firebase.initializeApp(config);
+		this._firebase = firebase.initializeApp(config);
 	}
 
 	//writeLog(date, user, key, value)
@@ -26,14 +26,14 @@ class FirebaseApp
 		logger.trace('key: ' + key);
 		logger.trace('value: ' + value);
 
-		this.firebase.database().ref(key).set({
+		this._firebase.database().ref(key).set({
 			value
 		});
 	}
 
 	get(key, callback)
 	{
-		let ref = this.firebase.database().ref(key);
+		let ref = this._firebase.database().ref(key);
 		ref.on('value', function(snapshot) {
 			callback(snapshot);
 		});
