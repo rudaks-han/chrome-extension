@@ -138,6 +138,33 @@ function checkSite() {
 	url = 'https://smartstore.naver.com/kumaelectron/products/4813999869';
 	checkNaverStore(name, url);
 
+    name = '네이버스토어 휴그린 중형';
+    url = 'https://smartstore.naver.com/soommask/products/4828127993?NaPm=#DEFAULT';
+    checkNaverStore(name, url);
+
+    name = '네이버스토어 미마마스크';
+    url = 'https://smartstore.naver.com/aseado/products/4837257765';
+    checkNaverStore(name, url);
+
+    name = '네이버스토어 미마마스크 어린이';
+    url = 'https://smartstore.naver.com/aseado/products/4837266971';
+    checkNaverStore(name, url);
+
+    name = '네이버스토어 일반마스크 비포장 50매';
+    url = 'https://smartstore.naver.com/neulhaerangmask/products/4632987981';
+    checkNaverStore(name, url);
+
+    name = '네이버스토어 해피키친';
+    url = 'https://smartstore.naver.com/carmang1825/products/4834056954';
+    checkNaverStore(name, url);
+
+
+
+    /*
+    name = '네이버스토어 ';
+    url = '';
+    checkNaverStore(name, url);
+    */
 	/*name = '금아덴탈 마스크';
 	url = 'http://item.gmarket.co.kr/?goodscode=1319742635&jaehuid=200010777';
 	checkUrl(url, 'html', function(res) {
