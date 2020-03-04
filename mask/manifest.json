@@ -5,13 +5,15 @@
     "permissions" : [
         "notifications",
 		"http://*/*",
+        "tabs",
         "*://smartstore.naver.com/*",
+        "*://coronamask.kr/*",
 		"background"
     ],
     "web_accessible_resources" : [
         "48.png"
     ],
-    "content_security_policy": "script-src 'self' https://smartstore.naver.com; object-src 'self'",
+    "content_security_policy": "script-src 'self' https://smartstore.naver.com https://coronamask.kr; object-src 'self'",
     "background": { "scripts": ["background.js", "jquery-1.9.1.min.js", "jquery.ajaxQueue.min.js"] }
 }
 
