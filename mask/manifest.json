@@ -7,14 +7,17 @@
 		"http://*/*",
         "tabs",
         "*://smartstore.naver.com/*",
+        "*://order.pay.naver.com/*",
         "*://coronamask.kr/*",
 		"background"
     ],
     "web_accessible_resources" : [
         "48.png"
     ],
-    "content_security_policy": "script-src 'self' https://smartstore.naver.com https://coronamask.kr; object-src 'self'",
-    "background": { "scripts": ["background.js", "jquery-1.9.1.min.js", "jquery.ajaxQueue.min.js"] }
+    "content_security_policy": "script-src 'self' https://smartstore.naver.com https://order.pay.naver.com https://coronamask.kr; object-src 'self'",
+    "background": {
+        "page" : "background.html"
+    }
 }
 
 

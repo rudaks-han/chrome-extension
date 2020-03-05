@@ -1,27 +1,11 @@
-﻿function showNotify(title, message) {
-	if (Notification && Notification.permission !== "granted") {
-		Notification.requestPermission(function (status) {
-			if (Notification.permission !== status) {
-				Notification.permission = status;
-			}
-		});
-	}
-	if (Notification && Notification.permission === "granted") {
-		var n = new Notification(title + "\n" + message);
-	}
-
-}
-
+﻿
 setTimeout(function() {
 	$.ajax({
 		type:"GET",
-		//url:'https://api.pushbullet.com/v2/users/me',
-		//url:'https://api.pushbullet.com/v2/devices',
 		url:'https://api.pushbullet.com/v2/contacts',
 		//data:params,
 		beforeSend: function (xhr) {
 			xhr.setRequestHeader('Authorization', 'Bearer 8yH3ytxOI7Bqu3bVbUqHKsVATSCpujVX');
-			//xhr.setRequestHeader('Authorization', 'Bearer nXmkzdhFQae9zY6YRGScOPTmoKnoT77m');
 		},
 		success:function(res){
 			console.log(JSON.stringify(res))
@@ -30,35 +14,21 @@ setTimeout(function() {
 }, 1000);
 
 //var interval = 60*1000; // The display interval, in minutes.
-var interval = 60*1000; // The display interval, in minutes.
+var interval = 10*1000; // The display interval, in minutes.
 
-function addMinutes(date, minutes) {
-    return new Date(date.getTime() + minutes*60000);
-}
-
-function getDateFormat(date) {
-    return date.getFullYear() + '/' + makeTwoLength(date.getMonth()+1) + '/' + makeTwoLength(date.getDate()) + ' ' + makeTwoLength(date.getHours()) + ':' + makeTwoLength(date.getMinutes());
-}
-
-function makeTwoLength(str) {
-    if (String(str).length == 1) {
-        return '0' + str;
-    }
-    return str;
-}
-
-var beforeMinute = -1;
+var beforeMinute = -1; // 구입체크를 할 시간 몇분 전
 var coronaMaskOpenDate = [];
+var reloadCountData = [];
+var reloadCount = 5;
 
 function checkCoronaMask() {
     setTimeout(function() {
         $.ajax({
             type:"GET",
             url:'https://coronamask.kr/',
-            success:function(res){
+            success:function(res) {
                 coronaMaskOpenDate.length = 0;
 
-                console.log(res);
                 var list = $(res).find('.relative.w-full.border-r');
 
                 list.each(function(index) {
@@ -78,37 +48,12 @@ function checkCoronaMask() {
                         var hour = timePart[0];
                         var minute = timePart[1];
 
-                       /* console.error('year: ' + year);
-                        console.error('month: ' + month);
-                        console.error('day: ' + day);
-                        console.error('hour: ' + hour);
-                        console.error('minute: ' + minute);*/
-
-                        /*year = 2020
-                        month = 3
-                        day = 04
-                        hour = 23
-                        minute = 11*/
                         var sellDate = new Date(year, Number(month)-1, day, hour, minute, 0);
                         var newItem = {url:url, date: sellDate};
 
-                        //Array.prototype.push.apply(coronaMaskOpenDate, {url, sellDate});
                         coronaMaskOpenDate.push(newItem)
-                        //var now = new Date();
-                        /*console.error('now: ' + sellDate);
-                        console.error('add 1minute: ' + addMinutes(sellDate, -1));
-                        console.error('now: ' + now);
-                        console.error('getDateFormat1: ' + getDateFormat(now));
-                        console.error('getDateFormat2: ' + getDateFormat(addMinutes(sellDate, beforeMinute)));*/
-
-
-                        /*if (getDateFormat(now) == getDateFormat(addMinutes(sellDate, beforeMinute))) {
-                            console.error('________________ 시작')
-                        } else {
-                            console.error('아직')
-                        }*/
                     }
-                })
+                });
             }
         });
     }, 100)
@@ -223,9 +168,9 @@ function checkSite() {
 	url = 'https://smartstore.naver.com/kumaelectron/products/4813999869';
 	checkNaverStore(name, url);
 */
-    name = '네이버스토어 휴그린 중형';
+  /* name = '네이버스토어 휴그린 중형';
     url = 'https://smartstore.naver.com/soommask/products/4828127993?NaPm=#DEFAULT';
-    checkNaverStore(name, url);
+    checkNaverStore(name, url);*/
 /*
     name = '네이버스토어 미마마스크';
     url = 'https://smartstore.naver.com/aseado/products/4837257765';
@@ -242,15 +187,15 @@ function checkSite() {
     name = '네이버스토어 해피키친';
     url = 'https://smartstore.naver.com/carmang1825/products/4834056954';
     checkNaverStore(name, url);
-
+*/
     name = '네이버스토어 라록스';
     url = 'https://smartstore.naver.com/ygfac/products/3905641271';
     checkNaverStore(name, url);
     
-*/
-    name = '네이버스토어 마데카 파워 앰플';
+
+   /*name = '네이버스토어 마데카 파워 앰플';
     url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4737857552';
-    checkNaverStore(name, url);
+    checkNaverStore(name, url);*/
 
 
     /*
@@ -293,6 +238,15 @@ function checkSite() {
 
 }
 
+function readyToSell(now, sellDate) {
+    if (true) return true; // 임시코드
+    
+	if (getDateFormat(now) == getDateFormat(addMinutes(sellDate, beforeMinute))) {
+		return true;
+	} else {
+		return false;
+	}
+}
 var welKipsMallCount = 0;
 
 function checkWelKipsMall(name, url) {
@@ -314,30 +268,30 @@ function checkWelKipsMall(name, url) {
 function checkNaverStore(name, url) {
 
     console.error('url : ' + url)
-    var coronaMaskFound = false;
+    var isReadyToSell = false;
     $.each(coronaMaskOpenDate, function(index, item) {
-        console.error(item.url)
+        //console.error(item.url)
 
-       //if (item.url == url) {
-            console.error('___있음 OOO')
+        isReadyToSell = true; // 임시코드
+       if (item.url == url) {
+            console.error('___있음 : ' + url)
 
-            // 시간체크
+            // 시간체크 로직
             //openTab(url);
-            coronaMaskFound = true;
-            return false;
-       // }
+			//isReadyToSell = true;
+
+		   var currDate = new Date();
+		   var sellDate = item.date;
+
+		   if (readyToSell(currDate, sellDate)) {
+			   isReadyToSell = true;
+			   return false;
+		   }
+       }
     });
 
-    if (coronaMaskFound) {
-        //openTab(url);
-        chrome.tabs.create({'url': url}, function(tab) {
-            console.error('Tab Created ' + tab.id);
-
-            chrome.tabs.executeScript(null, {file:'checkoutItem.js'});
-
-            //var code = 'alert(document.querySelector("._buy_button"))';
-            //chrome.tabs.executeScript(tab.id, {code: code});
-        });
+    if (isReadyToSell) { // 판매 5분전인 사이트 일 경우
+		checkoutItem(url);
     }
 
     /*checkUrl(url, 'html', function (res) {
@@ -348,29 +302,78 @@ function checkNaverStore(name, url) {
             console.log('[재고없음] ' + name);
         }
     });*/
-
-
 };
 
-function openTab(url) {
-    chrome.tabs.create({ url: url });
-
-    checkSiteAvailable();
+function getBuyButtonCode() {
+    return 'var buyButton = document.querySelector("._buy_button"); buyButton';
 }
 
-function checkSiteAvailable() {
-    
+// 구매사이트를 팝업으로 열고 구매하기 버튼 클릭
+function checkoutItem(url) {
+
+
+	chrome.tabs.create({'url': url}, function(tab) {
+		/*chrome.tabs.executeScript(null, {file:'checkoutItem.js'}, function(result) {
+		});*/
+        reloadCountData[url] = 0;
+
+        chrome.tabs.executeScript(null, {file:'selectOption.js'}, function(result) {
+        });
+
+        chrome.tabs.executeScript( null, {code: getBuyButtonCode()},
+            function(results) {
+                if (results[0] == null) { // 구입불가
+                    chrome.tabs.reload(tab.id);
+                } else {
+                    chrome.tabs.executeScript(null, {file:'checkoutItem.js'}, function(result) {
+                    })
+                }
+        } );
+	});
 }
 
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
-setInterval(function() {
-	console.log('checking... ' + new Date());
+	if (changeInfo.status != 'complete')
+		return;
 
-	checkSite();
+	if (tab.url.indexOf('smartstore.naver.com') > -1) {
+        chrome.tabs.executeScript(null, {file:'selectOption.js'}, function(result) {
+        });
 
-}, interval);
+        chrome.tabs.executeScript( null, {code: getBuyButtonCode()},
+            function(results) {
+                if (results[0] == null) { // 구입불가
+                    if (reloadCountData[tab.url] > reloadCount) { // 최대 새로고침 횟수를 넘기면 중단
+                        return;
+                    }
+                    chrome.tabs.reload(tab.id)
 
-function checkUrl(url, datatype, callback)
+                    reloadCountData[tab.url] = reloadCountData[tab.url] + 1;
+                } else {
+                    chrome.tabs.executeScript(null, {file:'checkoutItem.js'}, function(result) {})
+                }
+            } );
+	} else if (tab.url.indexOf('order.pay.naver.com/orderSheet') > -1) {
+		chrome.tabs.executeScript(null, {file:'orderItem.js'});
+	}
+});
+
+
+/*setInterval(function() {
+    console.log('checking... ' + new Date());
+    checkSite();
+}, interval);*/
+
+setTimeout(function() {
+    checkSite();
+}, 100)
+
+setTimeout(function() {
+    checkSite();
+}, 5000)
+
+/*function checkUrl(url, datatype, callback)
 {
 	$.ajaxQueue({
 		type:"GET",
@@ -387,8 +390,7 @@ function checkUrl(url, datatype, callback)
 			console.error(e);
 		}
 	});
-
-}
+}*/
 
 function pushBullet(title, body)
 {
