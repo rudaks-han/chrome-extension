@@ -31,15 +31,13 @@ function checkUrl(url, datatype, callback)
 	$.ajaxQueue({
 		type:"GET",
 		dataType: datatype,
-		//contentType: "application/x-www-form-urlencoded; charset=euc-kr",
 		url:url,
-		beforeSend : function(xhr){
+		beforeSend : function(xhr) {
 		},
 		success:function(res){
 			callback(res);
 		},
-		error:function(e){
-			//alert("error : " + e.responseText);
+		error:function(e) {
 			console.error(e);
 		}
 	});

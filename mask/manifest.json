@@ -11,6 +11,12 @@
         "*://coronamask.kr/*",
 		"background"
     ],
+    "content_scripts": [
+        {
+            "matches": ["https://smartstore.naver.com/**"],
+            "js": ["jquery-1.9.1.min.js"]
+        }
+    ],
     "web_accessible_resources" : [
         "48.png"
     ],

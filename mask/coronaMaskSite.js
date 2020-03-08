@@ -36,7 +36,6 @@
     url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007206&xcode=023&mcode=001&scode=&special=1&GfDT=bm9%2FW1w%3D';
     checkWelKipsMall(name, url);
 
-
     name = '네이버스토어 아에르 스탠다스 베이직 마스크'
     url = 'https://smartstore.naver.com/aer-shop/products/4722827602';
     checkNaverStore(name, url);
@@ -148,7 +147,8 @@
     name = '네이버스토어 디즈니 유아';
     url = 'https://smartstore.naver.com/light_market/products/4835093482';
     checkNaverStore(name, url);
-    
+
+    // https://smartstore.naver.com/mooninsam/products/341195701
 
     /*
     name = '네이버스토어 ';
