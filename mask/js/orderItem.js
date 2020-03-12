@@ -8,7 +8,7 @@ setTimeout(function() {
     document.querySelector('.agree_required > .checkbox-applied > .checkbox-mark').click(); // 전체 동의하기
 }, 200);
 setTimeout(function() {
-    document.querySelector('.btn_payment').click(); // 결제하기/
+    //document.querySelector('.btn_payment').click(); // 결제하기/
 
     console.error('### 구입완료');
 }, 300);

@@ -1,10 +1,13 @@
 ﻿function debug(str) {
-    console.error(str);
+    console.log(str);
 }
 
 var testMode = false;
 
-var interval = 60*1000; // The display interval, in minutes.
+var checkStartHour = 7;
+var checkEndHour = 22;
+
+var interval = 60*1000;
 if (testMode) {
     interval = 10*1000;
 }
@@ -13,8 +16,9 @@ var coronaMaskOpenDate = [];
 var reloadCountData = [];
 var maxReloadCount = 200;
 var welKipsMallCount = 0;
+var naverShopList = [];
 
-function checkCoronaMask() {
+function checkCoronaMaskStartTime() {
     setTimeout(function() {
         $.ajax({
             type:"GET",
@@ -29,9 +33,12 @@ function checkCoronaMask() {
 function checkCoronaMaskCallback(res) {
     var list = $(res).find('.relative.w-full.border-r');
 
+    coronaMaskOpenDate.length = 0;
     list.each(function(index) {
+        var name = $(this).find('.text-gray-900').text();
         var url = $(this).find('a').attr('href');
         var text = $(this).find('.text-gray-600.leading-none.leading-normal').text();
+
         if (text.indexOf("시작") > -1) {
             var date = text.substring(text.indexOf('시작')+4);
             var arDate = date.split(' ');
@@ -45,11 +52,36 @@ function checkCoronaMaskCallback(res) {
             var sellDate = new Date(year, Number(month)-1, day, hour, minute, 0);
             var newItem = {url:url, date: sellDate};
 
-            coronaMaskOpenDate.push(newItem)
+            coronaMaskOpenDate.push(newItem);
+
+            var exists = false;
+            if (naverShopList.length > 0) {
+                for (var i=0; i<naverShopList.length; i++) {
+                    if (newItem.url == naverShopList[i].url) {
+                        exists = true;
+                        break;
+                    }
+                }
+
+                if (!exists) {
+                    console.error('사이트 등록 필요 : ' + name)
+                    console.error(newItem);
+
+                    if (newItem.url.startsWith('https://smartstore.naver.com')) {
+                        addNaverSite(name, newItem.url);
+                    }
+
+                }
+            }
         }
     });
 }
-checkCoronaMask();
+
+checkCoronaMaskStartTime();
+
+setInterval(function() {
+    checkCoronaMaskStartTime()
+}, 60*1000);
 
 function readyToSell(now, sellDate) {
     if (testMode) return true;
@@ -68,9 +100,9 @@ function checkWelKipsMall(name, url) {
 		checkUrl(url, 'html', function(res) {
 			if (res.indexOf('총 상품 금액') > -1 && res.indexOf('<div class="soldout">SOLD OUT</div>') == -1) {
 				sendPushBullet(name, url);
-				console.log('[판매중] ' + name + ' : ' + url);
+				debug('[판매중] ' + name + ' : ' + url);
 			} else {
-				console.log('[재고없음] ' + name);
+                debug('[재고없음] ' + name);
 			}
 		})
 	}, welKipsMallCount * 1000);
@@ -80,9 +112,9 @@ function checkNaverStore(name, url) {
     checkUrl(url, 'html', function (res) {
         if (res.indexOf('배송비결제') > -1 && res.indexOf('<em class="fc_point">구매하실 수 없는</em> 상품입니다') == -1 && res.indexOf('현재 주문 폭주로 구매가 어렵습니다') == -1) {
             sendPushBullet(name, url);
-            console.log('[판매중] ' + name + ' : ' + url);
+            debug('[판매중] ' + name + ' : ' + url);
         } else {
-            console.log('[재고없음] ' + name);
+            debug('[재고없음] ' + name);
         }
     });
 
@@ -90,6 +122,7 @@ function checkNaverStore(name, url) {
     $.each(coronaMaskOpenDate, function(index, item) {
         if (testMode) {
             isReadyToSell = true; // 임시코드
+            return false;
         }
 
        if (item.url == url) {
@@ -104,6 +137,7 @@ function checkNaverStore(name, url) {
        }
     });
 
+    console.log('isReadyToSell : ' + isReadyToSell)
     if (isReadyToSell) { // 판매 1분전인 사이트 일 경우
 		checkoutItem(url);
     }
@@ -117,61 +151,20 @@ function getExistSelectOptionCode() {
     return 'var optionLength = $("._combination_option").length; optionLength';
 }
 
-function getSelectOptionLengthCode() {
-    var code = '';
-    code += 'var length = document.querySelectorAll("._combination_option > option").length;';
-    code += 'length;';
-
-    return code;
-}
-
-function selectAvaiableOption() {
-    var code = '';
-    //return 'var length = $("._combination_option > option").length; length';
-    //var code = '$jq("._combination_option > option").each(function() {';
-    //code += '    var val = $jq("._combination_option > option").each(function() {';
-    //code += 'alert($(this).val());'
-    //code += '           if ($(this).text().indexOf("품절") > -1) {';
-    //code += '               $(this).selected = true;';
-    //code += '           }';
-    //code += '       }; ';
-    //code += '}); ';
-
-    code += 'var options = document.querySelectorAll("._combination_option > option");';
-    code += 'for (var i=0; i<options.length; i++) {';
-    //code += '    if (options[i].textContent.indexOf("품절") == -1) {';
-    code += '        options[i].selected = true;';
-    //code += '    }';
-    code += '};';
-    code += '$jq("._combination_option").change();';
-    code += '1';
-
-   // $jq('._selectbox_auto').eq(0).addClass('selectbox-open selectbox-focused');$jq('.selectbox-box').eq(0).focus();
-
-    return code;
-}
-
-function executeScriptSelectOption() {
-    chrome.tabs.executeScript(null, {file:'selectOption.js'}, function(result) {
-        debug('[품절이 아닌 상품 선택하기] ' );
-    });
-}
-
 function executeScriptCheckoutItem(url) {
-    chrome.tabs.executeScript(null, {file:'checkoutItem.js'}, function(result) {
-        debug('[구매하기 버튼 클릭] ' + url);
+    chrome.tabs.executeScript(null, {file:'js/checkoutItem.js'}, function(result) {
+        debug('[구매하기 버튼 클릭] ');
     })
 }
 
 function executeScriptOrderItem() {
-    chrome.tabs.executeScript(null, {file:'orderItem.js'}, function(response) {
-        debug('[결제하기 클릭] ' + tab.url);
+    chrome.tabs.executeScript(null, {file:'js/orderItem.js'}, function(response) {
+        debug('[결제하기 클릭] ');
     });
 }
 
 // 구매사이트를 팝업으로 열고 구매하기 버튼 클릭
 function checkoutItem(url) {
-
     debug('[구입을 위해 site 팝업창 띄움] ' + url);
     sendPushBullet("마스크 판매 1분 전", url);
 
@@ -199,23 +192,6 @@ function checkoutItem(url) {
                 }
             }
         );
-
-        // 상품 여러개 중 한개를 선택
-       // executeScriptSelectOption();
-
-        /*setTimeout(function() {
-            chrome.tabs.executeScript( null, {code: getBuyButtonCode()},
-                function(results) {
-                    if (results[0] == null) { // 구입불가
-                        debug('[구입불가] ' + url);
-                        chrome.tabs.reload(tab.id);
-                    } else {
-                       // 구매하기 버튼 클릭
-                        executeScriptCheckoutItem(url);
-                    }
-                } );
-        }, 200);*/
-
 	});
 }
 
@@ -258,32 +234,11 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
             function(results) {
                 if (results[0] > 0) { // 옵션이 있음
                     debug('옵션이 있어서 구매하지 않음 ' + tab.url);
-
-                    /*chrome.tabs.executeScript( null, {code: getSelectOptionLengthCode()},
-                        function(results) {
-                            console.error('옵션 개수 : ' + results[0])
-                            console.error(results[0])
-                            if (results[0] > 1) {
-                                selectAvaiableOption();
-                                setTimeout(function() {
-                                    clickBuyButtonAndRefresh(tab);
-                                }, 300)
-
-                            }
-                        }
-                    );*/
-
-                    
-                    // 상품 여러개 중 한개를 선택
-                    /*executeScriptSelectOption();
-
-                    clickBuyButtonAndRefresh(tab);*/
                 } else { // 옵션이 없음
                     clickBuyButtonAndRefresh(tab);
                 }
             }
         );
-
 	} else if (tab.url.startsWith('https://order.pay.naver.com/orderSheet/result')) {
         debug('[상품주문완료] ' + tab.url);
         sendPushBullet('상품주문완료', tab.url);
@@ -295,16 +250,24 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 if (testMode) {
     setTimeout(function() {
-        checkCoronaMaskSite();
-    }, 1000)
+        checkMaskSite();
+    }, 1 * 1000);
 
-    /*setTimeout(function() {
-        checkCoronaMaskSite();
-    }, 5000)*/
+    setTimeout(function() {
+        checkMaskSite();
+    }, 10 * 1000);
 } else {
+    checkMaskSite();
     setInterval(function() {
         console.log('checking... ' + new Date());
-        checkCoronaMaskSite();
+
+        var date = new Date();
+        if (date.getHours() < checkStartHour || date.getHours() >= checkEndHour) {
+            debug('체크시간 아님 ');
+            return;
+        }
+
+        checkMaskSite();
     }, interval);
 
 }
