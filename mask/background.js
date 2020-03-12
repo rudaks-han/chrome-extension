@@ -11,7 +11,7 @@ if (testMode) {
 var beforeMinute = -1; // 구입체크를 할 시간 몇분 전
 var coronaMaskOpenDate = [];
 var reloadCountData = [];
-var reloadCount = 100;
+var maxReloadCount = 200;
 var welKipsMallCount = 0;
 
 function checkCoronaMask() {
@@ -173,20 +173,37 @@ function executeScriptOrderItem() {
 function checkoutItem(url) {
 
     debug('[구입을 위해 site 팝업창 띄움] ' + url);
-    
+    sendPushBullet("마스크 판매 1분 전", url);
+
 	chrome.tabs.create({'url': url}, function(tab) {
         reloadCountData[url] = 0;
 
         chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
             function(results) {
-                console.error('result : ' + results[0])
+                if (results[0] >= 1) {
+                    debug('옵션이 있어서 구매하지 않음 ' + url);
+                } else {
+
+                    setTimeout(function() {
+                        chrome.tabs.executeScript( null, {code: getBuyButtonCode()},
+                            function(results) {
+                                if (results[0] == null) { // 구입불가
+                                    debug('[구입불가] ' + url);
+                                    chrome.tabs.reload(tab.id);
+                                } else {
+                                    // 구매하기 버튼 클릭
+                                    executeScriptCheckoutItem(url);
+                                }
+                            } );
+                    }, 200);
+                }
             }
         );
 
         // 상품 여러개 중 한개를 선택
-        executeScriptSelectOption();
+       // executeScriptSelectOption();
 
-        setTimeout(function() {
+        /*setTimeout(function() {
             chrome.tabs.executeScript( null, {code: getBuyButtonCode()},
                 function(results) {
                     if (results[0] == null) { // 구입불가
@@ -197,7 +214,7 @@ function checkoutItem(url) {
                         executeScriptCheckoutItem(url);
                     }
                 } );
-        }, 200);
+        }, 200);*/
 
 	});
 }
@@ -207,21 +224,22 @@ function clickBuyButtonAndRefresh(tab) {
         chrome.tabs.executeScript( null, {code: getBuyButtonCode()},
             function(results) {
                 if (results[0] == null) { // 구입불가
-                    debug('[구입불가] ' + tab.url);
+                    debug('[구입불가] ');
 
                     if (!reloadCountData[tab.url]) {
                         reloadCountData[tab.url] = 0;
                     }
 
-                    if (reloadCountData[tab.url] > reloadCount) { // 최대 새로고침 횟수를 넘기면 중단
-                        debug('[새로고침 횟수(' + reloadCount + ') 초과로 중단] ' + tab.url);
+                    if (reloadCountData[tab.url] > maxReloadCount) { // 최대 새로고침 횟수를 넘기면 중단
+                        debug('[새로고침 횟수(' + maxReloadCount + ') 초과로 중단] ' + tab.url);
                         return;
                     }
 
-                    /*debug('[새로고침] ' + reloadCountData[tab.url] + " > " + tab.url);
-                    chrome.tabs.reload(tab.id)*/
-
                     reloadCountData[tab.url] = reloadCountData[tab.url] + 1;
+
+                    debug('[새로고침] ' + reloadCountData[tab.url] + " > " + tab.url);
+                    chrome.tabs.reload(tab.id)
+
                 } else {
                     // 구매하기 버튼 클릭
                     executeScriptCheckoutItem();
@@ -238,10 +256,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     ) {
         chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
             function(results) {
-                console.error('___옵션 존재여부 : ' + results[0])
-                if (results[0] != '0') { // 옵션이 있음
+                if (results[0] > 0) { // 옵션이 있음
+                    debug('옵션이 있어서 구매하지 않음 ' + tab.url);
 
-                    chrome.tabs.executeScript( null, {code: getSelectOptionLengthCode()},
+                    /*chrome.tabs.executeScript( null, {code: getSelectOptionLengthCode()},
                         function(results) {
                             console.error('옵션 개수 : ' + results[0])
                             console.error(results[0])
@@ -253,7 +271,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
                             }
                         }
-                    );
+                    );*/
 
                     
                     // 상품 여러개 중 한개를 선택
@@ -261,8 +279,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
                     clickBuyButtonAndRefresh(tab);*/
                 } else { // 옵션이 없음
-
-                    clickBuyButtonAndRefresh();
+                    clickBuyButtonAndRefresh(tab);
                 }
             }
         );
@@ -278,12 +295,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 if (testMode) {
     setTimeout(function() {
-        //checkCoronaMaskSite();
-    }, 100)
+        checkCoronaMaskSite();
+    }, 1000)
 
-    setTimeout(function() {
-        //checkCoronaMaskSite();
-    }, 5000)
+    /*setTimeout(function() {
+        checkCoronaMaskSite();
+    }, 5000)*/
 } else {
     setInterval(function() {
         console.log('checking... ' + new Date());
@@ -293,6 +310,9 @@ if (testMode) {
 }
 
 function sendPushBullet(title, body) {
+    if (testMode)
+        return;
+
     var authorization = '8yH3ytxOI7Bqu3bVbUqHKsVATSCpujVX';
     pushBullet(authorization, title, body);
 }

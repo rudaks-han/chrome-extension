@@ -4,6 +4,15 @@
     var name = '';
     var url = '';
 
+    if (testMode) {
+
+        name = '네이버스토어 test'
+        //url = 'https://smartstore.naver.com/sol-sungrass/products/4851263224';
+        //url = 'https://smartstore.naver.com/mooninsam/products/341195701'; // 인삼
+        url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4737857552'; // 마데카 파워앰플
+        checkNaverStore(name, url);
+        return;
+    }
     name = '웹킵스몰 스마트블랙 KF94 45개';
     url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007193&xcode=023&mcode=002&scode=&type=X&sort=manual&cur_code=023&GfDT=bm95W1g%3D';
     checkWelKipsMall(name, url);
