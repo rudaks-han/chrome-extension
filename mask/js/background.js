@@ -5,7 +5,7 @@
 var testMode = false;
 
 var checkStartHour = 7;
-var checkEndHour = 22;
+var checkEndHour = 21;
 
 var interval = 60*1000;
 if (testMode) {
@@ -14,7 +14,7 @@ if (testMode) {
 var beforeMinute = -1; // 구입체크를 할 시간 몇분 전
 var coronaMaskOpenDate = [];
 var reloadCountData = [];
-var maxReloadCount = 200;
+var maxReloadCount = 500;
 var welKipsMallCount = 0;
 var naverShopList = [];
 
@@ -63,13 +63,11 @@ function checkCoronaMaskCallback(res) {
                     }
                 }
 
-                if (!exists) {
+                if (!exists && newItem.url.startsWith('https://smartstore.naver.com')) {
                     console.error('사이트 등록 필요 : ' + name)
                     console.error(newItem);
 
-                    if (newItem.url.startsWith('https://smartstore.naver.com')) {
-                        addNaverSite(name, newItem.url);
-                    }
+                    addNaverSite(name, newItem.url);
 
                 }
             }
@@ -102,7 +100,7 @@ function checkWelKipsMall(name, url) {
 				sendPushBullet(name, url);
 				debug('[판매중] ' + name + ' : ' + url);
 			} else {
-                debug('[재고없음] ' + name);
+                //debug('[재고없음] ' + name);
 			}
 		})
 	}, welKipsMallCount * 1000);
@@ -114,7 +112,7 @@ function checkNaverStore(name, url) {
             sendPushBullet(name, url);
             debug('[판매중] ' + name + ' : ' + url);
         } else {
-            debug('[재고없음] ' + name);
+            //debug('[재고없음] ' + name);
         }
     });
 
@@ -171,7 +169,7 @@ function checkoutItem(url) {
 	chrome.tabs.create({'url': url}, function(tab) {
         reloadCountData[url] = 0;
 
-        chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
+        /*chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
             function(results) {
                 if (results[0] >= 1) {
                     debug('옵션이 있어서 구매하지 않음 ' + url);
@@ -191,7 +189,7 @@ function checkoutItem(url) {
                     }, 200);
                 }
             }
-        );
+        );*/
 	});
 }
 
@@ -253,9 +251,9 @@ if (testMode) {
         checkMaskSite();
     }, 1 * 1000);
 
-    setTimeout(function() {
+    /*setTimeout(function() {
         checkMaskSite();
-    }, 10 * 1000);
+    }, 10 * 1000);*/
 } else {
     checkMaskSite();
     setInterval(function() {

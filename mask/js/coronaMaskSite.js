@@ -133,11 +133,13 @@ function checkMaskSite() {
     url = 'https://smartstore.naver.com/gcleantec/products/4847692801';
     addNaverSite(name, url);
 
+    name = '네이버스토어 [무신사] 스탠다드 밸브 마스크 KF 94 20팩 [블랙]';
+    url = 'https://store.musinsa.com/app/product/detail/1260411/0';
+    addNaverSite(name, url);
 
-    debug('naverShopList 개수 : ' + naverShopList.length);
 
 
-    name = '웹킵스몰 스마트블랙 KF94 45개';
+    /*name = '웹킵스몰 스마트블랙 KF94 45개';
     url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007193&xcode=023&mcode=002&scode=&type=X&sort=manual&cur_code=023&GfDT=bm95W1g%3D';
     checkWelKipsMall(name, url);
 
@@ -168,12 +170,13 @@ function checkMaskSite() {
     name ='[아동용] 웹킵스몰 마스크 소형 KF80 25개';
     url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007206&xcode=023&mcode=001&scode=&special=1&GfDT=bm9%2FW1w%3D';
     checkWelKipsMall(name, url);
+*/
 
     if (testMode) {
         name = '네이버스토어 test'
-        //url = 'https://smartstore.naver.com/sol-sungrass/products/4851263224';
+        url = 'https://smartstore.naver.com/sol-sungrass/products/4851263224';
         //url = 'https://smartstore.naver.com/mooninsam/products/341195701'; // 인삼
-        url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4737857552'; // 마데카 파워앰플
+        //url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4737857552'; // 마데카 파워앰플
         checkNaverStore(name, url);
         return;
     } else {
