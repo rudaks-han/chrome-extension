@@ -81,7 +81,7 @@ function checkWelKipsSite() {
 						sendPushBullet('웹킵스 마스크 재고있음 알림', url);
 						error('[판매중] welkips : ' + href);
 					} else {
-						debug('[재고없음] welkips : ' + href);
+						//debug('[재고없음] welkips : ' + href);
 					}
 				}
 

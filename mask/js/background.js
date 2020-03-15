@@ -36,7 +36,7 @@ function checkNaverStore(name, url) {
             sendPushBullet(name, url);
             error('[판매중] ' + name + ' : ' + url);
         } else {
-            debug('[재고없음] ' + name);
+            //debug('[재고없음] ' + name);
         }
     });
 
