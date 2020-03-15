@@ -148,8 +148,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 });
 
 if (testMode) {
-
-    console.log("Checking... " + getCurrDate());
+    debug('[' + getCurrDate() + '] Checking... ');
     setTimeout(function() {
         checkNaverMaskSite();
         checkWelKipsSite();
@@ -159,13 +158,13 @@ if (testMode) {
         checkMaskSite();
     }, 10 * 1000);*/
 } else {
-    console.log("Checking... " + getCurrDate());
+    debug('[' + getCurrDate() + '] Checking... ');
 
     checkNaverMaskSite();
     checkWelKipsSite();
 
     setInterval(function() {
-        console.log("Checking... " + getCurrDate());
+        debug('[' + getCurrDate() + '] Checking... ');
 
         var date = new Date();
         if (date.getHours() < checkStartHour || date.getHours() >= checkEndHour) {

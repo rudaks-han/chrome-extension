@@ -58,7 +58,6 @@ function checkCoronaMaskCallback(res) {
 }
 
 function checkWelKipsSite() {
-	debug("welkips 사이트 체크");
 
 	setTimeout(function() {
 		checkUrl('http://www.welkeepsmall.com/shop/shopbrandCA.html?type=X&xcode=023', 'html', function(res) {
