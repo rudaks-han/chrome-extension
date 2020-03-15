@@ -1,4 +1,5 @@
-﻿function addNaverSite(name, url) {
+﻿var naverSiteList = '';
+function addNaverSite(name, url) {
     var exists = false;
     for (var i=0; i<naverShopList.length; i++) {
         if (naverShopList[i].url == url) {
@@ -8,16 +9,21 @@
 
     if (!exists) {
         naverShopList.push({name: name, url: url});
+
+        naverSiteList += "name = '" + name + "';\n";
+        naverSiteList += "url = '" + url + "';\n";
+        naverSiteList += 'addNaverSite(name, url);\n\n';
     }
+
 }
 
-function checkMaskSite() {
+function checkNaverMaskSite() {
     welKipsMallCount = 0;
 
     var name = '';
     var url = '';
 
-    name = '네이버스토어 아에르 스탠다스 베이직 마스크'
+    name = '네이버스토어 아에르 스탠다스 베이직 마스크';
     url = 'https://smartstore.naver.com/aer-shop/products/4722827602';
     addNaverSite(name, url);
 
@@ -137,6 +143,69 @@ function checkMaskSite() {
     url = 'https://store.musinsa.com/app/product/detail/1260411/0';
     addNaverSite(name, url);
 
+    name = '[닥터퓨리] KF94 미세먼지 황사마스크 20매 (선물용 한정판 패키지)';
+    url = 'https://smartstore.naver.com/mfbshop/products/4114661363';
+    addNaverSite(name, url);
+
+    name = '[닥터퓨리] KF94 미세먼지 황사마스크 20매 (개별 낱개포장)';
+    url = 'https://smartstore.naver.com/mfbshop/products/4072435942';
+    addNaverSite(name, url);
+
+    name = '[입고미정]  KF94 국대 황사 미세먼지 마스크 20매';
+    url = 'https://smartstore.naver.com/korea-mask/products/4825762296';
+    addNaverSite(name, url);
+
+    name = '[닥터퓨리] KF94 스타일리시 블랙 미세먼지 황사마스크 20매 (개별 낱개포장)';
+    url = 'https://smartstore.naver.com/mfbshop/products/4680268551';
+    addNaverSite(name, url);
+
+    name = '[닥터퓨리] KF94 끈조절 미세먼지 황사마스크 20매 (개별 낱개포장)';
+    url = 'https://smartstore.naver.com/mfbshop/products/4735160554';
+    addNaverSite(name, url);
+
+    name = '대웅생명과학 편한숨 에브리가드 KF80소형 엠버/(5매X5)총 25매. 황사마스크 .유아마스크';
+    url = 'https://smartstore.naver.com/elbonshop/products/4811559240';
+    addNaverSite(name, url);
+
+    name = '미마마스크 미세먼지 황사 보건용마스크 30개입(KF94)';
+    url = 'https://smartstore.naver.com/aseado/products/4789698311';
+    addNaverSite(name, url);
+
+    name = '미마마스크 미세먼지 황사 보건용마스크 20개입(KF94)';
+    url = 'https://smartstore.naver.com/aseado/products/4837245656';
+    addNaverSite(name, url);
+
+    name = '미마마스크 어린이 미세먼지 황사 보건용마스크 20개입(KF80)';
+    url = 'https://smartstore.naver.com/aseado/products/4837264529';
+    addNaverSite(name, url);
+
+    name = '위케어 중국 사스 우한 코로나바이러스 예방 황사 미세먼지마스크 KF94 성인용 30매';
+    url = 'https://smartstore.naver.com/wiicare/products/3922699232';
+    addNaverSite(name, url);
+
+    name = '미세먼지 황사 KF80/KF94 성인 어린이 일회용 마스크 실속형 20매';
+    url = 'https://smartstore.naver.com/pyeongpyoen/products/4690028600';
+    addNaverSite(name, url);
+
+    name = '뉴크린웰 8종컬러 미세먼지 황사 KF94 대형/중형/소형 마스크 30매';
+    url = 'https://smartstore.naver.com/pyeongpyoen/products/4779665558';
+    addNaverSite(name, url);
+
+    name = '평편 미세먼지 황사 마스크 KF94 대형 10매';
+    url = 'https://smartstore.naver.com/pyeongpyoen/products/4751210548';
+    addNaverSite(name, url);
+
+    name = '에티카 김다미 마스크 KF94 밸브형 미세먼지 황사마스크 21매입';
+    url = 'https://smartstore.naver.com/etiqa/products/4683602058';
+    addNaverSite(name, url);
+
+    name = '에티카 밸브형 큐브마스크 KF94 미세먼지 초미세먼지 황사마스크 21매입';
+    url = 'https://smartstore.naver.com/etiqa/products/4691343733';
+    addNaverSite(name, url);
+
+    name = '(수량확보)당일출고 뉴크린웰 스타일황사마스크 KF94블랙 실속형20매(벌크)(개당 2700원) / KF94마스크대형벌크20매 / KF94대형마스크세트';
+    url = 'https://smartstore.naver.com/jbeast/products/4835440126';
+    addNaverSite(name, url);
 
 
     /*name = '웹킵스몰 스마트블랙 KF94 45개';
@@ -171,6 +240,8 @@ function checkMaskSite() {
     url = 'http://www.welkeepsmall.com/shop/shopdetail.html?branduid=1007206&xcode=023&mcode=001&scode=&special=1&GfDT=bm9%2FW1w%3D';
     checkWelKipsMall(name, url);
 */
+
+    //console.error(naverSiteList)
 
     if (testMode) {
         name = '네이버스토어 test'

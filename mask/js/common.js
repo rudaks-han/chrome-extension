@@ -1,4 +1,12 @@
-﻿function showNotify(title, message) {
+﻿function debug(str) {
+	console.log(str);
+}
+
+function error(str) {
+	console.error(str);
+}
+
+function showNotify(title, message) {
 	if (Notification && Notification.permission !== "granted") {
 		Notification.requestPermission(function (status) {
 			if (Notification.permission !== status) {
@@ -13,6 +21,11 @@
 
 function addMinutes(date, minutes) {
 	return new Date(date.getTime() + minutes*60000);
+}
+
+function getCurrDate() {
+	var date = new Date();
+	return date.getFullYear() + '/' + makeTwoLength(date.getMonth()+1) + '/' + makeTwoLength(date.getDate()) + ' ' + makeTwoLength(date.getHours()) + ':' + makeTwoLength(date.getMinutes()) + ':' + makeTwoLength(date.getSeconds());
 }
 
 function getDateFormat(date) {

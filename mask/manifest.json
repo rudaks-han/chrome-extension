@@ -20,7 +20,7 @@
     "web_accessible_resources" : [
         "48.png"
     ],
-    "content_security_policy": "script-src 'self' https://smartstore.naver.com https://order.pay.naver.com https://coronamask.kr; object-src 'self'",
+    "content_security_policy": "script-src 'self' https://smartstore.naver.com https://order.pay.naver.com https://coronamask.kr https://mask.shopping; object-src 'self'",
     "background": {
         "page" : "background.html"
     }
