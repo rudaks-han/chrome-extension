@@ -296,23 +296,6 @@ function generateUUID() {
     return uuid;
 };
 
-var createShareScreen = function (chrome) {
-    return function (sender) {
-    	debug('createShareScreen called');
-    	debug('sender : ' + sender);
-    	debug('sender.tab : ' + sender.tab);
-        chrome.desktopCapture.chooseDesktopMedia(['screen', 'window'], sender.tab, function (streamId) {
-            chrome.tabs.sendMessage(sender.tab.id, {
-                action: 'relay-to-tab',
-                callback: 'share-screen',
-                argument: streamId
-            }, function () {
-                console.log("Message sent with stream %s", streamId);
-            });
-        });
-    };
-};
-
 var screenshot = null;
 var tabId = null;
 

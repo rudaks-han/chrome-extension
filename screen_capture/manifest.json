@@ -1,6 +1,6 @@
 {
 	"name": "스크린샷 캡쳐 - rudaks capture",
-	"version": "1.0.14",
+	"version": "1.0.15",
 	"description": "웹페이지를 간단하고 다양한 방법으로 캡쳐하세요.",
 	"browser_action": {
 		"default_icon": "images/capture.png",
@@ -10,11 +10,6 @@
     {
       "matches": [ "<all_urls>" ] ,
       "js": ["js/lib/jquery-1.9.1.min.js", "js/contents-script.js"]
-    },
-    {
-		"matches": ["http://www.google.com/robots.txt*"],
-      	"js": ["js/lib/oauth2/oauth2_inject.js"],
-      	"run_at": "document_start"
     }
   ],
    "background": {
@@ -30,7 +25,6 @@
 	"icons": {"16": "images/capture.png"},
 	"web_accessible_resources": [
 		"selection.html",
-		"chrome_oauth_receiver.html",
 		"images/number-1.png",
 		"images/number-2.png",
 		"images/number-3.png",
@@ -38,6 +32,6 @@
 	],
 	"offline_enabled": true,
 	"optional_permissions": [ "clipboardWrite" ],
-	"permissions": [ "activeTab", "tabs", "\u003Call_urls>", "storage", "contextMenus", "desktopCapture", "background" ],
+	"permissions": [ "activeTab", "tabs", "storage", "contextMenus", "desktopCapture", "background" ],
 	"manifest_version": 2
 }
