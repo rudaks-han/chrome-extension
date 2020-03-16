@@ -204,18 +204,18 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/etiqa/products/4691343733';
     addNaverSite(name, url);
 
-    name = '(수량확보)당일출고 뉴크린웰 스타일황사마스크 KF94블랙 실속형20매(벌크)(개당 2700원) / KF94마스크대형벌크20매 / KF94대형마스크세트';
+    /*name = '(수량확보)당일출고 뉴크린웰 스타일황사마스크 KF94블랙 실속형20매(벌크)(개당 2700원) / KF94마스크대형벌크20매 / KF94대형마스크세트';
     url = 'https://smartstore.naver.com/jbeast/products/4835440126';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     /*name = '(품절)(1인 최대 3매) 아기상어 유아 소형 코로나마스크 KF94 황사마스크';
     url = 'https://smartstore.naver.com/light_market/products/4834555739';
     addNaverSite(name, url);
 */
-    name = '중형 1매입 5매  낱개포장 [KF94 휴그린 미세먼지 방역마스크] 초미세먼지 호흡기보호 유통기한23년2월';
+    /*name = '중형 1매입 5매  낱개포장 [KF94 휴그린 미세먼지 방역마스크] 초미세먼지 호흡기보호 유통기한23년2월';
     url = 'https://smartstore.naver.com/soommask/products/4828127993';
     addNaverSite(name, url);
-
+*/
     name = '[대형] 동국제약 황사방역용 마스크 KF94 1봉(3매)';
     url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4810907388';
     addNaverSite(name, url);
@@ -228,8 +228,8 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/dapharm/products/4834738614';
     addNaverSite(name, url);
 
-    name = 'M.ask  엠에스크 황사 방역용 마스크 KF94 (흰색/대형) 코로나19 예방마스크 국산제품 개별포장';
-    url = 'https://smartstore.naver.com/dydsmall/products/4833226977';
+    /*name = 'M.ask  엠에스크 황사 방역용 마스크 KF94 (흰색/대형) 코로나19 예방마스크 국산제품 개별포장';
+    url = 'https://smartstore.naver.com/dydsmall/products/4833226977';*/
     addNaverSite(name, url);
 
     name = '에티카 신민아 마스크 KF94 밸브형 미세먼지 황사마스크 7매';
@@ -247,22 +247,22 @@ function addNaverStoreMaskSite() {
     name = '(깨끗한나라) KF94 마스크 3입 x 2팩';
     url = 'https://smartstore.naver.com/sunsuhan/products/4843564301';
     addNaverSite(name, url);
-
+/*
     name = '[마이케어] 끈조절 KF80 마스크 소형 (1매)';
     url = 'https://smartstore.naver.com/heattem/products/4173474004';
-    addNaverSite(name, url);
-
+    addNaverSite(name, url);*/
+/*
     name = '[마이케어] 끈조절 KF80 마스크 대형 (1매)';
     url = 'https://smartstore.naver.com/heattem/products/4173331569';
     addNaverSite(name, url);
 
     name = '[마이케어] 끈조절 KF94 마스크 대형 (1매)';
     url = 'https://smartstore.naver.com/heattem/products/4173318669';
-    addNaverSite(name, url);
-
+    addNaverSite(name, url);*/
+/*
     name = 'KF94 황사 방역 마스크 대형X(3입) 3단구조 국산 미세먼지 코로나 예방';
     url = 'https://smartstore.naver.com/matlove/products/4835320363';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     name = '[품절] 미마마스크 필터교체형 먼지 자외선차단 패션 마스크 (+활성탄필터 5매)';
     url = 'https://smartstore.naver.com/aseado/products/3765693172';
