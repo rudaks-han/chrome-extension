@@ -30,7 +30,7 @@ function readyToSell(now, sellDate) {
 	}
 }
 
-function checkNaverStore(name, url) {
+function checkNaverStoreUrl(name, url) {
     checkUrl(url, 'html', function (res) {
         if (res.indexOf('배송비결제') > -1 && res.indexOf('<em class="fc_point">구매하실 수 없는</em> 상품입니다') == -1 && res.indexOf('현재 주문 폭주로 구매가 어렵습니다') == -1) {
             sendPushBullet(name, url);
@@ -150,8 +150,10 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 if (testMode) {
     debug('[' + getCurrDate() + '] Checking... ');
     setTimeout(function() {
-        checkNaverMaskSite();
-        checkWelKipsSite();
+        addNaverStoreMaskSite();
+
+        checkNaverStoreAvailable();
+        checkWelKipsSiteUrl();
     }, 1 * 1000);
 
     /*setTimeout(function() {
@@ -160,8 +162,9 @@ if (testMode) {
 } else {
     debug('[' + getCurrDate() + '] Checking... ');
 
-    checkNaverMaskSite();
-    checkWelKipsSite();
+    addNaverStoreMaskSite();
+    //checkNaverMaskSite();
+    checkWelKipsSiteUrl();
 
     setInterval(function() {
         debug('[' + getCurrDate() + '] Checking... ');
@@ -172,8 +175,9 @@ if (testMode) {
             return;
         }
 
-        checkNaverMaskSite();
-        checkWelKipsSite();
+        //checkNaverMaskSite();
+        checkNaverStoreAvailable();
+        checkWelKipsSiteUrl();
     }, interval);
 
 }

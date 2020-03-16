@@ -17,7 +17,8 @@ function addNaverSite(name, url) {
 
 }
 
-function checkNaverMaskSite() {
+function addNaverStoreMaskSite() {
+    naverSiteList = '';
     welKipsMallCount = 0;
 
     var name = '';
@@ -115,10 +116,10 @@ function checkNaverMaskSite() {
     url = 'https://smartstore.naver.com/aseado/products/3765693172#coronamaskkr';
     addNaverSite(name, url);
 
-    name = '네이버스토어 마스크 블랙';
+    /*name = '네이버스토어 마스크 블랙';
     url = 'https://smartstore.naver.com/light_market/products/4834555216';
     addNaverSite(name, url);
-
+*/
     name = '네이버스토어 기본에';
     url = 'https://smartstore.naver.com/gibone/products/4842094192';
     addNaverSite(name, url);
@@ -131,10 +132,10 @@ function checkNaverMaskSite() {
     url = 'https://smartstore.naver.com/wiicare/products/4242262742';
     addNaverSite(name, url);
 
-    name = '네이버스토어 디즈니 유아';
+    /*name = '네이버스토어 디즈니 유아';
     url = 'https://smartstore.naver.com/light_market/products/4835093482';
     addNaverSite(name, url);
-
+*/
     name = '네이버스토어 [미엘물티슈] 숨쉬GO KF94 미세먼지 황사방역마스크 10매';
     url = 'https://smartstore.naver.com/gcleantec/products/4847692801';
     addNaverSite(name, url);
@@ -207,10 +208,10 @@ function checkNaverMaskSite() {
     url = 'https://smartstore.naver.com/jbeast/products/4835440126';
     addNaverSite(name, url);
 
-    name = '(품절)(1인 최대 3매) 아기상어 유아 소형 코로나마스크 KF94 황사마스크';
+    /*name = '(품절)(1인 최대 3매) 아기상어 유아 소형 코로나마스크 KF94 황사마스크';
     url = 'https://smartstore.naver.com/light_market/products/4834555739';
     addNaverSite(name, url);
-
+*/
     name = '중형 1매입 5매  낱개포장 [KF94 휴그린 미세먼지 방역마스크] 초미세먼지 호흡기보호 유통기한23년2월';
     url = 'https://smartstore.naver.com/soommask/products/4828127993';
     addNaverSite(name, url);
@@ -304,9 +305,10 @@ function checkNaverMaskSite() {
     checkWelKipsMall(name, url);
 */
 
-    console.error(naverSiteList)
+   // console.error(naverSiteList)
+    console.error('naverShopList.length: ' + naverShopList.length)
 
-    if (testMode) {
+    /*if (testMode) {
         name = '네이버스토어 test'
         url = 'https://smartstore.naver.com/sol-sungrass/products/4851263224';
         //url = 'https://smartstore.naver.com/mooninsam/products/341195701'; // 인삼
@@ -317,7 +319,7 @@ function checkNaverMaskSite() {
         for(var i=0; i<naverShopList.length; i++) {
             checkNaverStore(naverShopList[i].name, naverShopList[i].url);
         }
-    }
+    }*/
 
     // https://smartstore.naver.com/mooninsam/products/341195701
 

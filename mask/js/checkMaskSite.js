@@ -57,7 +57,7 @@ function checkCoronaMaskCallback(res) {
 	});
 }
 
-function checkWelKipsSite() {
+function checkWelKipsSiteUrl() {
 
 	setTimeout(function() {
 		checkUrl('http://www.welkeepsmall.com/shop/shopbrandCA.html?type=X&xcode=023', 'html', function(res) {
@@ -87,4 +87,20 @@ function checkWelKipsSite() {
 			}
 		});
 	}, 100);
+}
+
+function checkNaverStoreAvailable() {
+	if (testMode) {
+		var name = '네이버스토어 test'
+		var url = 'https://smartstore.naver.com/sol-sungrass/products/4851263224';
+		//url = 'https://smartstore.naver.com/mooninsam/products/341195701'; // 인삼
+		//url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4737857552'; // 마데카 파워앰플
+		checkNaverStoreUrl(name, url);
+		return;
+	} else {
+		debug('Checking naver store site : ' + naverShopList.length)
+		for(var i=0; i<naverShopList.length; i++) {
+			checkNaverStoreUrl(naverShopList[i].name, naverShopList[i].url);
+		}
+	}
 }
