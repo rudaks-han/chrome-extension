@@ -56,33 +56,33 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4810907388?NaPm=';
     addNaverSite(name, url);
 
-    name = '네이버스토어 금아덴탈';
+    /*name = '네이버스토어 금아덴탈';
     url = 'https://smartstore.naver.com/kumaelectron/products/4754238400';
     addNaverSite(name, url);
-
-    name = '네이버스토어 마이케어';
+*/
+    /*name = '네이버스토어 마이케어';
     url = 'https://smartstore.naver.com/heattem/products/4172159700';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     name = '네이버스토어 마이케어2';
     url = 'https://smartstore.naver.com/heattem/products/4824368953';
     addNaverSite(name, url);
 
-    name = '네이버스토어 금아스토어';
+    /*name = '네이버스토어 금아스토어';
     url = 'https://smartstore.naver.com/kumaelectron/products/4754244746';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     name = '네이버스토어 닥터퓨리';
     url = 'https://smartstore.naver.com/mfbshop/products/4735164530';
     addNaverSite(name, url);
 
-    name = '네이버스토어 금아스토어';
+    /*name = '네이버스토어 금아스토어';
     url = 'https://smartstore.naver.com/kumaelectron/products/4754246120';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
-    name = '네이버스토어 금아스토어 메디라인';
+    /*name = '네이버스토어 금아스토어 메디라인';
     url = 'https://smartstore.naver.com/kumaelectron/products/4754248104';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     name = '네이버스토어 금아스토어 블랙';
     url = 'https://smartstore.naver.com/kumaelectron/products/4813999869';
@@ -112,9 +112,9 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/shyman/products/4843275185';
     addNaverSite(name, url);
 
-    name = '네이버스토어 미마몰';
+   /* name = '네이버스토어 미마몰';
     url = 'https://smartstore.naver.com/aseado/products/3765693172#coronamaskkr';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     /*name = '네이버스토어 마스크 블랙';
     url = 'https://smartstore.naver.com/light_market/products/4834555216';
@@ -124,9 +124,9 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/gibone/products/4842094192';
     addNaverSite(name, url);
 
-    name = '네이버스토어 라록스';
+    /*name = '네이버스토어 라록스';
     url = 'https://smartstore.naver.com/ygfac/products/3905641271';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     name = '네이버스토어 위케어';
     url = 'https://smartstore.naver.com/wiicare/products/4242262742';
@@ -220,9 +220,9 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/dkpharm_naturesvitamin/products/4810907388';
     addNaverSite(name, url);
 
-    name = '국제약품 황사방역용 마스크 3매입 (KF94) (대형)';
+    /*name = '국제약품 황사방역용 마스크 3매입 (KF94) (대형)';
     url = 'https://smartstore.naver.com/candistore/products/4834846385';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
     name = '[3월입고 없음 4월에만나요] 품절 미세먼지 마스크 KF94 대형 (5장)';
     url = 'https://smartstore.naver.com/dapharm/products/4834738614';
@@ -264,9 +264,9 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/matlove/products/4835320363';
     addNaverSite(name, url);*/
 
-    name = '[품절] 미마마스크 필터교체형 먼지 자외선차단 패션 마스크 (+활성탄필터 5매)';
+    /*name = '[품절] 미마마스크 필터교체형 먼지 자외선차단 패션 마스크 (+활성탄필터 5매)';
     url = 'https://smartstore.naver.com/aseado/products/3765693172';
-    addNaverSite(name, url);
+    addNaverSite(name, url);*/
 
 
 
