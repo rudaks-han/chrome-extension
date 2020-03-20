@@ -1,9 +1,21 @@
 ﻿var naverSiteList = '';
+var naverExcludeSiteList = [
+    'https://www.i-ete.com/products/33'
+];
+
 function addNaverSite(name, url) {
     var exists = false;
-    for (var i=0; i<naverShopList.length; i++) {
-        if (naverShopList[i].url == url) {
-            exists = true;
+
+    if (naverExcludeSiteList.indexOf(url) > -1) {
+        console.error('exclude naver site: ' + url);
+        exists = true;
+    }
+
+    if (!exists) {
+        for (var i=0; i<naverShopList.length; i++) {
+            if (naverShopList[i].url == url) {
+                exists = true;
+            }
         }
     }
 
@@ -16,6 +28,10 @@ function addNaverSite(name, url) {
     }
 
 }
+
+var excludeSite = [
+    ''
+]
 
 function addNaverStoreMaskSite() {
     naverSiteList = '';
@@ -112,14 +128,6 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/shyman/products/4843275185';
     addNaverSite(name, url);
 
-   /* name = '네이버스토어 미마몰';
-    url = 'https://smartstore.naver.com/aseado/products/3765693172#coronamaskkr';
-    addNaverSite(name, url);*/
-
-    /*name = '네이버스토어 마스크 블랙';
-    url = 'https://smartstore.naver.com/light_market/products/4834555216';
-    addNaverSite(name, url);
-*/
     name = '네이버스토어 기본에';
     url = 'https://smartstore.naver.com/gibone/products/4842094192';
     addNaverSite(name, url);
@@ -204,6 +212,14 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/etiqa/products/4691343733';
     addNaverSite(name, url);
 
+    name = '위케어 중국 사스 우한 코로나바이러스 예방 블랙 황사 미세먼지마스크 KF94 성인용 60매';
+    url = 'https://smartstore.naver.com/wiicare/products/4242272411';
+    addNaverSite(name, url);
+
+
+    name = '위케어 중국 사스 우한 코로나바이러스 예방 황사 미세먼지마스크 KF94 아동용 60매';
+    url = 'https://smartstore.naver.com/wiicare/products/3924755533';
+    addNaverSite(name, url);
     /*name = '(수량확보)당일출고 뉴크린웰 스타일황사마스크 KF94블랙 실속형20매(벌크)(개당 2700원) / KF94마스크대형벌크20매 / KF94대형마스크세트';
     url = 'https://smartstore.naver.com/jbeast/products/4835440126';
     addNaverSite(name, url);*/
@@ -250,23 +266,33 @@ function addNaverStoreMaskSite() {
 /*
     name = '[마이케어] 끈조절 KF80 마스크 소형 (1매)';
     url = 'https://smartstore.naver.com/heattem/products/4173474004';
-    addNaverSite(name, url);*/
-/*
+    addNaverSite(name, url);
+
     name = '[마이케어] 끈조절 KF80 마스크 대형 (1매)';
     url = 'https://smartstore.naver.com/heattem/products/4173331569';
     addNaverSite(name, url);
 
     name = '[마이케어] 끈조절 KF94 마스크 대형 (1매)';
     url = 'https://smartstore.naver.com/heattem/products/4173318669';
-    addNaverSite(name, url);*/
-/*
+    addNaverSite(name, url);
+
     name = 'KF94 황사 방역 마스크 대형X(3입) 3단구조 국산 미세먼지 코로나 예방';
     url = 'https://smartstore.naver.com/matlove/products/4835320363';
-    addNaverSite(name, url);*/
+    addNaverSite(name, url);
 
-    /*name = '[품절] 미마마스크 필터교체형 먼지 자외선차단 패션 마스크 (+활성탄필터 5매)';
+    name = '[품절] 미마마스크 필터교체형 먼지 자외선차단 패션 마스크 (+활성탄필터 5매)';
     url = 'https://smartstore.naver.com/aseado/products/3765693172';
-    addNaverSite(name, url);*/
+    addNaverSite(name, url);
+
+    name = '네이버스토어 미마몰';
+    url = 'https://smartstore.naver.com/aseado/products/3765693172#coronamaskkr';
+    addNaverSite(name, url);
+
+    name = '네이버스토어 마스크 블랙';
+    url = 'https://smartstore.naver.com/light_market/products/4834555216';
+    addNaverSite(name, url);
+
+     */
 
     name = '[걸리버] KF94 휴그린 미세먼지 방역마스크 (5매)';
     url = 'https://smartstore.naver.com/soommask/products/4828127993';

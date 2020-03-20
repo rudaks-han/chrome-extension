@@ -196,6 +196,7 @@ function sendPushBullet(title, body) {
     if (testMode)
         return;
 
-    var authorization = '8yH3ytxOI7Bqu3bVbUqHKsVATSCpujVX';
+    //var authorization = '8yH3ytxOI7Bqu3bVbUqHKsVATSCpujVX';
+    var authorization = 'o.j6iPGdhYa97fxwvI5TWbAkXKPPnDyu6P'; // rudaks9451@gmail.com
     pushBullet(authorization, title, body);
 }

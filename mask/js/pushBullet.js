@@ -12,8 +12,12 @@ function pushBullet(authorization, title, body)
 		beforeSend: function (xhr) {
 			xhr.setRequestHeader('Authorization', 'Bearer ' + authorization);
 		},
-		success:function(res){
-			console.log(JSON.stringify(res))
+		success:function(res) {
+			console.log('send pushbullet: ' + title)
+			//console.log(JSON.stringify(res))
+		},
+		error: function(e) {
+			console.error('pushbullet error : ' + JSON.stringify(e));
 		}
 	});
 }
