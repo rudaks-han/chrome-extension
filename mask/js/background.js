@@ -116,8 +116,17 @@ function clickBuyButtonAndRefresh(tab) {
                     chrome.tabs.reload(tab.id)
 
                 } else {
-                    // 구매하기 버튼 클릭
-                    executeScriptCheckoutItem();
+
+                    chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
+                        function(results) {
+                            if (results[0] > 0) { // 옵션이 있음
+                                debug('옵션이 있어서 구매하지 않음 ' + tab.url);
+                            } else { // 옵션이 없음
+                                // 구매하기 버튼 클릭
+                                executeScriptCheckoutItem();
+                            }
+                        }
+                    );
                 }
             } );
     }, 100);
@@ -131,11 +140,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
     ) {
         chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
             function(results) {
-                if (results[0] > 0) { // 옵션이 있음
+                /*if (results[0] > 0) { // 옵션이 있음
                     debug('옵션이 있어서 구매하지 않음 ' + tab.url);
                 } else { // 옵션이 없음
                     clickBuyButtonAndRefresh(tab);
-                }
+                }*/
+                clickBuyButtonAndRefresh(tab);
             }
         );
 	} else if (tab.url.startsWith('https://order.pay.naver.com/orderSheet/result')) {

@@ -268,6 +268,9 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/aseado/products/3765693172';
     addNaverSite(name, url);*/
 
+    name = '[걸리버] KF94 휴그린 미세먼지 방역마스크 (5매)';
+    url = 'https://smartstore.naver.com/soommask/products/4828127993';
+    addNaverSite(name, url);
 
 
 
