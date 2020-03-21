@@ -1,5 +1,5 @@
 ﻿
-var testMode = true;
+var testMode = false;
 
 var checkStartHour = 7;
 var checkEndHour = 23;
