@@ -1,5 +1,5 @@
 ﻿
-var testMode = false;
+var testMode = true;
 
 var checkStartHour = 7;
 var checkEndHour = 23;
@@ -33,7 +33,7 @@ function readyToSell(now, sellDate) {
 function checkNaverStoreUrl(name, url) {
     checkUrl(url, 'html', function (res) {
         if (res.indexOf('배송비결제') > -1 && res.indexOf('<em class="fc_point">구매하실 수 없는</em> 상품입니다') == -1 && res.indexOf('현재 주문 폭주로 구매가 어렵습니다') == -1) {
-            sendPushBullet(name, url);
+            //sendPushBullet(name, url);
             error('[판매중] ' + name + ' : ' + url);
         } else {
             //debug('[재고없음] ' + name);
@@ -87,7 +87,7 @@ function executeScriptOrderItem() {
 // 구매사이트를 팝업으로 열고 구매하기 버튼 클릭
 function checkoutItem(url) {
     debug('[구입을 위해 site 팝업창 띄움] ' + url);
-    sendPushBullet("마스크 판매 1분 전", url);
+    //sendPushBullet("마스크 판매 1분 전", url);
 
 	chrome.tabs.create({'url': url}, function(tab) {
         reloadCountData[url] = 0;
@@ -109,14 +109,13 @@ function clickBuyButtonAndRefresh(tab) {
                         debug('[새로고침 횟수(' + maxReloadCount + ') 초과로 중단] ' + tab.url);
                         return;
                     }
-
+                    
                     reloadCountData[tab.url] = reloadCountData[tab.url] + 1;
 
                     debug('[새로고침] ' + reloadCountData[tab.url] + " > " + tab.url);
                     chrome.tabs.reload(tab.id)
 
                 } else {
-
                     chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
                         function(results) {
                             if (results[0] > 0) { // 옵션이 있음
@@ -138,13 +137,17 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 	if (tab.url.startsWith('https://smartstore.naver.com')
     ) {
+
+        // 현재 진행상태 표시
+        chrome.tabs.sendMessage(
+            tab.id, {
+                action: "reload-count",
+                data: {maxReloadCount: maxReloadCount, reloadCount: reloadCountData[tab.url]}}
+            , function(response) {}
+        );
+
         chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
             function(results) {
-                /*if (results[0] > 0) { // 옵션이 있음
-                    debug('옵션이 있어서 구매하지 않음 ' + tab.url);
-                } else { // 옵션이 없음
-                    clickBuyButtonAndRefresh(tab);
-                }*/
                 clickBuyButtonAndRefresh(tab);
             }
         );

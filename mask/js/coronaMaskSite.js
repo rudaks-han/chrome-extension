@@ -4,34 +4,22 @@ var naverExcludeSiteList = [
 ];
 
 function addNaverSite(name, url) {
-    var exists = false;
-
     if (naverExcludeSiteList.indexOf(url) > -1) {
-        console.error('exclude naver site: ' + url);
-        exists = true;
+        console.error('excluded naver site: ' + url);
+        return;
     }
 
-    if (!exists) {
-        for (var i=0; i<naverShopList.length; i++) {
-            if (naverShopList[i].url == url) {
-                exists = true;
-            }
-        }
-    }
+    var exists = naverShopList.some(el => el.url == url);
 
     if (!exists) {
         naverShopList.push({name: name, url: url});
 
-        naverSiteList += "name = '" + name + "';\n";
+       /* naverSiteList += "name = '" + name + "';\n";
         naverSiteList += "url = '" + url + "';\n";
-        naverSiteList += 'addNaverSite(name, url);\n\n';
+        naverSiteList += 'addNaverSite(name, url);\n\n';*/
     }
 
 }
-
-var excludeSite = [
-    ''
-]
 
 function addNaverStoreMaskSite() {
     naverSiteList = '';
@@ -258,6 +246,10 @@ function addNaverStoreMaskSite() {
 
     name = '에티카 밸브형 라운드마스크 KF94 미세먼지 초미세먼지 황사마스크 7매입';
     url = 'https://smartstore.naver.com/etiqa/products/4730528613';
+    addNaverSite(name, url);
+
+    name = '(깨끗한나라) KF94 마스크 3입 x 2팩';
+    url = 'https://smartstore.naver.com/sunsuhan/products/4843564301';
     addNaverSite(name, url);
 
     name = '(깨끗한나라) KF94 마스크 3입 x 2팩';
