@@ -31,6 +31,7 @@ function readyToSell(now, sellDate) {
 }
 
 function checkNaverStoreUrl(name, url) {
+    console.log('checkNaverStoreUrl')
     checkUrl(url, 'html', function (res) {
         if (res.indexOf('배송비결제') > -1 && res.indexOf('<em class="fc_point">구매하실 수 없는</em> 상품입니다') == -1 && res.indexOf('현재 주문 폭주로 구매가 어렵습니다') == -1) {
             //sendPushBullet(name, url);
@@ -59,6 +60,7 @@ function checkNaverStoreUrl(name, url) {
        }
     });
 
+    console.log('isReadyToSell : ' + isReadyToSell)
     if (isReadyToSell) { // 판매 1분전인 사이트 일 경우
 		checkoutItem(url);
     }
@@ -167,7 +169,7 @@ if (testMode) {
 
         checkNaverStoreAvailable();
         checkWelKipsSiteUrl();
-    }, 1 * 1000);
+    }, 2 * 1000);
 
     /*setTimeout(function() {
         checkMaskSite();

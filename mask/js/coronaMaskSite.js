@@ -252,9 +252,6 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/sunsuhan/products/4843564301';
     addNaverSite(name, url);
 
-    name = '(깨끗한나라) KF94 마스크 3입 x 2팩';
-    url = 'https://smartstore.naver.com/sunsuhan/products/4843564301';
-    addNaverSite(name, url);
 /*
     name = '[마이케어] 끈조절 KF80 마스크 소형 (1매)';
     url = 'https://smartstore.naver.com/heattem/products/4173474004';
