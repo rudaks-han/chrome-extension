@@ -290,7 +290,25 @@ function addNaverStoreMaskSite() {
     url = 'https://smartstore.naver.com/soommask/products/4828127993';
     addNaverSite(name, url);
 
+    name = '끈조절 미세먼지 황사마스크 대형/소형 색상랜덤 KF94 10매';
+    url = 'https://smartstore.naver.com/pyeongpyoen/products/4761816560';
+    addNaverSite(name, url);
 
+    name = '이편한 황사 방역 마스크 KF94 KF80 독감 감기 예방 미세먼지 황사 차단 일회용';
+    url = 'https://smartstore.naver.com/sintech/products/598573259';
+    addNaverSite(name, url);
+
+    name = '이편한 미세먼지 마스크 황사 마스크 KF80 KF94';
+    url = 'https://smartstore.naver.com/mdamayo/products/3803685971';
+    addNaverSite(name, url);
+
+    name = '';
+    url = '';
+    addNaverSite(name, url);
+
+    name = '';
+    url = '';
+    addNaverSite(name, url);
 
 
     /*name = '웹킵스몰 스마트블랙 KF94 45개';
