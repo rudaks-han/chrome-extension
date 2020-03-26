@@ -46,11 +46,12 @@ function checkCoronaMaskCallback(res) {
 				}
 
 				if (!exists && newItem.url.startsWith('https://smartstore.naver.com')) {
-					console.error('사이트 등록 필요 : ' + name)
-					console.error(newItem);
+					if (naverExcludeSiteList.indexOf(newItem.url) == -1) {
+						console.error('사이트 등록 필요 : ' + name)
+						console.error(newItem);
 
-					addNaverSite(name, newItem.url);
-
+						addNaverSite(name, newItem.url);
+					}
 				}
 			}
 		}
@@ -77,10 +78,12 @@ function checkWelKipsSiteUrl() {
 				var soldOut = list.find('.info').text().indexOf('SOLD OUT') > -1;
 				if (href) {
 					if (!soldOut) {
-						sendPushBullet('웹킵스 마스크 재고있음 알림', url);
+						//sendPushBullet('웹킵스 마스크 재고있음 알림', url);
 						error('[판매중] welkips : ' + href);
+						chrome.tabs.create({'url': href}, function(tab) {
+						});
 					} else {
-						//debug('[재고없음] welkips : ' + href);
+						debug('[재고없음] welkips : ' + href);
 					}
 				}
 

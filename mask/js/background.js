@@ -60,7 +60,7 @@ function checkNaverStoreUrl(name, url) {
        }
     });
 
-    console.log('isReadyToSell : ' + isReadyToSell)
+    //console.log('isReadyToSell : ' + isReadyToSell)
     if (isReadyToSell) { // 판매 1분전인 사이트 일 경우
 		checkoutItem(url);
     }
