@@ -122,6 +122,8 @@ function clickBuyButtonAndRefresh(tab) {
                         function(results) {
                             if (results[0] > 0) { // 옵션이 있음
                                 debug('옵션이 있어서 구매하지 않음 ' + tab.url);
+
+                                sendPushBullet('마스크 구매하세요', tab.url);
                             } else { // 옵션이 없음
                                 // 구매하기 버튼 클릭
                                 executeScriptCheckoutItem();
