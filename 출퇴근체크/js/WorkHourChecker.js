@@ -193,11 +193,22 @@ class WorkHourChecker
 			for (let i = 0; i < todayDayOffList.length; i++) {
 				let item = todayDayOffList[i];
 				if (item.indexOf(sessionUserName) > -1) {
-					if (!(item.indexOf('오전') > -1 || item.indexOf('오후') > -1 || item.indexOf('반차') > -1)) {
+					let dayOff = false;
+					if ((item.indexOf('연차') > -1 || item.indexOf('보상') > -1)
+						&& item.indexOf('오전') == -1 && item.indexOf('오후') == -1 && item.indexOf('반차') == -1) {
+						dayOff = true;
+					}
+
+					if (dayOff) {
 						// 연차
 						logger.trace('>>> 오늘은 연차입니다.');
 						return true;
 					}
+					/*if (!(item.indexOf('오전') > -1 || item.indexOf('오후') > -1 || item.indexOf('반차') > -1)) {
+						// 연차
+						logger.trace('>>> 오늘은 연차입니다.');
+						return true;
+					}*/
 				}
 			}
 		}
@@ -288,10 +299,14 @@ class WorkHourChecker
 			for (let i = 0; i < todayDayOffList.length; i++) {
 				let item = todayDayOffList[i];
 				if (item.indexOf(sessionUserName) > -1) {
-					if (item.indexOf('오전') > -1) {
-						return '오전';
+					if (item.indexOf('오전') > -1 && item.indexOf('반반차') > -1) {
+						return '오전반반차';
+					} else if (item.indexOf('오후') > -1 && item.indexOf('반반차') > -1) {
+						return '오후반반차';
+					} else if (item.indexOf('오전') > -1) {
+						return '오전반차';
 					} else if (item.indexOf('오후') > -1) {
-						return '오후';
+						return '오후반차';
 					} else if (item.indexOf('반차') > -1) {
 						logger.trace('>>> 오늘은 반차입니다. (오전/오후 알수 없음) ');
 						return '오전';
@@ -333,9 +348,18 @@ class WorkHourChecker
 
 		// 반차일 경우 시간 조정
 		let userDayHalfOff = this.isUserDayHalfOff();
-		if (userDayHalfOff == '오전') {
-			clockInMarkingTime = startWorkTimeDate.addMinutes(5 * 60 - minuteBeforeClockIn); // 기준시간 12:55
-		} else {
+		if (userDayHalfOff == '오전반반차') {
+			clockInMarkingTime = startWorkTimeDate.addMinutes(2 * 60 - minuteBeforeClockIn); // 기준시간 12:55
+		} else if (userDayHalfOff == '오전반차') {
+			// 8시 이전 출근이라면 +4를 하고 8시 출근 이후라면 +5를 한다.
+			let addHour = 5; // 점심시간 포함
+			if (startWorkTimeDate.getHours() < 8) {
+				addHour = 4; // 점심시간 이전 출근
+			}
+			clockInMarkingTime = startWorkTimeDate.addMinutes(addHour * 60 - minuteBeforeClockIn); // 기준시간 12:55
+		} else if (userDayHalfOff == '오후반반차'){
+			clockInMarkingTime = startWorkTimeDate.addMinutes(-minuteBeforeClockIn); // 기준시간 07:55
+		} else if (userDayHalfOff == '오후반차'){
 			clockInMarkingTime = startWorkTimeDate.addMinutes(-minuteBeforeClockIn); // 기준시간 07:55
 		}
 
@@ -365,10 +389,17 @@ class WorkHourChecker
 
 		// 반차일 경우 시간 조정
 		let userDayHalfOff = this.isUserDayHalfOff();
-		if (userDayHalfOff == '오후') {
-			clockOutMarkingTime = endWorkTimeDate.addMinutes(-5 * 60 + minuteAfterClockOut); // 기준시간 13:05
-		} else {
+		if (userDayHalfOff == '오전반반차') {
 			clockOutMarkingTime = endWorkTimeDate.addMinutes(minuteAfterClockOut); // 기준시간 15:05
+		} else if (userDayHalfOff == '오전반차') {
+			clockOutMarkingTime = endWorkTimeDate.addMinutes(minuteAfterClockOut); // 기준시간 15:05
+		} else if (userDayHalfOff == '오후반반차') {
+			clockOutMarkingTime = endWorkTimeDate.addMinutes(-2 * 60 + minuteAfterClockOut); // 기준시간 13:05
+		} else if (userDayHalfOff == '오후반차') {
+			let addHour = 4;
+			if (endWorkTimeDate.getHours() < 17)
+				addHour = 5;
+			clockOutMarkingTime = endWorkTimeDate.addMinutes(-addHour * 60 + minuteAfterClockOut); // 기준시간 13:05
 		}
 
 		let outTime = endWorkTimeDate.addMinutes(60); // 기준시간 18:00 (17:00 + 01:00)
