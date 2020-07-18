@@ -85,7 +85,7 @@ class WorkHourChecker
 					{
 						holidayList[date] = type;
 					}
-					else if (type == 'company')
+					else if (type == 'company' || summary.indexOf('보상휴가') > -1) // 보상휴가는 type=normal
 					{
 						if (!dayOffList[date])
 							dayOffList[date] = [];
@@ -186,13 +186,15 @@ class WorkHourChecker
 	{
 		logger.trace('[개인 연차 여부 체크]')
 		let currDate = getCurrDate();
-		let todayDayOffList = dayOffList[currDate];
+		//console.error(currDate)
+		//currDate = '2020-07-01'
 
+		let todayDayOffList = dayOffList[currDate];
 		if (todayDayOffList)
 		{
 			for (let i = 0; i < todayDayOffList.length; i++) {
 				let item = todayDayOffList[i];
-				if (item.indexOf(sessionUserName) > -1) {
+				if (item.indexOf(sessionUserName) > -1 || item.indexOf('보상휴가') > -1) {
 					let dayOff = false;
 					if ((item.indexOf('연차') > -1 || item.indexOf('보상') > -1)
 						&& item.indexOf('오전') == -1 && item.indexOf('오후') == -1 && item.indexOf('반차') == -1) {
@@ -361,6 +363,8 @@ class WorkHourChecker
 			clockInMarkingTime = startWorkTimeDate.addMinutes(-minuteBeforeClockIn); // 기준시간 07:55
 		} else if (userDayHalfOff == '오후반차'){
 			clockInMarkingTime = startWorkTimeDate.addMinutes(-minuteBeforeClockIn); // 기준시간 07:55
+		} else {
+			clockInMarkingTime = startWorkTimeDate.addMinutes(-minuteBeforeClockIn); // 기준시간 07:55
 		}
 
 		let outTime = startWorkTimeDate.addMinutes(60); // 기준시간 09:00
@@ -400,10 +404,11 @@ class WorkHourChecker
 			if (endWorkTimeDate.getHours() < 17)
 				addHour = 5;
 			clockOutMarkingTime = endWorkTimeDate.addMinutes(-addHour * 60 + minuteAfterClockOut); // 기준시간 13:05
+		} else {
+			clockOutMarkingTime = endWorkTimeDate.addMinutes(minuteAfterClockOut);
 		}
 
 		let outTime = endWorkTimeDate.addMinutes(60); // 기준시간 18:00 (17:00 + 01:00)
-
 		if (date >= clockOutMarkingTime) {
 			if (date > outTime) {
 				logger.trace('>>> 퇴근도장 찍을 유효시간(1시간) 초과됨');
