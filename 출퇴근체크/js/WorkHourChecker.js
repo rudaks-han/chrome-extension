@@ -377,7 +377,7 @@ class WorkHourChecker
 				return true;
 			}
 		} else {
-			logger.trace('>>> 출근도장 찍을 시간 아님');
+			logger.trace('>>> 출근도장 찍을 시간 아님 (' + clockInMarkingTime + ')');
 			return false;
 		}
 	}
@@ -387,7 +387,7 @@ class WorkHourChecker
 	{
 		logger.trace('[퇴근도장 범위내 여부 체크]')
 
-		let date = new Date();
+		let currDate = new Date();
 		// 퇴근도장 찍을 시간
 		let clockOutMarkingTime = null;
 
@@ -409,15 +409,16 @@ class WorkHourChecker
 		}
 
 		let outTime = endWorkTimeDate.addMinutes(60); // 기준시간 18:00 (17:00 + 01:00)
-		if (date >= clockOutMarkingTime) {
-			if (date > outTime) {
+
+		if (currDate >= clockOutMarkingTime) {
+			if (currDate > outTime) {
 				logger.trace('>>> 퇴근도장 찍을 유효시간(1시간) 초과됨');
 				return false
 			} else {
 				return true;
 			}
 		} else {
-			logger.trace('>>> 퇴근도장 찍을 시간 아님');
+			logger.trace('>>> 퇴근도장 찍을 시간 아님 (' + clockOutMarkingTime + ')');
 			return false;
 		}
 	}
