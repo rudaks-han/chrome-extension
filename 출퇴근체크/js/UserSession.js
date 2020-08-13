@@ -14,6 +14,8 @@ class UserSession
 				userInfo.username = res.data.employeeNumber;
 				userInfo.userId = sessionUserId;
 
+				saveLocalStorage('userId', userInfo.userId);
+
 				if (sessionUserName) {
 					let firebaseKey = firebaseApp.api_log + '/' + getCurrDateToMonth() + '/' + getCurrDay() + '/' + sessionUserName + '/get_session_updated';
 					firebaseApp.set(firebaseKey, getCurrTime());

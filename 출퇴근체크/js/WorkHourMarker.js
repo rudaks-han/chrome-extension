@@ -10,7 +10,8 @@ class WorkHourMarker
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		let userId = userInfo.userId;
+		//let userId = userInfo.userId;
+		let userId = getLocalStorage("userId");
 		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockIn?userId=${userId}&baseDate=${currDate}`;
 		let param = `{"checkTime":"${currDate}T${currTime}.000Z","timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 
@@ -67,7 +68,8 @@ class WorkHourMarker
 		let currDate = getCurrDate();
 		let currTime = getCurrTime();
 
-		let userId = userInfo.userId;
+		//let userId = userInfo.userId;
+		let userId = getLocalStorage("userId");
 		let url = `${this.BASE_URL}/api/ehr/timeline/status/clockOut?userId=${userId}&baseDate=${currDate}`;
 		let param = `{"checkTime":"${currDate}T${currTime}.000Z","timelineStatus":{},"isNightWork":false,"workingDay":"${currDate}"}`;
 

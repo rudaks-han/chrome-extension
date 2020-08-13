@@ -1,6 +1,6 @@
 {
-  "name": "그룹웨어 출퇴근 체크",
-  "version": "1.0.28",
+  "name": "그룹웨어 출근 체크",
+  "version": "1.0.30",
   "description": "그룹웨어 출퇴근을 체크하는 용도로 사용된다.",
   "browser_action": {
     "default_icon": "images/icon.png",
