@@ -1,7 +1,7 @@
 
 let GOSSOcookie = '';
 
-let checkInterval = 5 * 1000;
+let checkInterval = 60 * 1000;
 let userSessionInterval = 5 * 60 * 1000; // 5분 마다
 let calendarCheckInterval = 60 * 60 * 1000; // 1시간 마다
 let firebaseConfigCheckerInterval = 60 * 1000; // 1분마다.
