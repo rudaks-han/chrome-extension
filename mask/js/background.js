@@ -134,6 +134,17 @@ function clickBuyButtonAndRefresh(tab) {
             } );
     }, 100);
 }
+
+function showProgress(tab) {
+    // 현재 진행상태 표시
+    chrome.tabs.sendMessage(
+        tab.id, {
+            action: "reload-count",
+            data: {maxReloadCount: maxReloadCount, reloadCount: reloadCountData[tab.url]}}
+        , function(response) {}
+    );
+}
+
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 	if (changeInfo.status != 'complete')
@@ -141,15 +152,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 
 	if (tab.url.startsWith('https://smartstore.naver.com')
     ) {
-
-        // 현재 진행상태 표시
-        chrome.tabs.sendMessage(
-            tab.id, {
-                action: "reload-count",
-                data: {maxReloadCount: maxReloadCount, reloadCount: reloadCountData[tab.url]}}
-            , function(response) {}
-        );
-
+	    showProgress(tab);
         chrome.tabs.executeScript( null, {code: getExistSelectOptionCode()},
             function(results) {
                 clickBuyButtonAndRefresh(tab);

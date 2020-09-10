@@ -22,6 +22,7 @@ $(function() {
 	//el.click();
 	//el.trigger('click');
 	//el.trigger('mousedown');
+/*
 
 
     $('<button id="checkOption">button</button>').appendTo('._check_option');
@@ -50,6 +51,7 @@ $(function() {
         //$('._combination_option option').eq(3).prop('selected', true);
         //select.change();
     });
+*/
 
 	/*setTimeout(function() {
 		var el = $('.selectbox-layer').eq(1);
