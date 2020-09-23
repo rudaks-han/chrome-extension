@@ -1,0 +1,27 @@
+{
+    "manifest_version" : 2,
+    "short_name": "ajax intercept",
+    "name" : "ajax intercept",
+    "author": "rudaks",
+    "version": "0.0.1",
+    "description": "ajax intercept",
+    "content_scripts": [
+        {
+            "matches": ["*://*/*"],
+            "run_at": "document_start",
+            "js": ["js/jquery-1.9.1.min.js", "js/content-script.js", "js/injected.js"]
+        }
+    ],
+    "content_security_policy": "script-src 'self'; object-src 'self'",
+    "permissions" : [               
+        "notifications",
+		"background",
+		"storage",
+        "webRequest",
+        "*://*/*"
+    ],
+    "web_accessible_resources": ["js/injected.js"],
+    "background": {
+      "page": "background.html"
+    }
+}
