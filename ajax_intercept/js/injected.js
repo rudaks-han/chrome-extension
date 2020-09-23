@@ -1,5 +1,7 @@
 (function(xhr) {
 
+    var matchText = ['LOCAL'];
+
     var XHR = XMLHttpRequest.prototype;
 
     var open = XHR.open;
@@ -50,17 +52,22 @@
                     try {
 
                         // here you get RESPONSE TEXT (BODY), in JSON format, so you can use JSON.parse
-                        var arr = this.responseText;
+                        var responseText = JSON.parse(this.responseText);
+                        if (responseText.responses) {
+                            var responses = responseText.responses;
+                            responses.forEach(function(element) {
+                                var hits = element.hits.hits;
 
-                        console.error(arr)
-
-                        // printing url, request headers, response headers, response body, to console
-
-                        /*console.log(this._url);
-                        console.log(JSON.parse(this._requestHeaders));
-                        console.log(responseHeaders);
-                        console.log(JSON.parse(arr));*/
-
+                                hits.forEach(function(el) {
+                                    var message = el._source.message;
+                                    matchText.forEach(function(text) {
+                                        if (message.indexOf(text) > -1) {
+                                            matched(message);
+                                        }
+                                    })
+                                })
+                            })
+                        }
                     } catch(err) {
                         console.log("Error in responseType try catch");
                         console.log(err);
@@ -74,3 +81,7 @@
     };
 
 })(XMLHttpRequest);
+
+function matched(message) {
+    console.error(message)
+}

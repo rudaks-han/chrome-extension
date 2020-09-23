@@ -1,10 +1,4 @@
-﻿$( window ).ajaxComplete(function() {
-
-    console.error('complete')
-
-});
-
-var s = document.createElement('script');
+﻿var s = document.createElement('script');
 s.src = chrome.extension.getURL('js/injected.js');
 s.onload = function() {
     this.remove();
@@ -12,3 +6,7 @@ s.onload = function() {
 $(function() {
     (document.head || document.documentElement).appendChild(s);
 })
+
+function matchText() {
+    console.error('matchText')
+}
