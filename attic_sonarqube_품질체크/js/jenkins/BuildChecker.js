@@ -26,10 +26,6 @@ class BuildChecker {
 					hasError = true;
 				}
 
-				//let buildStatus = {};
-
-				//buildStatus[componentName] = value;
-
 				return {
 					componentName,
 					hasError
@@ -37,10 +33,7 @@ class BuildChecker {
 			});
 		}).then(responses => {
 
-			console.error('responses......')
-			console.error(responses)
 			data.push(responses);
-
 			return data;
 		});
 	}

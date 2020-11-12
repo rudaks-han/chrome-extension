@@ -19,7 +19,9 @@
         "notifications",
 		"background",
 		"storage",
-      "*://*/*"
+        "http://211.63.24.41:9000/api/**",
+        "http://211.63.24.41:8080/view/**"
+
     ],
     "background": {
       "page": "background.html"
