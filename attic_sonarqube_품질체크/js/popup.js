@@ -11,6 +11,12 @@ const command =
 		window.close();
 	},
 
+	checkBuild : function(e)
+	{
+		chrome.runtime.sendMessage({action: "checkBuild"}, function(response) {});
+		window.close();
+	},
+
 	openWindow : function(url)
 	{
 		chrome.runtime.sendMessage({action: "openWindow", url}, function(response) {});
@@ -32,9 +38,6 @@ function startChecking(callback)
 
 function checkQuality() {
 	startChecking(() => {
-
-		console.error(":" + saveStorageSync['saveUseFlag']);
-
 		if (saveStorageSync['saveUseFlag'] != 'Y') {
 			$('#component-errors').html('품질현황 체크: <font color="red">사용안함</font>');
 		} else {
@@ -63,8 +66,9 @@ function checkQuality() {
 (function($) {
 
     const load = () => {
-        $('#checkQuality').on('click', command.checkQuality);		
-		$('#gotoJenkins').on('click', () => command.openWindow('http://211.63.24.41:8080/view/attic/'));
+        $('#checkQuality').on('click', command.checkQuality);
+        $('#checkBuild').on('click', command.checkBuild);
+		$('#gotoJenkins').on('click', () => command.openWindow('http://211.63.24.41:8080/view/victory/'));
 		$('#gotoSonarqube').on('click', () => command.openWindow('http://211.63.24.41:9000/projects'));
 		$('#gotoJira').on('click', () => command.openWindow('https://enomix.atlassian.net/secure/RapidBoard.jspa?rapidView=41&projectKey=ATTP'));
 		$('#showOptions').on('click', command.showOptions);

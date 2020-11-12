@@ -23,8 +23,8 @@ const inputItems = [
 ];
 
 const componentNames = [
-	'Platform',
-	'Application'
+	'Mocha',
+	'Shop'
 ];
 
 function init()
@@ -35,13 +35,6 @@ function init()
 	setUseFlagChecked();
 	setInputValue('saveSelectHour');
 	setInputValue('saveSelectMinute');
-
-	/*setInputValue('saveInputBugsPlatform', '0');
-	setInputValue('saveInputVulnerabilitiesPlatform', '0');
-	setInputValue('saveSecurityHotspotsPlatform', '0');
-	setInputValue('saveCodeSmellsPlatform', '0');
-	setInputValue('saveCoveragePlatform', '0');
-	setInputValue('saveDuplicationsPlatform', '0');*/
 
 	componentNames.forEach((componentName) => {
 		inputItems.forEach(inputItem => {

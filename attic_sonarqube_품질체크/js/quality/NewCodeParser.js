@@ -8,9 +8,6 @@ class NewCodeParser {
 		let newCoverage = 0;
 		let newDuplicatedLinesDensity = 0;
 
-		console.log("=== Sonarqube response data ===")
-		console.log(response)
-
 		let component = response.component;
 
 		component.measures.map(measure =>  {

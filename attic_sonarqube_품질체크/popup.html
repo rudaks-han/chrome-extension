@@ -4,13 +4,16 @@
         <meta charset="utf-8">
         <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
         <link rel="stylesheet" type="text/css" href="css/popup.css">
-	    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="js/semantic.min.js"></script>
+	    <script type="text/javascript" src="js/lib/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/lib/semantic.min.js"></script>
+        <script src="js/lib/logger.js"></script>
+        <script src="js/lib/common.js"></script>
 	    <script type="text/javascript" src="js/popup.js"></script>
-        <script src="js/storageSync.js"></script>
+        <script src="js/lib/storageSync.js"></script>
         <script type="text/javascript" src="js/quality/QualityChecker.js"></script>
         <script type="text/javascript" src="js/quality/NewCodeParser.js"></script>
         <script type="text/javascript" src="js/quality/ErrorChecker.js"></script>
+        <script src="js/jenkins/BuildChecker.js"></script>
 
     </head>
 
@@ -40,6 +43,11 @@
                 <div class="extra content">
                     <div class="ui two buttons">
                         <div class="ui basic green button" id="checkQuality">품질현황 체크</div>
+                    </div>
+                </div>
+                <div class="extra content">
+                    <div class="ui two buttons">
+                        <div class="ui basic green button" id="checkBuild">Jenkins Build 체크</div>
                     </div>
                 </div>
             </div>

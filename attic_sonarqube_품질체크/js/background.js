@@ -45,18 +45,21 @@ let currDate;
 setInterval(() => {
 	currDate = new Date();
 
-  	console.log('checking : ' + currDate);
+  	logger.info('checking : ' + currDate);
 
 	startChecking(() => {
 		if (saveStorageSync['saveUseFlag'] !== 'Y') {
-			console.log('saveUseFlag: ' + saveStorageSync['saveUseFlag']);
+			logger.debug('saveUseFlag: ' + saveStorageSync['saveUseFlag']);
 			return;
 		}
 
-		if (!checkValidDate())
+		if (!checkValidDate()) {
+			logger.info('not valid time')
 			return;
+		}
 
 		checkQuality();
+		checkBuild();
 	});
 
 }, interval);
@@ -85,6 +88,34 @@ function checkQuality() {
 			});
 	});
 }
+
+function checkBuild() {
+	startChecking(() => {
+
+		const buildChecker = new BuildChecker();
+
+		buildChecker.startCheck()
+			.then(responses => {
+				let hasError = false;
+				let messages = '';
+				responses.map(response => {
+					if (response.hasError) {
+						hasError = true;
+						messages += '[' + response.componentName + '] Failed' + '\n';
+					}
+				});
+
+				if (hasError) {
+					responses.map(response => {
+						showBgNotification('', '[' + response.componentName + '] build failed.', true, '/images/Angry-Face.png');
+					});
+				} else {
+					showBgNotification('', 'All build success', false);
+				}
+			});
+	});
+}
+
 
 function checkValidDate() {
 	currDate = new Date();
@@ -117,6 +148,8 @@ const receiveMessage = function(request, sender, sendResponse)
 {
 	if (request.action === 'checkQuality') {
 		checkQuality();
+	} else if (request.action === 'checkBuild') {
+		checkBuild();
 	} else if (request.action === 'openWindow') {
 		window.open(request.url);
 	}

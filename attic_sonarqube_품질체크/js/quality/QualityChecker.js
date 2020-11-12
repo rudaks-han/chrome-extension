@@ -8,25 +8,33 @@ class QualityChecker {
 		let data = [];
 
 		return Promise.all(this.urls.map(url => {
-			console.log('# ajax request : ' + url);
+			logger.debug('# ajax request : ' + url);
 
 			return $.ajax(url);
 		})).then(responses => {
-			console.log('# ajax response')
-			console.log(responses);
+			logger.debug('# ajax response')
+			logger.debug(responses);
 			return responses.map(response => {
 				return new NewCodeParser().execute(response);;
 			});
 		}).then(responses => {
-			console.log('# newCodeParser response')
-			console.log(responses);
+			logger.debug('# newCodeParser response')
+			logger.debug(responses);
 
 			return responses.map(response => {
-				return new ErrorChecker().execute(response.componentName, response);;
+				let componentName = '';
+				if (response.componentName === 'Pi-mocha') {
+					componentName = 'Mocha';
+				} else if (response.componentName === 'Pi-shop') {
+					componentName = 'Shop';
+				} else {
+					logger.error('componentName is empty: ' + response.componentName)
+				}
+				return new ErrorChecker().execute(componentName, response);;
 			});
 		}).then(responses => {
-			console.log('# ErrorChecker response')
-			console.log(responses);
+			logger.debug('# ErrorChecker response')
+			logger.debug(responses);
 
 			responses.map(response => {
 				data.push(response);
@@ -37,7 +45,7 @@ class QualityChecker {
 	}
 
 	check(url) {
-		console.log('check url : ' + url)
+		logger.debug('check url : ' + url)
 
 		return new Promise((resolve, reject) => {
 			$.get(url, response => {

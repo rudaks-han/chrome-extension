@@ -38,6 +38,7 @@ class ErrorChecker {
 			hasError = true;
 		}
 
+		logger.debug('hasError: ' + hasError)
 		return {
 			componentName,
 			hasError,

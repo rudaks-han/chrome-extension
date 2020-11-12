@@ -6,9 +6,9 @@
 	<title class="i18n" data-msg="google_calendar_extension_name">Options</title>
 
 	<link rel="stylesheet" type="text/css" href="css/semantic.min.css">
-	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="js/semantic.min.js"></script>
-	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/lib/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="js/lib/semantic.min.js"></script>
+	<script type="text/javascript" src="js/lib/common.js"></script>
 	<script type="text/javascript" src="js/options.js"></script>
 	<style>
 		body {margin: 20px;}
@@ -52,12 +52,12 @@
 		</div>
 	</div>
 
-	<h4 class="ui dividing header">Platform 품질 기준</h4>
+	<h4 class="ui dividing header">Mocha 품질 기준</h4>
 	<div class="field">
 		<label>Reliability > new bugs</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Bugs 개수" id="saveInputBugsPlatform">
+			<input type="text" placeholder="Bugs 개수" id="saveInputBugsMocha">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -68,7 +68,7 @@
 		<label>Security > New Vulnerabilities</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilitiesPlatform">
+			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilitiesMocha">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -79,7 +79,7 @@
 		<label>Security > New Security Hotspots</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspotsPlatform">
+			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspotsMocha">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -90,7 +90,7 @@
 		<label>Maintainability > New Code Smells</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Smells 개수" id="saveCodeSmellsPlatform">
+			<input type="text" placeholder="Smells 개수" id="saveCodeSmellsMocha">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -101,7 +101,7 @@
 		<label>Coverage</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Coverage Percentage" id="saveCoveragePlatform">
+			<input type="text" placeholder="Coverage Percentage" id="saveCoverageMocha">
 			<a class="ui tag label">
 				% 이하
 			</a>
@@ -112,7 +112,7 @@
 		<label>Duplications</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Duplications Percentage" id="saveDuplicationsPlatform">
+			<input type="text" placeholder="Duplications Percentage" id="saveDuplicationsMocha">
 			<a class="ui tag label">
 				% 초과
 			</a>
@@ -121,12 +121,12 @@
 
 	<div class="ui divider"></div>
 
-	<h4 class="ui dividing header">Application 품질 기준</h4>
+	<h4 class="ui dividing header">Shop 품질 기준</h4>
 	<div class="field">
 		<label>Reliability > new bugs</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Bugs 개수" id="saveInputBugsApplication">
+			<input type="text" placeholder="Bugs 개수" id="saveInputBugsShop">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -137,7 +137,7 @@
 		<label>Security > New Vulnerabilities</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilitiesApplication">
+			<input type="text" placeholder="Vulnerabilities 개수" id="saveInputVulnerabilitiesShop">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -148,7 +148,7 @@
 		<label>Security > New Security Hotspots</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspotsApplication">
+			<input type="text" placeholder="Hotspots 개수" id="saveSecurityHotspotsShop">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -159,7 +159,7 @@
 		<label>Maintainability > New Code Smells</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Smells 개수" id="saveCodeSmellsApplication">
+			<input type="text" placeholder="Smells 개수" id="saveCodeSmellsShop">
 			<a class="ui tag label">
 				개 초과
 			</a>
@@ -170,7 +170,7 @@
 		<label>Coverage</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Coverage Percentage" id="saveCoverageApplication">
+			<input type="text" placeholder="Coverage Percentage" id="saveCoverageShop">
 			<a class="ui tag label">
 				% 이하
 			</a>
@@ -181,7 +181,7 @@
 		<label>Duplications</label>
 		<div class="ui right labeled left icon input">
 			<i class="tags icon"></i>
-			<input type="text" placeholder="Duplications Percentage" id="saveDuplicationsApplication">
+			<input type="text" placeholder="Duplications Percentage" id="saveDuplicationsShop">
 			<a class="ui tag label">
 				% 초과
 			</a>

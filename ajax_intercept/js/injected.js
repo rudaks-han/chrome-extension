@@ -1,6 +1,8 @@
 (function(xhr) {
 
-    var matchText = ['LOCAL'];
+    // 포함되는 글자
+    var matchText = ['LogoutTimeoutProcessor'];
+    var matchUrl = 'http://172.16.100.51:5601';
 
     var XHR = XMLHttpRequest.prototype;
 
@@ -28,25 +30,8 @@
             var endTime = (new Date()).toISOString();
 
             var myUrl = this._url ? this._url.toLowerCase() : this._url;
-            if(myUrl) {
-
-                if (postData) {
-                    if (typeof postData === 'string') {
-                        try {
-                            // here you get the REQUEST HEADERS, in JSON format, so you can also use JSON.parse
-                            this._requestHeaders = postData;
-                        } catch(err) {
-                            console.log('Request Header JSON decode failed, transfer_encoding field could be base64');
-                            console.log(err);
-                        }
-                    } else if (typeof postData === 'object' || typeof postData === 'array' || typeof postData === 'number' || typeof postData === 'boolean') {
-                        // do something if you need
-                    }
-                }
-
-                // here you get the RESPONSE HEADERS
-                var responseHeaders = this.getAllResponseHeaders();
-
+            console.error('myUrl : '  + myUrl)
+            if(myUrl && myUrl.includes(matchUrl)) {
                 if ( this.responseType != 'blob' && this.responseText) {
                     // responseText is string or null
                     try {
@@ -62,7 +47,7 @@
                                     var message = el._source.message;
                                     matchText.forEach(function(text) {
                                         if (message.indexOf(text) > -1) {
-                                            matched(message);
+                                            matched(el);
                                         }
                                     })
                                 })
@@ -82,6 +67,36 @@
 
 })(XMLHttpRequest);
 
-function matched(message) {
-    console.error(message)
+function matched(el) {
+    var id = el._id;
+    var message = el._source.message;
+
+    setStorage(id, message);
+}
+
+function setStorage(id, value) {
+    var json = {
+        id: id,
+        value: value
+    };
+
+    console.log(localStorage)
+    /*chrome.storage.local.set(json, function () {
+        //logger.debug(JSON.stringify(jsonValue));
+        console.log('config updated : ' + JSON.stringify(json));
+    });*/
+}
+
+function getStorage(id) {
+    chrome.storage.local.get(id, function(items) {
+
+        if (typeof items[id] != 'undefined')
+        {
+
+        }
+        else
+        {
+
+        }
+    });
 }
