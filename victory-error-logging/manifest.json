@@ -1,10 +1,14 @@
 {
     "manifest_version" : 2,
-    "short_name": "victory logging",
-    "name" : "victory logging",
+    "short_name": "victory error logging",
+    "name" : "victory error logging",
     "author": "rudaks",
     "version": "0.0.1",
     "description": "victory의 backoffice 로깅",
+    "browser_action": {
+        "default_icon": "images/icon-error-24-32.png",
+        "default_popup": "popup.html"
+    },
     "content_scripts": [
         {
             "matches": ["*://*/*"],
