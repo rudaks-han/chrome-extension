@@ -1,0 +1,38 @@
+{
+    "manifest_version" : 2,
+    "short_name": "victory error logging",
+    "name" : "victory error logging",
+    "author": "rudaks",
+    "version": "0.0.1",
+    "description": "victory의 backoffice 로깅",
+    "browser_action": {
+        "default_icon": "images/icons8-box-important-48.png",
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://victory-backoffice.spectra.co.kr/*",
+                "https://fd-backoffice.spectra.co.kr/*",
+                "https://test-backoffice.spectra.co.kr/*",
+                "http://localhost:3000/*",
+                "https://localhost:3000/*"
+            ],
+            "run_at": "document_start",
+            "js": ["js/jquery-1.9.1.min.js", "js/content-script.js", "js/jsonview.js", "js/consoleHtml.js"],
+            "css": ["css/jsonview.bundle.css", "css/console-log.css"]
+        }
+    ],
+    "content_security_policy": "script-src 'self'; object-src 'self'",
+    "permissions" : [               
+        "notifications",
+		"background",
+		"storage",
+        "webRequest",
+        "*://*/*"
+    ],
+    "web_accessible_resources": ["js/injected.js", "js/jsonview.js", "js/consoleHtml.js","css/jsonview.bundle.css", "css/console-log.css", "images/icons8-box-important-48.png"],
+    "background": {
+      "page": "background.html"
+    }
+}
