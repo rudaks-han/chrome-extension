@@ -11,9 +11,16 @@
     },
     "content_scripts": [
         {
-            "matches": ["*://*/*"],
+            "matches": [
+                "https://victory-backoffice.spectra.co.kr/*",
+                "https://fd-backoffice.spectra.co.kr/*",
+                "https://test-backoffice.spectra.co.kr/*",
+                "http://localhost:3000/*",
+                "https://localhost:3000/*"
+            ],
             "run_at": "document_start",
-            "js": ["js/jquery-1.9.1.min.js", "js/content-script.js", "js/injected.js"]
+            "js": ["js/jquery-1.9.1.min.js", "js/content-script.js", "js/jsonview.js", "js/consoleHtml.js"],
+            "css": ["css/jsonview.bundle.css", "css/console-log.css"]
         }
     ],
     "content_security_policy": "script-src 'self'; object-src 'self'",
@@ -24,7 +31,7 @@
         "webRequest",
         "*://*/*"
     ],
-    "web_accessible_resources": ["js/injected.js"],
+    "web_accessible_resources": ["js/injected.js", "js/jsonview.js", "js/consoleHtml.js","css/jsonview.bundle.css", "css/console-log.css"],
     "background": {
       "page": "background.html"
     }
