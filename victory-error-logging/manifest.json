@@ -6,7 +6,7 @@
     "version": "0.0.1",
     "description": "victory의 backoffice 로깅",
     "browser_action": {
-        "default_icon": "images/icon-error-24-32.png",
+        "default_icon": "images/icons8-box-important-48.png",
         "default_popup": "popup.html"
     },
     "content_scripts": [
@@ -31,7 +31,7 @@
         "webRequest",
         "*://*/*"
     ],
-    "web_accessible_resources": ["js/injected.js", "js/jsonview.js", "js/consoleHtml.js","css/jsonview.bundle.css", "css/console-log.css"],
+    "web_accessible_resources": ["js/injected.js", "js/jsonview.js", "js/consoleHtml.js","css/jsonview.bundle.css", "css/console-log.css", "images/icons8-box-important-48.png"],
     "background": {
       "page": "background.html"
     }

@@ -1,7 +1,7 @@
 ﻿
-const jq = jQuery.noConflict(true);
+//const jq = jQuery.noConflict(true);
 
-jq(function() {
+$(function() {
     loadIcon();
 })
 
@@ -27,26 +27,34 @@ injectScript('js/consoleHtml.js');
 injectCss('css/console-log.css')
 
 function loadIcon() {
-
-    var iconHtml = '<div class="ui">\n' +
+    /*var iconHtml = '<div class="ui">\n' +
         '  <a class="item">\n' +
         '    <i class="icon mail"></i> Victory Error\n' +
         '    <div class="badge">' +
         '' +
         '    </div>\n' +
         '  </a>\n' +
-        '</div>\n';
+        '</div>\n';*/
+
+    var imgUrl = chrome.runtime.getURL("images/icons8-box-important-48.png");
+
+    var iconHtml = '<div class="icon-display">' +
+        '   <div class="icon-display-img-div">' +
+        '       <img src="' + imgUrl + '" />' +
+        '   </div>' +
+        '   <div class="badge-num">' +
+        '' +
+        '   </div>' +
+        '</div>'
 
     var html = '<div id="victory-log">\n'
-        + headerLayer()
+        //+ headerLayer()
         + iconHtml
-        + logLayer()
+        //+ logLayer()
         + '</div>';
 
-    jq('body').append(html);
-    jq('#new-window-console-pane').on('click', function() {
-        console.log('click');
-        json = '{"aa":"bb"}'
+    $('body').append(html);
+    $('.icon-display-img-div').on('click', function() {
         chrome.runtime.sendMessage({'cmd': 'openConsole', 'data': _xhrErrors});
     })
 }
@@ -56,9 +64,12 @@ var _xhrErrors = [];
 function addErrorLog(json) {
     _xhrErrors.push(json);
 
+    console.log('addErrorLog');
+    console.log(json);
+
     try {
         if (json) {
-            const module = json.responseText.module;
+            /*const module = json.responseText.module;
             const code = json.responseText.code;
             const message = json.responseText.message;
 
@@ -70,8 +81,8 @@ function addErrorLog(json) {
             html += '</div>';
             html += '</li>';
 
-            jq('.xhr-error-panel > ul').append(html);
-            JsonView.renderJSON(json, jq('.detail-log:last').get(0));
+            $('.xhr-error-panel > ul').append(html);
+            JsonView.renderJSON(json, $('.detail-log:last').get(0));*/
 
             addBadgeCount();
 
@@ -83,8 +94,13 @@ function addErrorLog(json) {
 }
 
 function addBadgeCount() {
-    jq('#victory-log').find('.badge').text(_xhrErrors.length);
-    jq('#victory-log').find('.badge').css({'display':'block'});
+    $('#victory-log').find('.badge-num').text(_xhrErrors.length);
+    $('#victory-log').find('.badge-num').css({'display':'flex'});
+}
+
+function clearBadgeCount() {
+    $('#victory-log').find('.badge-num').text('');
+    $('#victory-log').find('.badge-num').css({'display':'none'});
 }
 
 document.addEventListener('xhrErrorEvent', function (e) {
@@ -93,4 +109,21 @@ document.addEventListener('xhrErrorEvent', function (e) {
 
     addErrorLog(json);
 });
+
+
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+        console.log('content-script#onMessage');
+        console.log(request);
+
+        if (request.cmd == 'clearConsoleLog') {
+            $('#victory-log').find('.badge-num').text('');
+            $('#victory-log').find('.badge-num').css({'display':'none'});
+            //clearBadgeCount();
+            /*chrome.tabs.executeScript({
+                code: 'alert($("#victory-log").length)'
+            });*/
+        }
+    }
+);
 

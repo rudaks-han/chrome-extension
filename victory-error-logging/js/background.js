@@ -10,5 +10,17 @@ chrome.runtime.onMessage.addListener(function(message){
     } else if (message.cmd == 'sendLog') {
         //consolePaneTabId.document.write('111')
         chrome.tabs.sendMessage(consolePaneTabId, message.data);
+    } else if (message.cmd == 'clearConsoleLog') {
+        //chrome.tabs.sendMessage(consolePaneTabId, message.data);
+
+        chrome.tabs.getAllInWindow(null, function(tabs){
+            for (var i = 0; i < tabs.length; i++) {
+                chrome.tabs.sendMessage(tabs[i].id, message, function(response) {
+                   console.log('result')
+                });
+            }
+        });
+
+
     }
 });
