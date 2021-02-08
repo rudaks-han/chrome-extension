@@ -27,37 +27,37 @@ injectScript('js/consoleHtml.js');
 injectCss('css/console-log.css')
 
 function loadIcon() {
-    /*var iconHtml = '<div class="ui">\n' +
-        '  <a class="item">\n' +
-        '    <i class="icon mail"></i> Victory Error\n' +
-        '    <div class="badge">' +
-        '' +
-        '    </div>\n' +
-        '  </a>\n' +
-        '</div>\n';*/
-
-    var imgUrl = chrome.runtime.getURL("images/icons8-box-important-48.png");
-
     var iconHtml = '<div class="icon-display">' +
         '   <div class="icon-display-img-div">' +
-        '       <img src="' + imgUrl + '" />' +
+        '       <img src="' + chrome.runtime.getURL("images/icons8-box-important-48.png") + '" />' +
         '   </div>' +
         '   <div class="badge-num">' +
         '' +
         '   </div>' +
+        '   <div class="iframe-console-log">' +
+        '       <iframe width="100%" height="100%" frameborder="0">' +
+        '       </iframe>' +
+        '   </div>' +
         '</div>'
 
-    var html = '<div id="victory-log">\n'
-        //+ headerLayer()
+    var html = '<div id="victory-log">'
         + iconHtml
-        //+ logLayer()
         + '</div>';
 
     $('body').append(html);
+
+    $('.iframe-console-log > iframe').attr('src', chrome.runtime.getURL('consoleLogPane.html'));
     $('.icon-display-img-div').on('click', function() {
-        chrome.runtime.sendMessage({'cmd': 'openConsole', 'data': _xhrErrors});
+        if ($('.iframe-console-log').is(':visible')) {
+            $('.iframe-console-log').css({'display': 'none'});
+        } else {
+            $('.iframe-console-log').css({'display': 'block'});
+        }
     })
+
 }
+
+
 
 var _xhrErrors = [];
 
@@ -69,21 +69,6 @@ function addErrorLog(json) {
 
     try {
         if (json) {
-            /*const module = json.responseText.module;
-            const code = json.responseText.code;
-            const message = json.responseText.message;
-
-            var html = '<li>';
-            html += '<div>';
-            html += '[' + module + '][' + code +'] ' + message;
-            html += '</div>';
-            html += '<div class="detail-log">';
-            html += '</div>';
-            html += '</li>';
-
-            $('.xhr-error-panel > ul').append(html);
-            JsonView.renderJSON(json, $('.detail-log:last').get(0));*/
-
             addBadgeCount();
 
             chrome.runtime.sendMessage({'cmd': 'sendLog', 'data': json});
@@ -96,11 +81,6 @@ function addErrorLog(json) {
 function addBadgeCount() {
     $('#victory-log').find('.badge-num').text(_xhrErrors.length);
     $('#victory-log').find('.badge-num').css({'display':'flex'});
-}
-
-function clearBadgeCount() {
-    $('#victory-log').find('.badge-num').text('');
-    $('#victory-log').find('.badge-num').css({'display':'none'});
 }
 
 document.addEventListener('xhrErrorEvent', function (e) {
@@ -116,14 +96,6 @@ chrome.runtime.onMessage.addListener(
         console.log('content-script#onMessage');
         console.log(request);
 
-        if (request.cmd == 'clearConsoleLog') {
-            $('#victory-log').find('.badge-num').text('');
-            $('#victory-log').find('.badge-num').css({'display':'none'});
-            //clearBadgeCount();
-            /*chrome.tabs.executeScript({
-                code: 'alert($("#victory-log").length)'
-            });*/
-        }
     }
 );
 

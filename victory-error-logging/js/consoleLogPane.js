@@ -38,14 +38,14 @@ function appendLog(data) {
     JsonView.renderJSON(data, $('.detail-log:last').get(0));
 }
 
+function clearConsoleLog() {
+    $('.xhr-error-panel').find('ul').find('li').remove();
+}
+
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-            console.log(request)
-            const dataList = request.data;
 
-            console.log('typeof : ' + (typeof dataList)); // object
-            //console.log(dataList);
-            console.log('length : ' + dataList.length);
+        console.log(request)
 
         if (request.cmd == 'sendLog') {
             appendLog(request.data);
@@ -53,6 +53,8 @@ chrome.runtime.onMessage.addListener(
             request.data.forEach((data, index) => {
                 appendLog(data);
             });
+        } else if (request.cmd == 'clearConsoleLog') {
+            clearConsoleLog();
         }
 
             /*if (request.cmd == 'sendLog' || request.cmd == 'openConsole') {

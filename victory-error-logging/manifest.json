@@ -31,7 +31,15 @@
         "webRequest",
         "*://*/*"
     ],
-    "web_accessible_resources": ["js/injected.js", "js/jsonview.js", "js/consoleHtml.js","css/jsonview.bundle.css", "css/console-log.css", "images/icons8-box-important-48.png"],
+    "web_accessible_resources": [
+        "js/injected.js",
+        "js/jsonview.js",
+        "js/consoleHtml.js",
+        "css/jsonview.bundle.css",
+        "css/console-log.css",
+        "images/icons8-box-important-48.png",
+        "consoleLogPane.html"
+    ],
     "background": {
       "page": "background.html"
     }

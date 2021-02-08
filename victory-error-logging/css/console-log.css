@@ -1,22 +1,29 @@
 #victory-log {
   z-index: 999999;
   position: fixed;
-  right: 10px;
+  right: 0;
   bottom: 0px;
+  width: 100%;
+
 }
 
 #victory-log .icon-display {
   position: relative;
+  height: 100%;
+  width: 100%;
 }
 
 #victory-log .icon-display .icon-display-img-div {
   cursor: pointer;
+  position: absolute;
+  right:10px;
+  top: -50px;
 }
 
 #victory-log .icon-display .badge-num {
   position: absolute;
-  top: 0;
-  right: 10px;
+  top: -45px;
+  right: 15px;
   transform: scale(1) translate(50%, -50%);
   background: #f44336;
   color: #fff;
@@ -35,6 +42,11 @@
   display: none;
 }
 
+
+#victory-log .icon-display .iframe-console-log {
+  height: 300px;
+  display: none;
+}
 
 .console-log .header {
   background: rgb(53, 55, 97);
