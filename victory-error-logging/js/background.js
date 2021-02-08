@@ -24,3 +24,50 @@ chrome.runtime.onMessage.addListener(function(message){
 
     }
 });
+
+var websocket;
+function createWebSocketConnection() {
+
+    var host = 'wss://victory-buzzer.spectra.co.kr/websocket';
+
+    console.log('----')
+    if ('WebSocket' in window) {
+        websocket = new WebSocket(host);
+        console.log("======== websocket ===========");
+        console.log(websocket);
+
+        websocket.onopen = function () {
+            websocket.send("Hello");
+        };
+
+        websocket.onmessage = function (event) {
+            var received_msg = JSON.parse(event.data);
+            var notificationOptions = {
+                type: "basic",
+                title: received_msg.title,
+                message: received_msg.message,
+                iconUrl: "extension-icon.png"
+            }
+
+            console.error('data:' + event.data);
+            chrome.notifications.create("", notificationOptions);
+        };
+
+        websocket.onclose = function () {
+        }
+    }
+}
+
+createWebSocketConnection();
+
+const networkFilters = {
+    urls: [
+        "wss://victory-buzzer.spectra.co.kr/*"
+    ]
+};
+
+chrome.webRequest.onBeforeRequest.addListener((details) => {
+    const { tabId, requestId } = details;
+    console.log('websocket start...')
+    // do stuff here
+}, networkFilters);
