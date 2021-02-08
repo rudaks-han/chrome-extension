@@ -13,10 +13,13 @@
         {
             "matches": [
                 "https://victory-backoffice.spectra.co.kr/*",
+                "https://victory-customer.spectra.co.kr/*",
                 "https://fd-backoffice.spectra.co.kr/*",
                 "https://test-backoffice.spectra.co.kr/*",
                 "http://localhost:3000/*",
-                "https://localhost:3000/*"
+                "https://localhost:3000/*",
+                "https://demo.spectra.co.kr/*",
+                "https://stephengrider.github.io/*"
             ],
             "run_at": "document_start",
             "js": ["js/jquery-1.9.1.min.js", "js/content-script.js", "js/jsonview.js", "js/consoleHtml.js"],

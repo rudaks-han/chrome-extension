@@ -28,7 +28,7 @@ chrome.runtime.onMessage.addListener(function(message){
 var websocket;
 function createWebSocketConnection() {
 
-    var host = 'wss://victory-buzzer.spectra.co.kr/websocket';
+    var host = 'wss://victory-buzzer.spectra.co.kr/';
 
     console.log('----')
     if ('WebSocket' in window) {
@@ -37,10 +37,12 @@ function createWebSocketConnection() {
         console.log(websocket);
 
         websocket.onopen = function () {
+            console.log('_______onopen')
             websocket.send("Hello");
         };
 
         websocket.onmessage = function (event) {
+            console.log('_______ onmessage')
             var received_msg = JSON.parse(event.data);
             var notificationOptions = {
                 type: "basic",

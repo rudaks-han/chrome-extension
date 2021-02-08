@@ -20,22 +20,33 @@ function sample() {
     JsonView.renderJSON(data, $('.detail-log:last').get(0));
 }
 
-function appendLog(data) {
-    const module = data.responseText.module;
-    const code = data.responseText.code;
-    const message = data.responseText.message;
+function appendLog(type, data) {
+    if (type == 'xhr') {
+        const module = data.responseText.module;
+        const code = data.responseText.code;
+        const message = data.responseText.message;
 
-    var html = '<li>';
-    html += '<div>';
-    html += '[' + module + '][' + code +'] ' + message;
-    html += '</div>';
-    html += '<div class="detail-log">';
-    html += '</div>';
-    html += '</li>';
+        var html = '<li>';
+        html += '<div>';
+        html += '[' + module + '][' + code +'] ' + message;
+        html += '</div>';
+        html += '<div class="detail-log">';
+        html += '</div>';
+        html += '</li>';
 
-    $('.xhr-error-panel').find('ul').append(html);
+        $('.xhr-error-panel').find('ul').append(html);
 
-    JsonView.renderJSON(data, $('.detail-log:last').get(0));
+        JsonView.renderJSON(data, $('.detail-log:last').get(0));
+    } else {
+        var html = '<li>';
+        html += '<div class="detail-log">';
+        html += '</div>';
+        html += '</li>';
+
+        $('.xhr-error-panel').find('ul').append(html);
+
+        JsonView.renderJSON(data, $('.detail-log:last').get(0));
+    }
 }
 
 function clearConsoleLog() {
@@ -48,10 +59,10 @@ chrome.runtime.onMessage.addListener(
         console.log(request)
 
         if (request.cmd == 'sendLog') {
-            appendLog(request.data);
+            appendLog(request.type, request.data);
         } else if (request.cmd == 'openConsole') {
             request.data.forEach((data, index) => {
-                appendLog(data);
+                appendLog(request.type, data);
             });
         } else if (request.cmd == 'clearConsoleLog') {
             clearConsoleLog();

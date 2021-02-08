@@ -57,21 +57,19 @@ function loadIcon() {
 
 }
 
-
-
 var _xhrErrors = [];
 
-function addErrorLog(json) {
+function addErrorLog(type, json) {
     _xhrErrors.push(json);
 
-    console.log('addErrorLog');
+    console.log('addErrorLog: ' + type);
     console.log(json);
 
     try {
         if (json) {
             addBadgeCount();
 
-            chrome.runtime.sendMessage({'cmd': 'sendLog', 'data': json});
+            chrome.runtime.sendMessage({'cmd': 'sendLog', 'type': type, 'data': json});
         }
     } catch (e) {
         console.error(e);
@@ -83,11 +81,22 @@ function addBadgeCount() {
     $('#victory-log').find('.badge-num').css({'display':'flex'});
 }
 
+
+
+document.addEventListener('ErrorToExtension', function (e) {
+    var json = e.detail;
+    console.log('___________ ErrorToExtension received __________');
+    console.log(json);
+    console.log('_________________________________');
+
+    addErrorLog('js', json);
+});
+
 document.addEventListener('xhrErrorEvent', function (e) {
     var json = e.detail;
-    console.log('received', json);
+    console.log('xhrErrorEvent received', json);
 
-    addErrorLog(json);
+    addErrorLog('xhr', json);
 });
 
 
