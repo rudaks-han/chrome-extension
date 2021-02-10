@@ -1,9 +1,9 @@
 (function(xhr, document) {
-    var XHR = XMLHttpRequest.prototype;
+    const XHR = XMLHttpRequest.prototype;
 
-    var open = XHR.open;
-    var send = XHR.send;
-    var setRequestHeader = XHR.setRequestHeader;
+    const open = XHR.open;
+    const send = XHR.send;
+    const setRequestHeader = XHR.setRequestHeader;
 
     XHR.open = function(method, url) {
         this._method = method;
@@ -21,15 +21,11 @@
 
     XHR.send = function(data) {
         this.addEventListener('load', function() {
-            var url = this._url ? this._url.toLowerCase() : this._url;
+            const url = this._url ? this._url.toLowerCase() : this._url;
 
-            var status = String(this.status);
+            const status = String(this.status);
             if (status.startsWith('4') || status.startsWith('5')) {
-                console.log('--------- error ---------');
-                console.log('status: ' + this.status);
-                console.log('url: ' + url);
-
-                var responseText = '{}';
+                let responseText = {};
 
                 if ( this.responseType != 'blob' && this.responseText) {
                     try {
@@ -40,7 +36,7 @@
                     }
                 }
 
-                var json = {
+                const json = {
                     url,
                     data,
                     status,
@@ -56,15 +52,14 @@
 })(XMLHttpRequest, document);
 
 
-function codeToInject() {
-
+(function(window) {
     function handleCustomError(message, stack) {
         if(!stack) {
             stack = (new Error()).stack.split("\n").splice(2, 4).join("\n");
         }
 
-        var stackLines = stack.split("\n");
-        var callSrc = (stackLines.length > 1 && (/^.*?\((.*?):(\d+):(\d+)/.exec(stackLines[1]) || /(\w+:\/\/.*?):(\d+):(\d+)/.exec(stackLines[1]))) || [null, null, null, null];
+        const stackLines = stack.split("\n");
+        const callSrc = (stackLines.length > 1 && (/^.*?\((.*?):(\d+):(\d+)/.exec(stackLines[1]) || /(\w+:\/\/.*?):(\d+):(\d+)/.exec(stackLines[1]))) || [null, null, null, null];
 
         document.dispatchEvent(new CustomEvent('ErrorToExtension', {
             detail: {
@@ -86,10 +81,10 @@ function codeToInject() {
     });
 
     // handle console.error()
-    var consoleErrorFunc = window.console.error;
+    const consoleErrorFunc = window.console.error;
     window.console.error = function() {
-        var argsArray = [];
-        for(var i in arguments) { // because arguments.join() not working! oO
+        const argsArray = [];
+        for(let i in arguments) { // because arguments.join() not working! oO
             argsArray.push(arguments[i]);
         }
         consoleErrorFunc.apply(console, argsArray);
@@ -114,8 +109,8 @@ function codeToInject() {
 
     // handle 404 errors
     window.addEventListener('error', function(e) {
-        var src = e.target.src || e.target.href;
-        var baseUrl = e.target.baseURI;
+        const src = e.target.src || e.target.href;
+        const baseUrl = e.target.baseURI;
         if(src && baseUrl && src != baseUrl) {
             document.dispatchEvent(new CustomEvent('ErrorToExtension', {
                 detail: {
@@ -125,9 +120,5 @@ function codeToInject() {
             }));
         }
     }, true);
-}
+})(window);
 
-var script = document.createElement('script');
-script.textContent = '(' + codeToInject + '())';
-(document.head || document.documentElement).appendChild(script);
-script.parentNode.removeChild(script);

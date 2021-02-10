@@ -6,41 +6,42 @@
     "version": "0.0.1",
     "description": "victory의 backoffice 로깅",
     "browser_action": {
-        "default_icon": "images/icons8-box-important-48.png",
-        "default_popup": "popup.html"
+        "default_icon": "images/icons8-box-important-48.png"
     },
     "content_scripts": [
         {
             "matches": [
-                "https://victory-backoffice.spectra.co.kr/*",
-                "https://victory-customer.spectra.co.kr/*",
-                "https://fd-backoffice.spectra.co.kr/*",
-                "https://test-backoffice.spectra.co.kr/*",
-                "http://localhost:3000/*",
-                "https://localhost:3000/*",
-                "https://demo.spectra.co.kr/*",
-                "https://stephengrider.github.io/*"
+                "*://victory-backoffice.spectra.co.kr/*",
+                "*://victory-customer.spectra.co.kr/*",
+                "*://fd-backoffice.spectra.co.kr/*",
+                "*://fd-customer.spectra.co.kr/*",
+                "*://test-backoffice.spectra.co.kr/*",
+                "*://test-customer.spectra.co.kr/*",
+                "*://localhost/*"
             ],
             "run_at": "document_start",
-            "js": ["js/jquery-1.9.1.min.js", "js/content-script.js", "js/jsonview.js", "js/consoleHtml.js"],
+            "js": ["js/jquery-1.9.1.min.js", "js/contentScriptUtil.js", "js/contentScript.js", "js/jsonview.js"],
             "css": ["css/jsonview.bundle.css", "css/console-log.css"]
         }
     ],
     "content_security_policy": "script-src 'self'; object-src 'self'",
-    "permissions" : [               
+    "permissions" : [
         "notifications",
 		"background",
 		"storage",
+        "tabs",
+        "activeTab",
+        "desktopCapture",
         "webRequest",
-        "*://*/*"
+        "<all_urls>"
     ],
     "web_accessible_resources": [
         "js/injected.js",
         "js/jsonview.js",
-        "js/consoleHtml.js",
         "css/jsonview.bundle.css",
         "css/console-log.css",
         "images/icons8-box-important-48.png",
+        "images/drag-32.png",
         "consoleLogPane.html"
     ],
     "background": {

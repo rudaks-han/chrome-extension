@@ -1,29 +1,24 @@
-#victory-log {
+#victory-log-icon {
   z-index: 999999;
   position: fixed;
-  right: 0;
-  bottom: 0px;
-  width: 100%;
-
+  right: 35px;
+  bottom: 20%;
+  cursor: move;
+  border: 1px solid red;
+  width: 1px;
+  height: 1px;
 }
 
-#victory-log .icon-display {
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
-
-#victory-log .icon-display .icon-display-img-div {
-  cursor: pointer;
+#victory-log-icon .icon-display-img-div {
   position: absolute;
-  right:10px;
-  top: -50px;
+  top: -17px;
+  left: -17px
 }
 
-#victory-log .icon-display .badge-num {
+#victory-log-icon .badge-num {
   position: absolute;
-  top: -45px;
-  right: 15px;
+  top: -9px;
+  right: -23px;
   transform: scale(1) translate(50%, -50%);
   background: #f44336;
   color: #fff;
@@ -43,9 +38,40 @@
 }
 
 
-#victory-log .icon-display .iframe-console-log {
+#iframe-console-log {
+  #display: none;
+  width: 100%;
+  position: fixed;
   height: 300px;
-  display: none;
+  #height: 100%;
+  bottom: 0;
+  z-index: 99999;
+
+}
+
+#iframe-console-log .drag-layer {
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  top: -10px;
+  left: 0;
+  right: 0;
+  cursor: move;
+}
+
+#iframe-console-log .line-layer {
+  background: blue;
+  width: 100%;
+  height: 15px;
+}
+
+#iframe-console-log .body-layer {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 
 .console-log .header {
@@ -72,5 +98,16 @@
 }
 
 .console-log .xhr-error-panel ul li {
-  list-style: square; padding: 10px 10px 0 10px; border-bottom: 1px solid rgb(68, 73, 122);
+  list-style: square;
+  padding: 10px 10px 0 10px;
+  border-bottom: 1px solid rgb(68, 73, 122);
+  font-weight: 200;
+}
+
+
+#for-clipboard-copy-canvas {
+  position: fixed;
+  bottom: 3000px;
+  right: 3000px;
+  display:none;
 }
