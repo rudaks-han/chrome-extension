@@ -19,6 +19,7 @@ const receiveMessage = function(request, sender, sendResponse) {
 
             chrome.tabs.getSelected(null, function(tab) {
                 console.log('tab.id: ' + tab.id);
+                chrome.tabs.update(tab.id, {'active': true}, (tab) => { });
                 //chrome.tabs.sendRequest(tab.id, 'captured.....', function() {});
                 chrome.tabs.sendMessage(tab.id, {
                     'action': 'captured',

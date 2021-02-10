@@ -17,13 +17,23 @@ $(function() {
 })
 
 function sample() {
-    data = {url: "//victory-agent-gateway.spectra.co.kr/mocha/login", data: '{"userId":"kmhan","password":"1","force":false}', status: "401", responseText: {}};
+    const data = {
+        url: "//victory-agent-gateway.spectra.co.kr/mocha/login",
+        data: '{"userId":"kmhan","password":"1","force":false}',
+        status: "400",
+        responseText: {
+            error: true,
+            code: 400104,
+            message: 'The request specifies an error occurred while mapping ``JSON`` to object',
+            detailMessage: 'Validation failed for argument [0] in public spectra.attic.talk.mocha.authenticate.authenticate.sdo.LoginTokenWithClientIdRdo spectra.attic.talk.mocha.authenticate.authenticate.controller.LoginController.login(spectra.attic.talk.mocha.authenticate.authenticate.sdo.LoginCdo,javax.servlet.http.HttpServletRequest): [Field error in object \'loginCdo\' on field \'userId\': rejected value [af]; codes [Size.loginCdo.userId,Size.userId,Size.java.lang.String,Size]; arguments [org.springframework.context.support.DefaultMessageSourceResolvable: codes [loginCdo.userId,userId]; arguments []; default message [userId],20,3]; default message [크기가 3에서 20 사이여야 합니다]]',
+            module: 'mocha'
+        }};
 
-    addErrorLog('none', data, true);
+    addErrorLog('xhr', data, true);
 }
 
 injectScript('js/injected.js');
-injectScript('js/jsonview.js');
+injectScript('js/lib/jsonview.js');
 injectCss('css/console-log.css')
 
 function loadIcon() {
@@ -70,7 +80,7 @@ function addErrorLog(type, json, countBadgeCount) {
             chrome.runtime.sendMessage({'cmd': 'sendLog', 'type': type, 'data': json});
         }
     } catch (e) {
-        console.error(e);
+        console.log('addErrorLog Error occurred.', e);
     }
 }
 
@@ -111,7 +121,6 @@ window.addEventListener('message', function(e) {
     } else {
         console.log('message received', e.data);
     }
-
 });
 
 document.addEventListener('message', function (e) {

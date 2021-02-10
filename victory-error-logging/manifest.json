@@ -6,7 +6,8 @@
     "version": "0.0.1",
     "description": "victory의 backoffice 로깅",
     "browser_action": {
-        "default_icon": "images/icons8-box-important-48.png"
+        "default_icon": "images/icons8-box-important-48.png",
+        "default_popup": "popup.html"
     },
     "content_scripts": [
         {
@@ -20,7 +21,7 @@
                 "*://localhost/*"
             ],
             "run_at": "document_start",
-            "js": ["js/jquery-1.9.1.min.js", "js/contentScriptUtil.js", "js/contentScript.js", "js/jsonview.js"],
+            "js": ["js/lib/jquery-1.9.1.min.js", "js/contentScriptUtil.js", "js/contentScript.js", "js/lib/jsonview.js"],
             "css": ["css/jsonview.bundle.css", "css/console-log.css"]
         }
     ],
@@ -37,7 +38,7 @@
     ],
     "web_accessible_resources": [
         "js/injected.js",
-        "js/jsonview.js",
+        "js/lib/jsonview.js",
         "css/jsonview.bundle.css",
         "css/console-log.css",
         "images/icons8-box-important-48.png",
