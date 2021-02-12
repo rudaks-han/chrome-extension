@@ -6,7 +6,7 @@ $(function() {
         });
     });
 
-    $('.close-console-log').on('click', function() {
+    $('.close-console-pane').on('click', function() {
         sendMessageToParent({
             'action': 'close-console-pane'
         });

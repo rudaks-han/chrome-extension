@@ -1,10 +1,10 @@
 {
     "manifest_version" : 2,
-    "short_name": "victory error logging",
-    "name" : "victory error logging",
+    "short_name": "Victory Log Collector",
+    "name" : "Victory Log Collector",
     "author": "rudaks",
     "version": "0.0.1",
-    "description": "victory의 backoffice 로깅",
+    "description": "Victory의 UI에서 발생하는 로그를 취합하기 위한 툴이다.",
     "browser_action": {
         "default_icon": "images/icons8-box-important-48.png",
         "default_popup": "popup.html"
@@ -43,6 +43,9 @@
         "css/console-log.css",
         "images/icons8-box-important-48.png",
         "images/drag-32.png",
+        "images/console.png",
+        "images/camera.png",
+        "images/dropbox.png",
         "consoleLogPane.html"
     ],
     "background": {

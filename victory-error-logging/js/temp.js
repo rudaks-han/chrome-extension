@@ -4,10 +4,10 @@ var lastDownX = 0;
 
 function resizable() {
 
-    var container = $('#iframe-console-log'),
-        //top = $('#iframe-console-log > .header-layer'),
-        bodyLayer = $('#iframe-console-log').find('.body-layer'),
-        handle = $('#iframe-console-log').find('.drag-layer');
+    var container = $('#victory-log-tracer'),
+        //top = $('#victory-log-tracer > .header-layer'),
+        bodyLayer = $('#victory-log-tracer').find('.body-layer'),
+        handle = $('#victory-log-tracer').find('.drag-layer');
 
     handle.on('mousedown', function (e) {
         isResizing = true;

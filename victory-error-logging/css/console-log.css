@@ -1,9 +1,9 @@
 #victory-log-icon {
   z-index: 999999;
-  position: fixed;
-  right: 35px;
-  bottom: 20%;
-  cursor: move;
+  position: absolute;
+  right: 40px;
+  top: -45px;
+  cursor: pointer;
   border: 1px solid red;
   width: 1px;
   height: 1px;
@@ -12,13 +12,13 @@
 #victory-log-icon .icon-display-img-div {
   position: absolute;
   top: -17px;
-  left: -17px
+  left: -27px
 }
 
 #victory-log-icon .badge-num {
   position: absolute;
   top: -9px;
-  right: -23px;
+  right: -13px;
   transform: scale(1) translate(50%, -50%);
   background: #f44336;
   color: #fff;
@@ -38,7 +38,7 @@
 }
 
 
-#iframe-console-log {
+#victory-log-tracer {
   #display: none;
   width: 100%;
   position: fixed;
@@ -49,29 +49,45 @@
 
 }
 
-#iframe-console-log .drag-layer {
+#victory-log-tracer .drag-layer {
   width: 100%;
   height: 1px;
   position: absolute;
-  top: -10px;
-  left: 0;
-  right: 0;
+  right: 47px;
+  bottom: -32px;
   cursor: move;
 }
 
-#iframe-console-log .line-layer {
+#victory-log-tracer .line-layer {
   background: blue;
   width: 100%;
   height: 15px;
 }
 
-#iframe-console-log .body-layer {
+#victory-log-tracer .body-layer {
   height: 100%;
   width: 100%;
   position: absolute;
   bottom: 0;
   right: 0;
   left: 0;
+  display:none;
+}
+
+#victory-log-tracer .speed-dial {
+  position: absolute;
+  bottom: 40px;
+  right: -16px;
+  opacity: 0;
+  cursor: pointer;
+  visibility: hidden;
+  transition: background 0.2s, opacity 0.2s, transform 0.5s;
+}
+
+#victory-log-tracer .speed-dial.active {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
 }
 
 .console-log .header {
@@ -111,7 +127,11 @@
 
 #for-clipboard-copy-canvas {
   position: fixed;
-  bottom: 3000px;
+  width: 1024px;
+  height: 1000px;
+  /*bottom: 3000px;
   right: 3000px;
-  display:none;
+  display:none;*/
+  top: 0;
+  left: 0;
 }
