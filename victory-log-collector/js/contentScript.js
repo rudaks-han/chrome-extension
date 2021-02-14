@@ -277,7 +277,7 @@ chrome.runtime.onMessage.addListener((request, sender) => {
             window.parent.postMessage(request, '*');
             break;
         default:
-            console.error('undefined action: ' + request.action);
+            console.error('[contentScript] undefined action', request.action);
     }
 });
 

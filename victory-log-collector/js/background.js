@@ -9,7 +9,7 @@ const receiveMessage = (request, sender, sendResponse) => {
             changeUseFlag(request);
             break;
         default:
-            console.error('undefined action: ' + request.action);
+            console.error('[background] undefined action', request);
             break;
     }
 }
