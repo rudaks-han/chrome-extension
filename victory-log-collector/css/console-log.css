@@ -45,7 +45,7 @@
   position: fixed;
   height: 0;
   #height: 100%;
-  bottom: 50%;
+  bottom: 300px;
   z-index: 99999;
 
 }
