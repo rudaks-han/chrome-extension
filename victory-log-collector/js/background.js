@@ -1,15 +1,10 @@
 const receiveMessage = (request, sender, sendResponse) => {
-    console.log('background request', request);
-
     switch (request.action) {
         case 'capture':
             captureCurrentTab(request);
             break;
         case 'change-useflag':
             changeUseFlag(request);
-            break;
-        default:
-            console.error('[background] undefined action', request);
             break;
     }
 }
