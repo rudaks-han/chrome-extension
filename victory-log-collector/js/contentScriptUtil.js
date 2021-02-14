@@ -14,7 +14,7 @@ function injectCss(file) {
     document.documentElement.removeChild(css);
 }
 
-function copyToClipboard(e, base64String, onSuccess) {
+function copyImageToClipboard(base64String, onSuccess) {
     fetch(base64String)
         .then(res => res.blob())
         .then(blob =>  {
@@ -25,8 +25,24 @@ function copyToClipboard(e, base64String, onSuccess) {
         });
 }
 
+function copyToClipboard(text, onSuccess) {
+    var $tmpDiv = $('<div style="position:absolute;top:1000px;left:1000px;">'+text.replace(/</g,"&lt;").replace(/>/g,"&gt;")+'</div>').appendTo("body")
+    var range = document.createRange();
+    var selection = null;
+
+    range.selectNodeContents($tmpDiv.get(0));
+    selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    if (document.execCommand("copy", false, null)) {
+        onSuccess();
+        $tmpDiv.remove();
+    }
+}
+
 function addDraggableEvent(moveElement, dragElement) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
     if (dragElement) {
         dragElement.onmousedown = dragMouseDown;
     } else {
@@ -74,9 +90,27 @@ const dataURLtoFile = (dataurl, fileName) => {
 }
 
 // devsum.spectra@gmail.com
-const DROPBOX_ACCESS_TOKEN = 'sl.ArLcC72V6f2GgMd6PkDIciGMMthSrmZDj-Y2Kx_LbMe87yTDpzpRUaqSXHoTG5aFV-CsIpc5tgUuV7VJ9-UlNEoyHzis6n3SY-172dSY0SwUfKyoj0a646Bc7_cP9GpuDW8_G_g';
+const DROPBOX_ACCESS_TOKEN = 'WFgpGqCWZkwAAAAAAAAAAVr5C0iMxt7gfJOQlc-TiA4cZKTGcIUm3SbEdwj7iph6';
+
+var charsToEncode = /[\u007f-\uffff]/g;
+
+function http_header_safe_json(v) {
+    return JSON.stringify(v).replace(charsToEncode,
+        function (c) {
+            return '\\u' + ('000' + c.charCodeAt(0).toString(16)).slice(-4);
+        }
+    );
+}
+
 
 function uploadFileToDropbox(filePath, file, successCallback) {
+    var params = {
+        path:filePath,
+        "mode": "add",
+        "autorename": true,
+        "mute": true
+    };
+
     $.ajax({
         url: 'https://content.dropboxapi.com/2/files/upload',
         type: 'post',
@@ -85,7 +119,8 @@ function uploadFileToDropbox(filePath, file, successCallback) {
         contentType: 'application/octet-stream',
         headers: {
             "Authorization": "Bearer " + DROPBOX_ACCESS_TOKEN,
-            "Dropbox-API-Arg": '{"path": "' + filePath + '", "mode": "add","autorename": true,"mute": true}'
+           // "Dropbox-API-Arg": '{"path": "' + filePath + '", "mode": "add","autorename": true,"mute": true}'
+            'Dropbox-API-Arg': http_header_safe_json(params)
         },
         success: function (data) {
             successCallback(data);
@@ -111,4 +146,12 @@ function makeTwoLength(str) {
         return '0' + str;
     }
     return str;
+}
+
+function animateCameraFlash() {
+    $('.camera-flash')
+        .show()  //show the hidden div
+        .animate({opacity: 0.5}, 300)
+        .fadeOut(300)
+        .css({'opacity': 1});
 }

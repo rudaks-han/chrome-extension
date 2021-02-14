@@ -1,22 +1,23 @@
-$(function() {
-    $('.clear-console-log').on('click', function() {
+$(() => {
+    $('.btn-clear-console-log').on('click', () => {
         clearConsoleLog();
         sendMessageToParent({
             'action': 'clear-console-log'
         });
     });
 
-    $('.close-console-pane').on('click', function() {
+    $('.btn-close-console-pane').on('click', () => {
         sendMessageToParent({
             'action': 'close-console-pane'
         });
     });
 
-    $('.capture-screen').on('click', function() {
+    $('.btn-copy-console-log').on('click', () => {
         sendMessageToParent({
-            'action': 'capture-screen'
+            'action': 'copy-console-log'
         });
     });
+
 });
 
 function sendMessageToParent(msg) {
@@ -64,19 +65,13 @@ function clearConsoleLog() {
     $('.xhr-error-panel').find('ul').find('li').remove();
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     switch (request.cmd) {
         case 'sendLog':
             appendLog(request.type, request.data);
             break;
-        case 'openConsole':
-            request.data.forEach((data, index) => {
-                appendLog(request.type, data);
-            });
-            break;
         case 'clearConsoleLog':
             clearConsoleLog();
             break;
-
     }
 });

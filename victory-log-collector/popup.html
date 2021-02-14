@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Rudaks Screenshot</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="css/semantic.min.css">
+        <link rel="stylesheet" type="text/css" href="css/popup.css" />
+        <script type="text/javascript" src="js/lib/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="js/lib/semantic.min.js"></script>
+        <script type="text/javascript" src="js/popup.js"></script>
+    </head>
+
+    <body>
+        <div class="header" style="padding: 10px">
+            <h4>Victory Log Collector</h4>
+            <i class="right floated" id="showOptions" style="cursor:pointer; position: absolute; top: 7px; right: 10px;" title="설정화면으로">
+                <img src="/images/setting.png" style="width: 25px;"/>
+            </i>
+        </div>
+        <div style="border: 1px solid rgba(34,36,38,.15)">
+            <div class="ui toggle checkbox useFlag" style="margin: 10px;">
+                <input type="checkbox" name="public">
+                <label>사용여부</label>
+            </div>
+        </div>
+        <ul>
+            <li>
+                <a id="windows">
+                    <img src="images/window.png" />
+                    <div class="text">윈도우 화면 캡처하기</div>
+                </a>
+            </li>
+        </ul>
+    </body>
+</html>

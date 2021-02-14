@@ -13,14 +13,26 @@
             font-size: 14px;
         }
 
-        .close-console-span {
+        .icons-right {
             position: absolute;
-            right: 5px;
+            right: 10px;
             top: 5px;
             cursor: pointer;
         }
+        .icons-right img {
+            width: 20px;
+        }
 
-        .clear-console-log {
+        .icons-left {
+            position: absolute;
+            left: 7px;
+            top: 5px;
+        }
+
+        .icons-left img {
+            width: 20px;
+        }
+        .btn-clear-console-log {
             cursor: pointer;
         }
     </style>
@@ -30,11 +42,12 @@
 <body>
     <div class="console-log" id="hzheader">
         <div class="header">
-            <span>
-                <img title="Clear Console" src="images/clear.png" class="clear-console-log"/>
+            <span class="icons-left">
+                <img title="Clear Console" src="images/clear.png" class="btn-clear-console-log"/>
             </span>
-            <span class="close-console-span">
-                <img title="Close Console" src="images/close-24.png" class="close-console-pane"/>
+            <span class="icons-right">
+                <img title="Copy Console Log" src="images/copy.png" class="btn-copy-console-log"/>
+                <img title="Close Console" src="images/close.png" class="btn-close-console-pane"/>
             </span>
         </div>
 

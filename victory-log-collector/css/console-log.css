@@ -12,13 +12,13 @@
 #victory-log-icon .icon-display-img-div {
   position: absolute;
   top: -17px;
-  left: -27px
+  left: -20px
 }
 
 #victory-log-icon .badge-num {
   position: absolute;
   top: -9px;
-  right: -13px;
+  right: -20px;
   transform: scale(1) translate(50%, -50%);
   background: #f44336;
   color: #fff;
@@ -34,6 +34,7 @@
   border-radius: 10px;
   flex-direction: row;
   justify-content: center;
+  word-break: normal;
   display: none;
 }
 
@@ -42,9 +43,9 @@
   #display: none;
   width: 100%;
   position: fixed;
-  height: 300px;
+  height: 0;
   #height: 100%;
-  bottom: 0;
+  bottom: 50%;
   z-index: 99999;
 
 }
@@ -65,10 +66,10 @@
 }
 
 #victory-log-tracer .body-layer {
-  height: 100%;
+  height: 300px;
   width: 100%;
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
   left: 0;
   display:none;
@@ -77,7 +78,7 @@
 #victory-log-tracer .speed-dial {
   position: absolute;
   bottom: 40px;
-  right: -16px;
+  right: -23px;
   opacity: 0;
   cursor: pointer;
   visibility: hidden;
@@ -134,4 +135,14 @@
   display:none;*/
   top: 0;
   left: 0;
+}
+
+.camera-flash{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:#fff;
+  display: none;
 }

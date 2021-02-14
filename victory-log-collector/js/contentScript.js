@@ -1,7 +1,4 @@
-﻿
-//const jq = jQuery.noConflict(true);
-
-$(function() {
+﻿$(() => {
     loadIcon();
 
     setTimeout(function() {
@@ -14,16 +11,20 @@ $(function() {
         document.getElementById("drag-layer-img")
     );
 
-    $('#capture-screen').on('click', function(e) {
-        captureScreen();
+    $('#capture-screen').on('click', (e) => {
+        captureScreen(e);
     });
 
-    $('#view-console').on('click', function(e) {
-        viewConsole();
+    $('#view-console').on('click', (e) => {
+        viewConsole(e);
     });
 
-    $('#upload-dropbox').on('click', function(e) {
-        uploadLogToDropbox();
+    $('#upload-dropbox').on('click', (e) => {
+        uploadLogToDropbox(e);
+    });
+
+    chrome.storage.sync.get('username', function(items) {
+       _username = items['username'];
     });
 })
 
@@ -50,7 +51,6 @@ injectCss('css/console-log.css')
 function loadIcon() {
     const html = `
        <div id="victory-log-tracer">
-            
            <div id="victory-log-icon">
                <div class="icon-display-img-div">
                    <img title="Victory Log Tracer" src="${chrome.runtime.getURL("images/icons8-box-important-48.png")}" />
@@ -78,29 +78,52 @@ function loadIcon() {
                 <iframe id="console-frame" width="100%" height="100%" frameborder="0" scrolling="yes" style="z-index:1"></iframe>
            </div>
            
-       </div>`
+           <div class="camera-flash"></div>
+       </div>`;
 
 
     $('body').append(html);
 
     $('#victory-log-tracer').find('iframe').attr('src', chrome.runtime.getURL('consoleLogPane.html'));
-    $('.icon-display-img-div').on('click', function() {
+    $('.icon-display-img-div').on('click', () => {
         if (!$('#victory-log-tracer').find('.speed-dial').hasClass('active')) {
             $('#victory-log-tracer').find('.speed-dial').addClass('active');
         } else {
             $('#victory-log-tracer').find('.speed-dial').removeClass('active');
         }
     });
+
+    chrome.storage.sync.get('useFlag', (items) => {
+        if (!items['useFlag'] || items['useFlag'] == 'Y') {
+            showLogTracer(true);
+        } else {
+            showLogTracer(false);
+        }
+    });
 }
 
-let _xhrErrors = [];
+function showLogTracer(flag) {
+    if (flag) {
+        $('#victory-log-tracer').css({'display': 'block'});
+    } else {
+        $('#victory-log-tracer').css({'display': 'none'});
+    }
 
-function addErrorLog(type, json, countBadgeCount) {
-    _xhrErrors.push(json);
+}
+
+const maxErrorLogsCount = 300;
+let _errorLogs = [];
+let _username = '';
+
+function addErrorLog(type, json, plusBadgeCountFlag) {
+    _errorLogs.unshift(json);
+    if (_errorLogs.length > maxErrorLogsCount) {
+        _errorLogs.length = maxErrorLogsCount;
+    }
 
     try {
         if (json) {
-            if (countBadgeCount) {
+            if (plusBadgeCountFlag) {
                 addBadgeCount() ;
             }
 
@@ -112,23 +135,29 @@ function addErrorLog(type, json, countBadgeCount) {
 }
 
 function addBadgeCount() {
-    $('#victory-log-icon').find('.badge-num').text(_xhrErrors.length);
+    $('#victory-log-icon').find('.badge-num').text(_errorLogs.length);
     $('#victory-log-icon').find('.badge-num').css({'display':'flex'});
 }
 
 function clearConsoleLog() {
-    _xhrErrors = [];
+    _errorLogs = [];
     $('#victory-log-icon').find('.badge-num').text('');
     $('#victory-log-icon').find('.badge-num').css({'display':'none'});
 }
 
 function closeConsolePane() {
-    //$('#victory-log-icon').find('.badge-num').text(0);
     $('#victory-log-tracer').find('.body-layer').css({'display':'none'})
 }
 
-function captureScreen() {
-    chrome.runtime.sendMessage({action: "capture", nextAction: 'copyToClipboard'}, function(response) {});
+function copyConsoleLog() {
+    copyToClipboard(JSON.stringify(_errorLogs), () => {
+        console.log('copied to clipboard.');
+        alert('로그가 클립보드에 복사되었습니다.')
+    });
+}
+
+function captureScreen(e) {
+    chrome.runtime.sendMessage({action: "capture", nextAction: 'copyImageToClipboard'}, (response) => {});
 }
 
 function viewConsole() {
@@ -136,72 +165,108 @@ function viewConsole() {
 }
 
 function uploadLogToDropbox() {
-    console.log('_xhrErrors', _xhrErrors);
-
-    chrome.runtime.sendMessage({action: "capture", nextAction: 'uploadToDropbox'}, function(response) {});
+    chrome.runtime.sendMessage({action: "capture", nextAction: 'uploadToDropbox'}, (response) => {});
 }
 
 function processUploadLogToDropbox(imageDataUrl) {
-    const folder = '/VictoryLogCollector/' + getCurrDate();
-    const filename = getCurrDateFormat();
-    const logUploadPath = folder + '/' + filename + '.log';
 
-    const fileContent = JSON.stringify(_xhrErrors);
-    uploadFileToDropbox(logUploadPath, fileContent, function() {
+    let usernamePath = '';
+    if (_username) {
+        usernamePath = '/' + _username;
+    }
+
+    const folder = `/VictoryLogCollector/${window.location.hostname}/${getCurrDate()}${usernamePath}` ;
+    const filename = getCurrDateFormat();
+    const logUploadPath = `${folder}/${filename}.log`;
+
+    // log file
+    const logFileContent = JSON.stringify(_errorLogs);
+    uploadFileToDropbox(logUploadPath, logFileContent, function() {
         console.log(logUploadPath + ' uploaded.');
     });
 
-    const imageUploadPath = folder + '/' + filename + '.png';
+    // local storage
+    let localStorageContent = '';
+    for (let i = 0; i < localStorage.length; i++)   {
+        localStorageContent += localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i)) + "\n\n";
+    }
+
+    if (localStorageContent != '') {
+        const localStorageUploadPath = `${folder}/${filename}.storage.txt`;
+        uploadFileToDropbox(localStorageUploadPath, localStorageContent, function() {
+            console.log(logUploadPath + ' uploaded.');
+        });
+    }
+
+    // image file
+    const imageUploadPath = `${folder}/${filename}.png`;
     const imgFile = dataURLtoFile(imageDataUrl, filename + '.png');
     uploadFileToDropbox(imageUploadPath, imgFile, function() {
         console.log(imageUploadPath + ' uploaded.');
-
-        alert('Dropbox에 업로드 되었습니다. (' + logUploadPath + ', ' +  imageUploadPath + ')');
+        alert('Dropbox에 업로드 되었습니다.');
     });
 }
 
-window.addEventListener('message', function(e) {
+window.addEventListener('message', (e) => {
     if (e.data && e.data.eventType) {
         addErrorLog('websocket', e.data, false);
-    } else if (e.data.action === 'close-console-pane') {
-        closeConsolePane();
-    } else if (e.data.action === 'clear-console-log') {
-        clearConsoleLog();
-    } else if (e.data.action === 'capture-screen') {
-        captureScreen();
-    } else if (e.data.action === 'captured') {
-        console.log('e.data.nextAction', e.data.nextAction);
-
-        if (e.data.nextAction === 'uploadToDropbox') {
-            processUploadLogToDropbox(e.data.image);
-        } else {
-            //console.log(e.data.image)
-            copyToClipboard(e, e.data.image, function() {
-                console.log('copied to clipboard.');
-                alert('화면이 클립보드에 복사되었습니다.')
-            });
-        }
     } else {
-        console.log('message received', e.data);
+        switch (e.data.action) {
+            case 'close-console-pane':
+                closeConsolePane();
+                break;
+            case 'copy-console-log':
+                copyConsoleLog();
+                break;
+            case 'clear-console-log':
+                clearConsoleLog();
+                break;
+            case 'capture-screen':
+                captureScreen();
+                break;
+            case 'captured':
+                animateCameraFlash();
+
+                if (e.data.nextAction === 'uploadToDropbox') {
+                    processUploadLogToDropbox(e.data.image);
+                } else {
+                    copyImageToClipboard(e.data.image, function() {
+                        console.log('copied to clipboard.');
+                        alert('화면이 클립보드에 복사되었습니다.')
+                    });
+                }
+                break;
+            case 'change-useflag':
+                if (e.data.value === 'Y') {
+                    showLogTracer(true);
+                } else if (e.data.value === 'N') {
+                    showLogTracer(false);
+                }
+                break;
+            default:
+                console.log('undefined message received', e.data);
+        }
     }
 });
 
-document.addEventListener('message', function (e) {
-    console.log('message', e);
-});
-
-document.addEventListener('ErrorToExtension', function (e) {
+document.addEventListener('ErrorToExtension', (e) => {
     addErrorLog('js', e.detail, true);
 });
 
-document.addEventListener('xhrErrorEvent', function (e) {
+document.addEventListener('xhrErrorEvent', (e) => {
     addErrorLog('xhr', e.detail, true);
 });
 
-chrome.runtime.onMessage.addListener(function(request, sender) {
+chrome.runtime.onMessage.addListener((request, sender) => {
     console.log('contentScript onMessage', request);
-    if (request.action === 'captured') {
-        window.parent.postMessage(request, '*');
+
+    switch (request.action) {
+        case 'captured':
+        case 'change-useflag':
+            window.parent.postMessage(request, '*');
+            break;
+        default:
+            console.error('undefined action: ' + request.action);
     }
 });
 
