@@ -25,19 +25,28 @@ function sendMessageToParent(msg) {
 }
 
 function appendLog(type, data) {
-    console.log('____consoleLogPane.js', type, data)
-
-    let title = 'No Title';
+    let title = '';
     switch (type) {
         case 'xhr':
-            const module = data.responseText ? data.responseText.module : 'NoModule';
-            const code = data.responseText ? data.responseText.code : 'NoCode';
-            const message = data.responseText ? data.responseText.message : 'NoMessage';
+            if (data.responseText) {
+                if ((data.responseText.status+'').startsWith('4')) {
+                    if (data.responseText.module)
+                        title += `[${data.responseText.module}]`;
+                    if (data.responseText.code)
+                        title += `[${data.responseText.code}]`;
+                    if (data.responseText.message)
+                        title += `[${data.responseText.message}`;
+                } else if ((data.responseText.status+'').startsWith('5')) {
+                    title += `[${data.responseText.status}]`;
+                    title += `[${data.responseText.error}]`;
+                    title += `[${data.responseText.path}]`;
+                } else {
+                    title = JSON.stringify(data);
+                }
+            }
 
-            title = `[${module}][${code}] ${message}]`;
             break;
         case 'js':
-            title = '';
             if (data.text)
                 title = `${data.text} `;
             if (data.url)

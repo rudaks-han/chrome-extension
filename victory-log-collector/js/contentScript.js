@@ -179,13 +179,12 @@ function uploadLogToDropbox() {
 }
 
 function processUploadLogToDropbox(imageDataUrl) {
-
-    let usernamePath = '';
+    let usernamePath = '_NONAME';
     if (_username) {
-        usernamePath = '/' + _username;
+        usernamePath = _username;
     }
 
-    const folder = `/VictoryLogCollector/${window.location.hostname}/${getCurrDate()}${usernamePath}` ;
+    const folder = `/VictoryLogCollector/${window.location.hostname}/${getCurrDate()}/${usernamePath}` ;
     const filename = getCurrDateFormat();
     const logUploadPath = `${folder}/${filename}.log`;
 
@@ -198,6 +197,8 @@ function processUploadLogToDropbox(imageDataUrl) {
     // local storage
     let localStorageContent = '';
     for (let i = 0; i < localStorage.length; i++)   {
+        if (!(localStorage.key(i).startsWith('CUSTOMER_') || localStorage.key(i).endsWith('Info')))
+            continue;
         localStorageContent += localStorage.key(i) + "=" + localStorage.getItem(localStorage.key(i)) + "\n\n";
     }
 
@@ -237,7 +238,7 @@ window.addEventListener('message', (e) => {
             case 'captured':
                 animateCameraFlash();
 
-                if (e.data.nextAction === 'uploadToDropbox') {
+                if (e.data.nextAction == 'uploadToDropbox') {
                     processUploadLogToDropbox(e.data.image);
                 } else {
                     copyImageToClipboard(e.data.image, function() {

@@ -1,30 +1,43 @@
 (function(window) {
     function handleCustomError(message, stack) {
+        if (!message) message = 'Uncaught (in promise)';
+
         if(!stack) {
             stack = (new Error()).stack.split("\n").splice(2, 4).join("\n");
         }
 
-        const stackLines = stack.split("\n");
-        const callSrc = (stackLines.length > 1 && (/^.*?\((.*?):(\d+):(\d+)/.exec(stackLines[1]) || /(\w+:\/\/.*?):(\d+):(\d+)/.exec(stackLines[1]))) || [null, null, null, null];
+        if (stack.length) {
+            const stackLines = stack.split("\n");
+            const callSrc = (stackLines.length > 1 && (/^.*?\((.*?):(\d+):(\d+)/.exec(stackLines[1]) || /(\w+:\/\/.*?):(\d+):(\d+)/.exec(stackLines[1]))) || [null, null, null, null];
 
-        document.dispatchEvent(new CustomEvent('jsErrorEvent', {
-            detail: {
-                stack: stackLines.join("\n"),
-                url: callSrc[1],
-                line: callSrc[2],
-                col: callSrc[3],
-                text: message
-            }
-        }));
+            document.dispatchEvent(new CustomEvent('jsErrorEvent', {
+                detail: {
+                    stack: stackLines.join("\n"),
+                    url: callSrc[1],
+                    line: callSrc[2],
+                    col: callSrc[3],
+                    text: message
+                }
+            }));
+
+        } else {
+            document.dispatchEvent(new CustomEvent('jsErrorEvent', {
+                detail: {
+                    stack: JSON.stringify(stack),
+                    text: message
+                }
+            }));
+        }
+
     }
 
     // handle uncaught promises errors
     window.addEventListener('unhandledrejection', function(e) {
-        if (typeof e.reason === 'undefined') {
+        if (typeof e.reason == 'undefined') {
             e.reason = e.detail;
         }
-        alert('__1')
-        handleCustomError(e.reason.message, e.reason.stack);
+        //handleCustomError(e.reason.message, e.reason.stack);
+        handleCustomError(e.reason.message, e.reason);
     });
 
     // handle console.error()

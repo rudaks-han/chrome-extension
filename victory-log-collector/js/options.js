@@ -11,8 +11,8 @@ function init()
 		};
 		chrome.storage.sync.set(jsonValue, () => {
 			console.log('json', jsonValue)
+			alert('저장되었습니다.');
 		});
-
 	});
 }
 

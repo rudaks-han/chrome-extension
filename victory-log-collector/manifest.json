@@ -3,7 +3,7 @@
     "short_name": "Victory Log Collector",
     "name" : "Victory Log Collector",
     "author": "rudaks",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Victory의 UI에서 발생하는 로그를 취합하기 위한 툴이다.",
     "browser_action": {
         "default_icon": "images/icons8-box-important-48.png",
