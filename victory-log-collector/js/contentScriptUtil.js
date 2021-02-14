@@ -155,3 +155,13 @@ function animateCameraFlash() {
         .fadeOut(300)
         .css({'opacity': 1});
 }
+
+function showNotification(message) {
+    if ($('#victory-notification').length > 0) {
+        $('#victory-notification').remove();
+    }
+    $('<div id="victory-notification"><span class="noti-message">' + message + '</span></div>').appendTo('body');
+
+    $('#victory-notification').fadeIn().delay(3000).fadeOut();
+
+}

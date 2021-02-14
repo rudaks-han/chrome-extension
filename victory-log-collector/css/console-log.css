@@ -146,3 +146,12 @@
   background-color:#fff;
   display: none;
 }
+
+#victory-notification {
+  position: fixed; top: 20px; width: 100%; text-align: center;
+  display:none;
+}
+
+#victory-notification .noti-message {
+  background: #ff5a2b; color: #fff; padding: 10px;
+}

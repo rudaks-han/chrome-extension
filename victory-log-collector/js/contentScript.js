@@ -152,7 +152,7 @@ function closeConsolePane() {
 function copyConsoleLog() {
     copyToClipboard(JSON.stringify(_errorLogs), () => {
         console.log('copied to clipboard.');
-        alert('로그가 클립보드에 복사되었습니다.')
+        showNotification('로그가 클립보드에 복사되었습니다.');
     });
 }
 
@@ -203,7 +203,7 @@ function processUploadLogToDropbox(imageDataUrl) {
     const imgFile = dataURLtoFile(imageDataUrl, filename + '.png');
     uploadFileToDropbox(imageUploadPath, imgFile, function() {
         console.log(imageUploadPath + ' uploaded.');
-        alert('Dropbox에 업로드 되었습니다.');
+        showNotification('Dropbox에 업로드 되었습니다.');
     });
 }
 
@@ -232,7 +232,7 @@ window.addEventListener('message', (e) => {
                 } else {
                     copyImageToClipboard(e.data.image, function() {
                         console.log('copied to clipboard.');
-                        alert('화면이 클립보드에 복사되었습니다.')
+                        showNotification('화면이 클립보드에 복사되었습니다.');
                     });
                 }
                 break;
