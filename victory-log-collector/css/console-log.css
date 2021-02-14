@@ -113,7 +113,11 @@
 }
 
 .console-log .xhr-error-panel ul {
-  background: rgb(53, 55, 97); font-size: 14px; color: #fff; height: 100%; margin:0;
+  background: rgb(53, 55, 97);
+  font-size: 14px;
+  color: #fff;
+  height: 300px;
+  margin:0;
   padding: 0;
   overflow: auto;
 }
@@ -153,5 +157,8 @@
 }
 
 #victory-notification .noti-message {
-  background: #ff5a2b; color: #fff; padding: 10px;
+  display: inline-block;
+  background: #ff5a2b;
+  color: #fff;
+  padding: 10px;
 }

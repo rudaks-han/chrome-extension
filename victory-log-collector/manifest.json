@@ -37,9 +37,8 @@
         "<all_urls>"
     ],
     "web_accessible_resources": [
-        "js/injected.js",
-        "js/lib/jsonview.js",
-        "css/jsonview.bundle.css",
+        "js/xhrErrorHook.js",
+        "js/javascriptErrorHook.js",
         "css/console-log.css",
         "images/icons8-box-important-48.png",
         "images/drag-32.png",

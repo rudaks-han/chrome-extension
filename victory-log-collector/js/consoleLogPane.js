@@ -25,7 +25,7 @@ function sendMessageToParent(msg) {
 }
 
 function appendLog(type, data) {
-    console.log('#consoleLogPane.js', type, data)
+    console.log('____consoleLogPane.js', type, data)
 
     let title = 'No Title';
     switch (type) {
@@ -37,7 +37,13 @@ function appendLog(type, data) {
             title = `[${module}][${code}] ${message}]`;
             break;
         case 'js':
-            title = `${data.text} ${data.url}:${data.line}`;
+            title = '';
+            if (data.text)
+                title = `${data.text} `;
+            if (data.url)
+                title += `${data.url}`;
+            if (data.line)
+                title += `:${data.line}`;
             break;
         case 'websocket':
             title = `[${data.eventType}]`;
@@ -59,6 +65,14 @@ function appendLog(type, data) {
 
     $('.xhr-error-panel').find('ul').append(html);
     JsonView.renderJSON(data, $('.detail-log:last').get(0));
+
+    scrollToBottom();
+}
+
+function scrollToBottom() {
+    setTimeout(function() {
+        $('.xhr-error-panel').find('ul').scrollTop(10000000);
+    }, 100);
 }
 
 function clearConsoleLog() {

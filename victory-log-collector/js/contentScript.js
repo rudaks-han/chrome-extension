@@ -1,10 +1,14 @@
 ﻿$(() => {
     loadIcon();
 
-    setTimeout(function() {
+    /*setTimeout(function() {
         for (let i=0; i<10; i++)
             sample();
     }, 500);
+
+    setInterval(function() {
+        sample();
+    }, 1000);*/
 
     addDraggableEvent(
         document.getElementById("victory-log-tracer"),
@@ -44,8 +48,8 @@ function sample() {
     addErrorLog('xhr', data, true);
 }
 
-injectScript('js/injected.js');
-injectScript('js/lib/jsonview.js');
+injectScript('js/xhrErrorHook.js');
+injectScript('js/javascriptErrorHook.js');
 injectCss('css/console-log.css')
 
 function loadIcon() {
@@ -161,10 +165,16 @@ function captureScreen(e) {
 }
 
 function viewConsole() {
-    $('#victory-log-tracer').find('.body-layer').css({'display':'block'})
+    if ($('#victory-log-tracer').find('.body-layer').is(':visible')) {
+        $('#victory-log-tracer').find('.body-layer').css({'display':'none'})
+    } else {
+        $('#victory-log-tracer').find('.body-layer').css({'display':'block'})
+    }
+
 }
 
 function uploadLogToDropbox() {
+    showNotification('Dropbox에 파일 업로드 중...');
     chrome.runtime.sendMessage({action: "capture", nextAction: 'uploadToDropbox'}, (response) => {});
 }
 
@@ -203,7 +213,7 @@ function processUploadLogToDropbox(imageDataUrl) {
     const imgFile = dataURLtoFile(imageDataUrl, filename + '.png');
     uploadFileToDropbox(imageUploadPath, imgFile, function() {
         console.log(imageUploadPath + ' uploaded.');
-        showNotification('Dropbox에 업로드 되었습니다.');
+        showNotification('Dropbox에 파일이 업로드 되었습니다. <br/>' + folder);
     });
 }
 
@@ -249,7 +259,7 @@ window.addEventListener('message', (e) => {
     }
 });
 
-document.addEventListener('ErrorToExtension', (e) => {
+document.addEventListener('jsErrorEvent', (e) => {
     addErrorLog('js', e.detail, true);
 });
 
@@ -269,6 +279,5 @@ chrome.runtime.onMessage.addListener((request, sender) => {
             console.error('undefined action: ' + request.action);
     }
 });
-
 
 
