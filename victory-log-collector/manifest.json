@@ -24,7 +24,12 @@
                 "*://localhost/*"
             ],
             "run_at": "document_start",
-            "js": ["js/lib/jquery-1.9.1.min.js", "js/contentScriptUtil.js", "js/contentScript.js", "js/lib/jsonview.js"],
+            "js": [
+                "js/lib/jquery-1.9.1.min.js",
+                "js/contentScriptUtil.js",
+                "js/contentScript.js",
+                "js/lib/jsonview.js"
+            ],
             "css": ["css/jsonview.bundle.css", "css/console-log.css"]
         }
     ],
@@ -46,6 +51,7 @@
         "images/icons8-box-important-48.png",
         "images/drag-32.png",
         "images/console.png",
+        "images/record.png",
         "images/camera.png",
         "images/dropbox.png",
         "consoleLogPane.html"

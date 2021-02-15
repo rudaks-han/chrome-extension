@@ -19,6 +19,10 @@
         captureScreen(e);
     });
 
+    $('#record-screen').on('click', (e) => {
+        recordScreen(e);
+    });
+
     $('#view-console').on('click', (e) => {
         viewConsole(e);
     });
@@ -68,6 +72,9 @@ function loadIcon() {
                     
                     <div>
                         <img title="Dropbox로 보내기" id="upload-dropbox" src="${chrome.runtime.getURL("images/dropbox.png")}" />
+                    </div>
+                    <div>
+                        <img title="화면 녹화하기" id="record-screen" src="${chrome.runtime.getURL("images/record.png")}" />
                     </div>
                     <div>
                         <img title="화면 캡처" id="capture-screen" src="${chrome.runtime.getURL("images/camera.png")}" />
@@ -162,6 +169,10 @@ function copyConsoleLog() {
 
 function captureScreen(e) {
     chrome.runtime.sendMessage({action: "capture", nextAction: 'copyImageToClipboard'}, (response) => {});
+}
+
+function recordScreen(e) {
+    startRecording();
 }
 
 function viewConsole() {
