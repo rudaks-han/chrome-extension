@@ -18,6 +18,9 @@
                 "*://fd-customer.spectra.co.kr/*",
                 "*://test-backoffice.spectra.co.kr/*",
                 "*://test-customer.spectra.co.kr/*",
+                "*://172.16.100.101/*",
+                "*://172.16.100.51/*",
+                "*://172.16.100.52/*",
                 "*://localhost/*"
             ],
             "run_at": "document_start",

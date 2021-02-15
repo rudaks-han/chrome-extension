@@ -66,12 +66,14 @@ function addDraggableEvent(moveElement, dragElement) {
         pos3 = e.clientX;
         pos4 = e.clientY;
         moveElement.style.top = (moveElement.offsetTop - pos2) + "px";
-        //el.style.left = (el.offsetLeft - pos1) + "px";
+        //el.style.left = (moveElement.offsetLeft - pos1) + "px";
     }
 
-    function closeDragElement() {
+    function closeDragElement(e) {
         document.onmouseup = null;
         document.onmousemove = null;
+
+        console.log('top: ' + moveElement.style.top, 'left:' + (moveElement.offsetLeft - pos1))
     }
 }
 

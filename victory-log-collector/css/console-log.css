@@ -15,6 +15,10 @@
   left: -20px
 }
 
+#victory-log-icon img {
+  max-width: 50px;
+}
+
 #victory-log-icon .badge-num {
   position: absolute;
   top: -9px;
@@ -45,6 +49,7 @@
   position: fixed;
   height: 0;
   #height: 100%;
+  right: 0;
   bottom: 300px;
   z-index: 99999;
 
@@ -152,7 +157,11 @@
 }
 
 #victory-notification {
-  position: fixed; top: 20px; width: 100%; text-align: center;
+  position: fixed;
+  z-index: 99999;
+  top: 20px;
+  width: 100%;
+  text-align: center;
   display:none;
 }
 

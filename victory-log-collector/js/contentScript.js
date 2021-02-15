@@ -269,8 +269,6 @@ document.addEventListener('xhrErrorEvent', (e) => {
 });
 
 chrome.runtime.onMessage.addListener((request, sender) => {
-    console.log('contentScript onMessage', request);
-
     switch (request.action) {
         case 'captured':
         case 'change-useflag':
