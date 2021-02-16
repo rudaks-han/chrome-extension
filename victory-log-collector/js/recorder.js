@@ -42,7 +42,7 @@ const Button = {
   view(vnode) {
     if (vnode.attrs.a) {
       return m('a', {
-        class: `button ${vnode.attrs.primary ? 'primary' : 'secondary'} ${vnode.attrs.label ? '' : 'icon-only'} ${vnode.attrs.outline ? 'outline' : ''}`,
+        class: `ui button ${vnode.attrs.primary ? 'primary' : 'red'} ${vnode.attrs.label ? '' : 'icon-only'} ${vnode.attrs.outline ? 'outline' : ''}`,
         ...vnode.attrs.a,
       }, [
         m('img', { src: `https://icongr.am/${vnode.attrs.iconset || 'octicons'}/${vnode.attrs.icon}.svg?size=16&color=${vnode.attrs.outline ? '333333' : 'ffffff'}` }),
@@ -50,7 +50,7 @@ const Button = {
       ]);
     } else {
       return m('button', {
-        class: `button ${vnode.attrs.primary ? 'primary' : 'secondary'} ${vnode.attrs.label ? '' : 'icon-only'} ${vnode.attrs.outline ? 'outline' : ''}`,
+        class: `ui button ${vnode.attrs.primary ? 'primary' : 'red'} ${vnode.attrs.label ? '' : 'icon-only'} ${vnode.attrs.outline ? 'outline' : ''}`,
         onclick: vnode.attrs.onclick,
         title: vnode.attrs.title || vnode.attrs.label,
         disabled: vnode.attrs.disabled

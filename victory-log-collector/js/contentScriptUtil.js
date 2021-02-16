@@ -14,11 +14,25 @@ function injectCss(file) {
     document.documentElement.removeChild(css);
 }
 
+function toImageDataUrl(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function() {
+        var reader = new FileReader();
+        reader.onloadend = function() {
+            callback(reader.result);
+        }
+        reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+}
+
 function copyImageToClipboard(base64String, onSuccess) {
     fetch(base64String)
         .then(res => res.blob())
         .then(blob =>  {
-            let data = [new ClipboardItem({ ['image/png']: blob })];
+            let data = [new ClipboardItem({ [blob.type]: blob })];
             navigator.clipboard.write(data)
                 .then(() => onSuccess()
                     , (err) => console.error('error', err));
