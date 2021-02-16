@@ -6,6 +6,9 @@ const receiveMessage = (request, sender, sendResponse) => {
         case 'change-useflag':
             changeUseFlag(request);
             break;
+        case 'openwindow':
+            openWindow(request);
+            break;
     }
 }
 
@@ -31,4 +34,36 @@ function changeUseFlag(request) {
             value: request.value
         }, () => {});
     });
+}
+
+let isTabOpen = false;
+let openedTab = 0;
+function openWindow(request) {
+
+    if (!isTabOpen){
+        chrome.tabs.create({selected: true},function(tab){
+            isTabOpen= true;
+            openedTab = tab.id;
+            tabCreated(request.url);
+        });
+    } else {
+        chrome.tabs.get(openedTab, function(tab) {
+
+            if (chrome.runtime.lastError) {
+                chrome.tabs.create({selected: true},function(tab){
+                    isTabOpen= true;
+                    openedTab = tab.id;
+                    tabCreated(request.url);
+                });
+            } else {
+                console.log(1)
+                tabCreated(request.url);
+            }
+        });
+
+    }
+}
+
+function tabCreated(url){
+    chrome.tabs.update(openedTab, {'active': true, url:url});
 }

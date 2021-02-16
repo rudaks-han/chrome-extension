@@ -11,7 +11,7 @@
 	  <style>
 		  body {margin: 20px;}
 
-		  video {width: 100%; border: 1px solid #363636}
+		  video {border: 1px solid #363636}
 	  </style>
   </head>
   <body>
@@ -28,11 +28,15 @@
 		</button>
 	</div>
 	<div style="margin-top: 5px;">
-		<video autoplay controls />
+		<video id="record-video" autoplay controls />
+	</div>
+	<div>
+		<canvas id="record-canvas" width="600"></canvas>
 	</div>
 
 
   <script type="text/javascript" src="js/recorder.js"></script>
+
 
   </body>
 </html>

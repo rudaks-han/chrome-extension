@@ -172,7 +172,8 @@ function captureScreen(e) {
 }
 
 function recordScreen(e) {
-    startRecording();
+    //startRecording();
+    chrome.runtime.sendMessage({action: "openwindow", url: 'screenRecorder.html'}, (response) => {});
 }
 
 function viewConsole() {
