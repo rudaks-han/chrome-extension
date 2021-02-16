@@ -10,6 +10,16 @@
         sample();
     }, 1000);*/
 
+    $(document).mousedown(function(e) {
+
+        var $target = $(e.target);
+        var $specificDiv = $target.closest('#victory-log-tracer .speed-dial');
+
+        if (!$specificDiv || !$specificDiv.length) {
+            $('#victory-log-tracer').find('.speed-dial').removeClass('active');
+        }
+    });
+
     addDraggableEvent(
         document.getElementById("victory-log-tracer"),
         document.getElementById("drag-layer-img")
@@ -34,6 +44,7 @@
     chrome.storage.sync.get('username', function(items) {
        _username = items['username'];
     });
+
 })
 
 function sample() {
