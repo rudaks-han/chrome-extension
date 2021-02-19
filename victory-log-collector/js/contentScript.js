@@ -207,7 +207,7 @@ function processUploadLogToDropbox(imageDataUrl) {
         usernamePath = _username;
     }
 
-    const folder = `/VictoryLogCollector/${window.location.hostname}/${getCurrDate()}/${usernamePath}` ;
+    const folder = `/VictoryLogCollector/logs/${window.location.hostname}/${getCurrDate()}/${usernamePath}` ;
     const filename = getCurrDateFormat();
     const logUploadPath = `${folder}/${filename}.log`;
 
@@ -277,8 +277,8 @@ window.addEventListener('message', (e) => {
                     showLogTracer(false);
                 }
                 break;
-            default:
-                console.log('undefined message received', e.data);
+            /*default:
+                console.log('undefined message received', e.data);*/
         }
     }
 });
