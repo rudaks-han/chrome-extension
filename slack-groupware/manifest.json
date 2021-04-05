@@ -1,0 +1,18 @@
+{
+  "name": "slack-groupware",
+  "version": "0.1.1",
+  "description": "개발팀 휴가일정 slack에 공지",
+  "background": {
+    "page" : "background.html"
+  },
+  "permissions" : [
+    "https://spectra.daouoffice.com/api/*",
+    "https://slack.com/api/*",
+    "notifications",
+    "background",
+    "storage",
+    "cookies"
+  ],
+  "content_security_policy":"script-src 'self'; object-src 'self'",
+  "manifest_version" : 2
+}
