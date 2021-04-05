@@ -12,7 +12,7 @@ function checkCalendar() {
         '김선숙', '김호진',
         '박은규',
         //'정재헌', '김지홍'
-        '유승화'
+        //'유승화'
     ];
 
     let currDate = getCurrDate();
@@ -84,8 +84,6 @@ function checkCalendar() {
 
 function sendToSlack(message) {
 
-    //https://slack.com/api/chat.postMessage?token=xoxb-471569414946-1939462143793-3KH8oAWqiKNvFuzWi7UxB56P&channel=C01T21V0GG6&text=1
-
     // C01FRS7V830 31-개발팀-backend
     // C01FJRQF8KX 30-victory-개발팀
     const channel = 'C01T21V0GG6'; // test-channel
@@ -125,7 +123,7 @@ function init() {
     setInterval(() => {
 
         const currTime = getCurrTime();
-        if (currTime.startsWith('07:00')) {
+        if (currTime.startsWith('07:00')) { // 07시에 알림
             checkCalendar();
         }
     }, 10 * 1000);
