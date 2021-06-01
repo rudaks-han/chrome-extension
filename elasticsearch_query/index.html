@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset=utf-8 />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="js/lib/jquery-1.9.1.min.js"></script>
+	<script src="js/common.js"></script>
+	<script src="js/background.js"></script>
+</head>
+
+<script>
+	const elasticsearchUrl = 'http://172.16.100.51:9200';
+	$(() => {
+		$('#elasticsearchUrl').val(elasticsearchUrl);
+
+		$('#btnSearchIndicesList').on('click', searchIndicesList);
+	});
+
+	function searchIndicesList() {
+		const options = {
+			method: 'get',
+			url: elasticsearchUrl + '/_cat/indices?format=json',
+			success : (res) => {
+				console.log(res);
+			},
+			error : (xhr, e) => {
+				console.error(e);
+			}
+		};
+
+		requestAjax(options);
+	}
+
+</script>
+<body>
+<div>
+	<input type="text" id="elasticsearchUrl" value="" size="30"/>
+</div>
+<div>
+	<div>인덱스 목록: <button id="btnSearchIndicesList"/>search</div>
+	<div>
+
+	</div>
+</div>
+</body>
+</html>

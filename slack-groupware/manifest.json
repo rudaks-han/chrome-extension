@@ -8,6 +8,8 @@
   "permissions" : [
     "https://spectra.daouoffice.com/api/*",
     "https://slack.com/api/*",
+    "http://211.63.24.41:9000/api/**",
+    "http://211.63.24.41:8080/view/**",
     "notifications",
     "background",
     "storage",

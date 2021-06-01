@@ -1,0 +1,23 @@
+{
+  "name": "elasticsearch query",
+  "version": "0.0.1",
+  "description": "elasticsearch query",
+  "browser_action": {
+    "default_icon": "images/elasticsearch-48.png",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "48": "images/elasticsearch-48.png"
+  },
+  "background": {
+    "page" : "background.html"
+  },
+  "permissions" : [
+    "notifications",
+    "background",
+    "storage",
+    "cookies"
+  ],
+  "content_security_policy":"script-src 'self'; object-src 'self'",
+  "manifest_version" : 2
+}
