@@ -1,6 +1,6 @@
 class Slack {
 	send(channel, message) {
-		const authToken = '';
+		const authToken = 'xoxb-471569414946-1939462143793-DbJnG7LszkZmJMvFLotcP29a';
 
 		const headers = {
 			"Authorization": "Bearer " + authToken,
@@ -19,7 +19,7 @@ class Slack {
 			param: JSON.stringify(body),
 			success : (res) => {
 				console.log('success');
-				console.error(res)
+				console.log(res)
 			},
 			error : (xhr, e) => {
 				console.error('error');
