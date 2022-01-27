@@ -2,6 +2,11 @@
   "name": "my-dashboard",
   "version": "0.1.0",
   "private": true,
+  "devDependencies": {
+    "nodemon": "^2.0.0",
+    "concurrently": "^6.2.1"
+  },
+  "homepage": "build",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
@@ -16,7 +21,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "move": "yarn build && rm -rf ./static && mv build/static ./static"
+    "move": "yarn build && rm -rf ./static && mv build/static ./static",
+    "extension": "nodemon --watch src/ --exec \"yarn build\""
   },
   "eslintConfig": {
     "extends": [

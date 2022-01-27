@@ -1,5 +1,5 @@
 {
-	"name": "My Dashboard",
+	"name": "my dashboard",
 	"version": "0.0.1",
 	"description": "My Dashboard",
 	"browser_action": {
