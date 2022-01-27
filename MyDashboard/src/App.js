@@ -4,6 +4,7 @@ import UserContext from "./UserContext";
 import TimerContext from "./TimerContext";
 import {MainLayout} from "./layouts/MainLayout";
 import daouofficeRepository from "./components/daouoffice/repository/DaouofficeRepository";
+import axios from "axios";
 
 //const { ipcRenderer } = window.require('electron');
 //const firebaseApp = new FirebaseApp();
@@ -22,7 +23,9 @@ function App() {
 
     const getUserInfo = () => {
         console.error('getUserInfo')
-        daouofficeRepository.findUserInfo();
+        //daouofficeRepository.findUserInfo();
+        axios.get('https://spectra.daouoffice.com/api/ehr/timeline/info')
+            .then(({data}) => console.log(data));
         /*ipcRenderer.send('login.findUserInfo');
         ipcRenderer.on('login.findUserInfoCallback', async (e, data) => {
             const {id, employeeNumber, name, position, deptName} = data;
