@@ -1,0 +1,14 @@
+{
+    "name" : "다음 뉴스 댓글",
+    "version": "0.0.1",
+    "manifest_version" : 3,
+    "content_scripts": [
+        {
+            "matches": ["https://news.v.daum.net/*"],
+            "js": ["js/lib/jquery-1.9.1.min.js", "js/content-script.js"]
+        }
+    ],
+    "icons": {"16": "images/_comment.png"}
+}
+
+

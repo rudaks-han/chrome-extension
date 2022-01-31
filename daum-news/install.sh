@@ -1,0 +1,1 @@
+zip install.zip images/* js/* manifest.json
