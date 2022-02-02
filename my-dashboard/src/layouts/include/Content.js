@@ -28,6 +28,32 @@ const Content = () => {
     }, []);
 
     const findComponentSort = () => {
+        let componentsIds = ['daouoffice'];
+        if (!componentsIds) {
+            componentsIds = [];
+            components.map(component => {
+                componentsIds.push(component.id);
+            });
+        }
+
+        components.map(component => {
+            if (!componentsIds.includes(component.id)) {
+                componentsIds.push(component.id);
+            }
+        });
+
+
+        const sortedComponents = [];
+        componentsIds.map(id => {
+            components.map(component => {
+                if (component.id === id) {
+                    sortedComponents.push(component);
+                }
+            })
+        });
+
+        setState(sortedComponents);
+
         /*ipcRenderer.send('findComponentSort');
         ipcRenderer.on('findComponentSortCallback', (e, data) => {
             let componentsIds = data;

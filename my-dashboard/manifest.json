@@ -11,6 +11,13 @@
 	},
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"offline_enabled": true,
-	"permissions": [ "activeTab", "tabs", "storage", "contextMenus", "desktopCapture", "background" ],
+	"permissions" : [
+		"https://spectra.daouoffice.com/api/*",
+		"notifications",
+		"background",
+		"tabs",
+		"storage",
+		"cookies"
+	],
 	"manifest_version": 2
 }
