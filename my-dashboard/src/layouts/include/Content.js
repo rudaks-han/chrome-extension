@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {ReactSortable} from "react-sortablejs";
-//import Jira from "../../components/jira/Jira";
+import Jira from "../../components/jira/Jira";
 import Daouoffice from "../../components/daouoffice/Daouoffice";
 /*import Outlook from "../../components/outlook/Outlook";
 import Jenkins from "../../components/jenkins/Jenkins";
@@ -11,7 +11,7 @@ import TeamBook from "../../components/teambook/TeamBook";*/
 
 const Content = () => {
     const components = [
-        /*{ id: 'jira', name: "Jira" , component: <Jira />},*/
+        { id: 'jira', name: "Jira" , component: <Jira />},
         { id: 'daouoffice', name: "Daouoffice", component: <Daouoffice /> }/*,
         { id: 'outlook', name: "Outlook", component: <Outlook /> },
         { id: 'jenkins', name: "Jenkins", component: <Jenkins /> },

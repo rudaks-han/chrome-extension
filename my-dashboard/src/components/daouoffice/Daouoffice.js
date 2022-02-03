@@ -10,9 +10,6 @@ import TitleLayer from "../share/TitleLayer";
 import ContentLayer from "./ContentLayer";
 const chrome = window.chrome;
 
-/*const { ipcRenderer } = window.require('electron');*/
-/*const logger = window.require('electron-log').scope('daouoffice');*/
-
 const Daouoffice = () => {
     const [list, setList] = useState(null);
     const [calendarList, setCalendarList] = useState(null);
@@ -26,64 +23,78 @@ const Daouoffice = () => {
     const [userInfo, setUserInfo] = useState(null);
 
     useEffect(() => {
+        bindListener();
+    }, []);
+
+    useEffect(() => {
+        checkLogin();
+        if (authenticated) {
+            initialize();
+        }
+    }, [authenticated]);
+
+    const initialize = () => {
         findList();
         findUserInfo();
         findCalendar();
         findNotificationCount();
-        findStore();
+        //findStore();
         findDayoffList();
         findMyDayoffList();
-    }, []);
+    }
 
-    useEffect(() => {
-        console.log('userInfo : ' + userInfo)
-        console.log('authenticated : ' + authenticated)
-        setAuthenticated(true);
+    const bindListener = () => {
+        chrome.runtime.onMessage.addListener(
+            function(request, sender, sendResponse) {
+                if (request.action === 'daouofficeClient.loginOk') {
+                    setAuthenticated(true);
+                } else {
+                    setAuthenticated(false);
+                }
+            });
+    }
 
-        //if (!userInfo || !authenticated) return;
-    }, [authenticated]);
+    const checkLogin = () => {
+        setTimeout(() => {
+            chrome.runtime.sendMessage({action: "daouofficeClient.checkLogin"}, response => {
+                setAuthenticated(response);
+            });
+        }, 100)
+    }
 
     const findList = () => {
         setList(null);
         chrome.runtime.sendMessage({action: "daouofficeClient.findList"}, response => {
             setList(response.data);
-            setAuthenticated(true);
         });
     }
 
     const findUserInfo = () => {
-        /*ipcRenderer.send('daouoffice.findUserInfo');
-        ipcRenderer.on('daouoffice.findUserInfoCallback', async (event, data) => {
-            const clockedIn = data.clockInTime ? true: false;
-            //const clockedIn = false; // 임시
-            const clockedOut = data.clockOutTime ? true: false;
+        chrome.runtime.sendMessage({action: "daouofficeClient.findUserInfo"}, response => {
+            const clockedIn = response.clockInTime ? true: false;
+            const clockedOut = response.clockOutTime ? true: false;
+            const userId = response.userId;
 
             setUserInfo({
-                ...data,
+                ...response,
                 clockedIn,
-                clockedOut
+                clockedOut,
+                userId,
+                username
             });
-
-            ipcRenderer.removeAllListeners('daouoffice.findUserInfoCallback');
-        });*/
+        });
     }
 
     const findCalendar = () => {
-        /*ipcRenderer.send('daouoffice.findCalendar');
-        ipcRenderer.removeAllListeners('daouoffice.findCalendarCallback');
-        ipcRenderer.on('daouoffice.findCalendarCallback', async (event, data) => {
-            setCalendarList(data);
-        });*/
-
+        chrome.runtime.sendMessage({action: "daouofficeClient.findCalendar"}, response => {
+            setCalendarList(response);
+        });
     }
 
     const findNotificationCount = () => {
-        /*ipcRenderer.send('daouoffice.findNotificationCount');
-        ipcRenderer.on('daouoffice.findNotificationCountCallback', async (event, data) => {
-            setNotificationCount(data.data);
-
-            ipcRenderer.removeAllListeners('daouoffice.findNotificationCountCallback');
-        });*/
+        chrome.runtime.sendMessage({action: "daouofficeClient.findNotificationCount"}, response => {
+            setNotificationCount(response.data);
+        });
     }
 
     const findStore = () => {
@@ -106,10 +117,9 @@ const Daouoffice = () => {
     }
 
     const findDayoffList = () => {
-        /*setDayoffList(null);
-        ipcRenderer.send('daouoffice.findDayoffList');
-        ipcRenderer.on('daouoffice.findDayoffListCallback', async (event, data) => {
-            const dayoffList = data.filter(item => item.type == 'company').map(item => {
+        setDayoffList(null);
+        chrome.runtime.sendMessage({action: "daouofficeClient.findDayoffList"}, response => {
+            const dayoffList = response.data.filter(item => item.type == 'company').map(item => {
                 const { id, startTime, endTime, summary, type } = item;
                 const startTimeDate = startTime.substring(0, 10);
                 const endTimeDate = endTime.substring(0, 10);
@@ -120,17 +130,14 @@ const Daouoffice = () => {
             });
 
             setDayoffList(dayoffList);
-            ipcRenderer.removeAllListeners('daouoffice.findDayoffListCallback');
-        });*/
+        });
     }
 
     const findMyDayoffList = () => {
-        /*setMyDayoffList(null);
-        ipcRenderer.send('daouoffice.findMyDayoffList');
-        ipcRenderer.on('daouoffice.findMyDayoffListCallback', async (event, data) => {
-            setMyDayoffList(data);
-            ipcRenderer.removeAllListeners('daouoffice.findMyDayoffListCallback');
-        });*/
+        setMyDayoffList(null);
+        chrome.runtime.sendMessage({action: "daouofficeClient.findMyDayoffList"}, response => {
+            setMyDayoffList(response.data);
+        });
     }
 
     const onClickRefresh = () => {
@@ -139,52 +146,37 @@ const Daouoffice = () => {
     }
 
     const onClickLogin = () => {
-        //ipcRenderer.send('daouoffice.openLoginPage');
+        window.open('https://spectra.daouoffice.com/login');
     }
 
     const onClockIn = () => {
-        /*ipcRenderer.send('daouoffice.clockIn');
-        ipcRenderer.on('daouoffice.clockInCallback', async (event, data) => {
-            const { code, message } = data;
+        chrome.runtime.sendMessage({action: "daouofficeClient.clockIn", params: {userId: userInfo.userId}}, response => {
+            const { code, message } = response;
             if (code === '200') {
                 UiShare.showNotification('출근이 등록되었습니다.');
                 findUserInfo();
-                /!*setUserInfo({
-                    ...userInfo,
-                    clockedIn: true,
-                    clockInTime: UiShare.getCurrTime()
-                });*!/
             } else {
-                UiShare.showNotification(message);
+                UiShare.showNotification(message)
                 if (code === '400') {
                     findUserInfo();
-                    /!*setUserInfo({
-                        ...userInfo,
-                        clockedIn: true
-                    });*!/
                 }
             }
-
-            ipcRenderer.removeAllListeners('daouoffice.clockInCallback');
-        });*/
+        });
     }
 
     const onClockOut = () => {
-       /* ipcRenderer.send('daouoffice.clockOut');
-        ipcRenderer.on('daouoffice.clockOutCallback', async (event, data) => {
-            const { code, message } = data;
+        chrome.runtime.sendMessage({action: "daouofficeClient.clockOut", params: {userId: userInfo.userId}}, response => {
+            const { code, message } = response;
             if (code === '200') {
                 UiShare.showNotification('퇴근이 등록되었습니다.');
                 findUserInfo();
             } else {
-                UiShare.showNotification(message);
+                UiShare.showNotification(message)
                 if (code === '400') {
                     findUserInfo();
                 }
             }
-
-            ipcRenderer.removeAllListeners('daouoffice.clockOutCallback');
-        });*/
+        });
     }
 
     return (
@@ -229,3 +221,4 @@ const Daouoffice = () => {
 };
 
 export default Daouoffice;
+

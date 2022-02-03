@@ -26,6 +26,7 @@ const ExtraButtons = props => {
                     options={[
                         { key: '1', icon: 'discussions', selected: true, text: '회의실 예약', href: 'https://spectra.daouoffice.com/app/asset', target: '_blank'},
                         { key: '2', icon: 'address book', selected: true, text: '주소록', href: 'https://spectra.daouoffice.com/app/contact/dept/2752', target: '_blank'},
+                        { key: '3', icon: 'address book', selected: true, text: '시차출퇴근 근무 신청서', href: 'https://spectra.daouoffice.com/app/approval/document/new/2752/188949', target: '_blank'},
                     ]}
                     trigger={<></>}
                 />

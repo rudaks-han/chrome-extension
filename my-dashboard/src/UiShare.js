@@ -2,6 +2,7 @@ import {Placeholder} from "semantic-ui-react";
 /*const os = window.require('os');
 const { dialog } = window.require('electron').remote;*/
 /*const logger = window.require('electron-log');*/
+const chrome = window.chrome;
 
 class UiShare {
     static displayListLoading = () => {
@@ -19,28 +20,29 @@ class UiShare {
         </Placeholder>
     };
 
-    static showNotification(body, title = 'My Dashboard', onClickFn) {
-        const notification = new Notification(
-            title, {
-                body
+    static showNotification(message, requireInteraction = false) {
+        console.error('__ Notification.permission: ' + Notification.permission)
+        if (Notification && Notification.permission !== "granted") {
+            Notification.requestPermission(function (status) {
+                if (Notification.permission !== status) {
+                    Notification.permission = status;
+                }
             });
-
-        notification.onclick = e => {
-            if (onClickFn) {
-                onClickFn(e);
-            }
         }
-    }
+        if (Notification && Notification.permission === "granted") {
+            let options = {
+                type: 'basic',
+                iconUrl: '/images/128x128.png',
+                title: 'My Dashboard',
+                message: message,
+                requireInteraction: requireInteraction
+            };
 
-    static async showMessageBox(options) {
-        /*let choice = await dialog.showMessageBox({
-            title: options.title,
-            message: options.message,
-            detail: options.detail,
-            buttons: options.buttons
-        });
-
-        return options.buttons[choice.response];*/
+            chrome.notifications.create(options);
+            chrome.notifications.onClicked.addListener(function(notificationId, byUser) {
+                chrome.notifications.clear(notificationId, function() {});
+            });
+        }
     }
 
     static timeSince(date) {

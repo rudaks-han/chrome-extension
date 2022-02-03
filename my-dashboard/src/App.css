@@ -33,6 +33,10 @@ body ::-webkit-scrollbar {
   z-index: 999;
 }
 
+.main-content {
+  margin-top: 40px;
+}
+
 .pusher {
   margin-top: 0;
 }
