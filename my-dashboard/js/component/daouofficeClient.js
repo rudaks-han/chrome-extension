@@ -1,11 +1,13 @@
+import ShareUtil from '../util/shareUtil.js';
 
 export default class DaouofficeClient {
     constructor() {
     }
 
-    axiosConfig() {
+    requestOptions() {
         return {
             headers: {
+                'Content-Type': 'application/json',
                 TimeZoneOffset: 540
             }
         };
@@ -13,7 +15,8 @@ export default class DaouofficeClient {
 
     async checkLogin() {
         try {
-            return await axios.get('https://spectra.daouoffice.com/api/user/session')
+            return await fetch('https://spectra.daouoffice.com/api/user/session')
+                .then(response => response.json())
                 .then(response => {
                     return true;
                 });
@@ -27,41 +30,41 @@ export default class DaouofficeClient {
         const _this = this;
         let data = {}
 
-        return await axios.all(
-            [
-                axios.get('https://spectra.daouoffice.com/api/ehr/timeline/info', this.axiosConfig()),
-                axios.get('https://spectra.daouoffice.com/api/ehr/timeline/summary', this.axiosConfig())
-            ]
-        ).then(response => {
-            const infoResponse = response[0];
-            const infoData = infoResponse.data.data;
-            data = {
-                ...data,
-                clockInTime: infoData.workInTime,
-                clockOutTime: infoData.workOutTime
-            };
+        return Promise.all([
+            fetch('https://spectra.daouoffice.com/api/ehr/timeline/info', _this.requestOptions())
+                .then(value => value.json()),
+            fetch('https://spectra.daouoffice.com/api/ehr/timeline/summary')
+                .then(value => value.json())
+        ])
+            .then((response) => {
+                const infoResponse = response[0];
+                const infoData = infoResponse.data;
+                data = {
+                    ...data,
+                    clockInTime: infoData.workInTime,
+                    clockOutTime: infoData.workOutTime
+                };
 
-            const summaryResponse = response[1];
+                const summaryResponse = response[1];
 
-            const workTimeRange = summaryResponse.data.group.fixedOption.workTimeRange;
-            const workStartTime = workTimeRange.workStartTime;
-            const workEndTime = workTimeRange.workEndTime;
-            const userId = summaryResponse.data.month.user.id;
-            const username = summaryResponse.data.month.user.name;
+                const workTimeRange = summaryResponse.group.fixedOption.workTimeRange;
+                const workStartTime = workTimeRange.workStartTime;
+                const workEndTime = workTimeRange.workEndTime;
+                const userId = summaryResponse.month.user.id;
+                const username = summaryResponse.month.user.name;
 
-            /*const workStartTime = '07:00'; //workTimeRange.workStartTime;
-            const workEndTime = '16:00'; //workTimeRange.workEndTime;*/
-
-            //_this.getStore().set(this.clockOutTimeStoreId, workEndTime);*!/
-
-            return {
-                ...data,
-                workStartTime,
-                workEndTime,
-                userId,
-                username
-            };
-        });;
+                return {
+                    ...data,
+                    workStartTime,
+                    workEndTime,
+                    userId,
+                    username
+                };
+            })
+            .catch((err) => {
+                console.log(err);
+                return null;
+            });
     }
 
     async findList() {
@@ -69,17 +72,18 @@ export default class DaouofficeClient {
         const count = 10;
 
 
-        return axios.get(`https://spectra.daouoffice.com/api/board/2302/posts?offset=${count}&page=0`)
-            .then(response => response.data);
+        return fetch(`https://spectra.daouoffice.com/api/board/2302/posts?offset=${count}&page=0`)
+            .then(response => response.json());
     }
 
     async findCalendar() {
         const _this = this;
-        return await axios.get(`https://spectra.daouoffice.com/api/calendar/user/me/event/daily?year=${_this.getCurrYear()}&month=${_this.getCurrMonth()}`)
+        return await fetch(`https://spectra.daouoffice.com/api/calendar/user/me/event/daily?year=${_this.getCurrYear()}&month=${_this.getCurrMonth()}`)
+            .then(response => response.json())
             .then(response => {
                 let holidayList = {};
                 let dayOffList = {};
-                let list = response.data.data.list;
+                let list = response.data.list;
 
                 list.map(item => {
                     let datetime = item.datetime;
@@ -144,7 +148,8 @@ export default class DaouofficeClient {
     }
 
     async findNotificationCount() {
-        return await axios.get(`https://spectra.daouoffice.com/api/home/noti/new`)
+        return await fetch(`https://spectra.daouoffice.com/api/home/noti/new`)
+            .then(response => response.json())
             .then(response => {
                 return response.data
             });
@@ -156,14 +161,16 @@ export default class DaouofficeClient {
         const currDate = ShareUtil.getCurrDate();
         const toDate = ShareUtil.addDays(currDate, 7);
 
-        return await axios.get(`https://spectra.daouoffice.com/api/calendar/event?timeMin=${currDate}T00%3A00%3A00.000%2B09%3A00&timeMax=${toDate}T23%3A59%3A59.999%2B09%3A00&includingAttendees=true&calendarIds%5B%5D=8452&calendarIds%5B%5D=8987&calendarIds%5B%5D=11324&calendarIds%5B%5D=11326`)
+        return await fetch(`https://spectra.daouoffice.com/api/calendar/event?timeMin=${currDate}T00%3A00%3A00.000%2B09%3A00&timeMax=${toDate}T23%3A59%3A59.999%2B09%3A00&includingAttendees=true&calendarIds%5B%5D=8452&calendarIds%5B%5D=8987&calendarIds%5B%5D=11324&calendarIds%5B%5D=11326`)
+            .then(response => response.json())
             .then(response => response.data);
     }
 
     async findMyDayoffList() {
         const currDate = ShareUtil.getCurrDate();
 
-        return await axios.get(`https://spectra.daouoffice.com/api/ehr/vacation/stat?baseDate=${currDate}`)
+        return await fetch(`https://spectra.daouoffice.com/api/ehr/vacation/stat?baseDate=${currDate}`)
+            .then(response => response.json())
             .then(response => response.data);
 
     }
@@ -172,25 +179,48 @@ export default class DaouofficeClient {
         const _this = this;
         const data = {"checkTime":`${ShareUtil.getCurrDate()}T${ShareUtil.getCurrTime()}.000Z`,"timelineStatus":{},"isNightWork":false,"workingDay":`${ShareUtil.getCurrDate()}`};
 
-        return await axios.post(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockIn?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, data, _this.axiosConfig())
+        const options = {
+            method: 'POST',
+            headers: _this.requestOptions().headers,
+            body: JSON.stringify(data),
+        };
+
+        return await fetch(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockIn?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, options)
+            .then(response => response.json())
+            .then(response => response);
+
+        /*return await fetch(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockIn?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, data, _this.requestOptions())
+            .then(response => response.json())
             .then(response => response.data)
             .catch(e => {
                 return e.response.data;
-            });
+            });*/
     }
 
     async clockOut() {
         const _this = this;
         const data = {"checkTime":`${ShareUtil.getCurrDate()}T${ShareUtil.getCurrTime()}.000Z`,"timelineStatus":{},"isNightWork":false,"workingDay":`${ShareUtil.getCurrDate()}`};
 
-        return await axios.post(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockOut?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, data, _this.axiosConfig())
+        const options = {
+            method: 'POST',
+            headers: _this.requestOptions().headers,
+            body: JSON.stringify(data),
+        };
+
+        return await fetch(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockOut?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, options)
+            .then(response => response.json())
+            .then(response => response);
+
+        /*
+        return await fetch(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockOut?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, data, _this.requestOptions())
+            .then(response => response.json())
             .then(response => response.data)
             .catch(e => {
                 return e.response.data;
-            });
+            });*/
 
         /*try {
-            const response = await axios.post(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockOut?userId=${this.getUserId()}&baseDate=${ShareUtil.getCurrDate()}`, data, _this.axiosConfig());
+            const response = await axios.post(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockOut?userId=${this.getUserId()}&baseDate=${ShareUtil.getCurrDate()}`, data, _this.requestOptions());
         } catch (error) {
             ShareUtil.printAxiosError(error);
             _this.mainWindowSender.send('clockOutCallback', error.response.data);

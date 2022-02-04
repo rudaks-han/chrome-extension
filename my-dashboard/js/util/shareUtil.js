@@ -1,4 +1,4 @@
-class ShareUtil {
+export default class ShareUtil {
     static getCookie(url, name) {
         return new Promise((resolve, reject) => {
             window.chrome.cookies.get({
