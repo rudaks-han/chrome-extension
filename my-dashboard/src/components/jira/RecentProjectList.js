@@ -8,6 +8,7 @@ const RecentJobList = props => {
     } else {
         return props.list.map(item => {
             const { id, title, metadata, avatarUrl, url } = item;
+
             return <List.Item key={id}>
                 <Image avatar src={avatarUrl} />
                 <List.Content className='image_content'>

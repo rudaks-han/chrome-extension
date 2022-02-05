@@ -71,8 +71,7 @@ const Daouoffice = () => {
 
     const findUserInfo = () => {
         chrome.runtime.sendMessage({action: "daouofficeClient.findUserInfo"}, response => {
-            //const clockedIn = response.clockInTime ? true: false;
-            const clockedIn = false;
+            const clockedIn = response.clockInTime ? true: false;
             const clockedOut = response.clockOutTime ? true: false;
             const userId = response.userId;
 
@@ -120,7 +119,7 @@ const Daouoffice = () => {
     const findDayoffList = () => {
         setDayoffList(null);
         chrome.runtime.sendMessage({action: "daouofficeClient.findDayoffList"}, response => {
-            const dayoffList = response.data.filter(item => item.type == 'company').map(item => {
+            const dayoffList = response.filter(item => item.type == 'company').map(item => {
                 const { id, startTime, endTime, summary, type } = item;
                 const startTimeDate = startTime.substring(0, 10);
                 const endTimeDate = endTime.substring(0, 10);
@@ -137,7 +136,7 @@ const Daouoffice = () => {
     const findMyDayoffList = () => {
         setMyDayoffList(null);
         chrome.runtime.sendMessage({action: "daouofficeClient.findMyDayoffList"}, response => {
-            setMyDayoffList(response.data);
+            setMyDayoffList(response);
         });
     }
 

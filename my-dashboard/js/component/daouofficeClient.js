@@ -68,9 +68,7 @@ export default class DaouofficeClient {
     }
 
     async findList() {
-        const _this = this;
         const count = 10;
-
 
         return fetch(`https://spectra.daouoffice.com/api/board/2302/posts?offset=${count}&page=0`)
             .then(response => response.json());

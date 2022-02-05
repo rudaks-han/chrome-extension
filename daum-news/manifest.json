@@ -1,11 +1,12 @@
 {
-    "name" : "다음 뉴스 댓글",
-    "version": "0.0.1",
+    "name" : "daum 뉴스 댓글 자동 표시",
+    "description": "daum 뉴스의 댓글을 자동으로 표시한다.",
+    "version": "0.1.0",
     "manifest_version" : 3,
     "content_scripts": [
         {
             "matches": ["https://news.v.daum.net/*"],
-            "js": ["js/lib/jquery-1.9.1.min.js", "js/content-script.js"]
+            "js": ["js/jquery-1.9.1.min.js", "js/content-script.js"]
         }
     ],
     "icons": {"16": "images/_comment.png"}

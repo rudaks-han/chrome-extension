@@ -2,23 +2,23 @@ import React, {useEffect, useState} from "react";
 import {ReactSortable} from "react-sortablejs";
 import Jira from "../../components/jira/Jira";
 import Daouoffice from "../../components/daouoffice/Daouoffice";
-/*import Outlook from "../../components/outlook/Outlook";
+import Outlook from "../../components/outlook/Outlook";
 import Jenkins from "../../components/jenkins/Jenkins";
 import Sonarqube from "../../components/sonarqube/Sonarqube";
 import VictoryPortal from "../../components/victoryPortal/VictoryPortal";
 import Modeloffice from "../../components/modeloffice/Modeloffice";
-import TeamBook from "../../components/teambook/TeamBook";*/
+/*import TeamBook from "../../components/teambook/TeamBook";*/
 
 const Content = () => {
     const components = [
-        /*{ id: 'jira', name: "Jira" , component: <Jira />},*/
-        { id: 'daouoffice', name: "Daouoffice", component: <Daouoffice /> }/*,
+        { id: 'jira', name: "Jira" , component: <Jira />},
+        { id: 'daouoffice', name: "Daouoffice", component: <Daouoffice /> },
         { id: 'outlook', name: "Outlook", component: <Outlook /> },
         { id: 'jenkins', name: "Jenkins", component: <Jenkins /> },
         { id: 'sonarqube', name: "Sonarqube", component: <Sonarqube /> },
         { id: 'victoryPortal', name: "VictoryPortal", component: <VictoryPortal /> },
         { id: 'modeloffice', name: "Modeloffice", component: <Modeloffice /> },
-        { id: 'teambook', name: "TeamBook", component: <TeamBook /> },*/
+        /*{ id: 'teambook', name: "TeamBook", component: <TeamBook /> },*/
     ];
 
     const [state, setState] = useState([]);

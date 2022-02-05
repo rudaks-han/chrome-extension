@@ -10,8 +10,6 @@
 		"service_worker": "background.js",
 		"type": "module"
 	},
-
-	"offline_enabled": true,
 	"permissions" : [
 		"notifications",
 		"background",
@@ -20,8 +18,10 @@
 		"cookies"
 	],
 	"host_permissions": [
-		"https://spectra.daouoffice.com/api/*",
-		"https://enomix.atlassian.net/*"
+		"https://spectra.daouoffice.com/",
+		"https://enomix.atlassian.net/",
+		"https://mail.spectra.co.kr/",
+		"http://211.63.24.41:8080/"
 	],
 	"manifest_version": 3
 }

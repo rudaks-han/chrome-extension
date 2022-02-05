@@ -22,11 +22,6 @@ const Jira = () => {
         }
     }, [authenticated]);
 
-    useEffect(() => {
-        if (!authenticated) return;
-
-    }, [authenticated]);
-
     const checkLogin = () => {
         setTimeout(() => {
             chrome.runtime.sendMessage({action: "jiraClient.checkLogin"}, response => {
@@ -46,35 +41,20 @@ const Jira = () => {
         chrome.runtime.sendMessage({action: "jiraClient.findRecentJobList"}, response => {
             setRecentJobList(response);
         });
-
-        /*ipcRenderer.send('jira.findRecentJobList');
-        ipcRenderer.removeAllListeners('jira.findRecentJobListCallback');
-        ipcRenderer.on('jira.findRecentJobListCallback', async (event, data) => {
-            setRecentJobList(data);
-        });
-
-        ipcRenderer.removeAllListeners('jira.authenticated');
-        ipcRenderer.on('jira.authenticated', async (event, data) => {
-            setAuthenticated(data);
-        });*/
     }
 
     const findAssignToMeList = () => {
         setAssignToMeList(null);
-        /*ipcRenderer.send('jira.findAssignToMeList');
-        ipcRenderer.removeAllListeners('jira.findAssignToMeListCallback');
-        ipcRenderer.on('jira.findAssignToMeListCallback', async (event, data) => {
-            setAssignToMeList(data);
-        });*/
+        chrome.runtime.sendMessage({action: "jiraClient.findAssignToMeList"}, response => {
+            setAssignToMeList(response);
+        });
     }
 
     const findRecentProjectList = () => {
         setRecentProjectList(null);
-        /*ipcRenderer.send('jira.findRecentProjectList');
-        ipcRenderer.removeAllListeners('jira.findRecentProjectListCallback');
-        ipcRenderer.on('jira.findRecentProjectListCallback', async (event, data) => {
-            setRecentProjectList(data);
-        });*/
+        chrome.runtime.sendMessage({action: "jiraClient.findRecentProjectList"}, response => {
+            setRecentProjectList(response);
+        });
     }
 
     const onClickRefresh = () => {

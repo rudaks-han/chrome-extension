@@ -3,7 +3,7 @@ export default class LoginClient {
     constructor() {
     }
 
-    axiosConfig() {
+    requestOptions() {
         return {
             headers: {
                 TimeZoneOffset: 540
@@ -14,7 +14,7 @@ export default class LoginClient {
     findUserInfo() {
         const _this = this;
 
-        return fetch('https://spectra.daouoffice.com/api/user/today', _this.axiosConfig())
+        return fetch('https://spectra.daouoffice.com/api/user/today', _this.requestOptions())
             .then(response => response.json())
             .then(response => {
                 console.error('___response')

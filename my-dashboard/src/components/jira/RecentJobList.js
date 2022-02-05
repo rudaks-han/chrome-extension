@@ -7,15 +7,15 @@ const RecentJobList = props => {
         return UiShare.displayListLoading();
     } else {
         return props.list.map(item => {
-            const { id, timestamp, issueKey, containerName, name, type, url, iconUrl } = item;
+            const { id, avatarUrl, url, title, subtitle} = item;
 
-            return <List.Item key={issueKey}>
-                <Image avatar src={iconUrl} />
+            return <List.Item key={id}>
+                <Image avatar src={avatarUrl} />
                 <List.Content className='image_content'>
                     <List.Header>
-                        <a href={`https://enomix.atlassian.net/browse/${issueKey}`} rel="noreferrer" target="_blank">{name}</a>
+                        <a href={url} rel="noreferrer" target="_blank">{title}</a>
                     </List.Header>
-                    <List.Description>{issueKey} | {containerName}</List.Description>
+                    <List.Description>{subtitle} | {title}</List.Description>
                 </List.Content>
             </List.Item>;
         });

@@ -1,29 +1,18 @@
-
-//const loginClient = new LoginClient();
-/*const jiraClient = new JiraClient();
-const daouofficeClient = new DaouofficeClient();
-const jenkinsClient = new JenkinsClient();
-const sonarqubeClient = new SonarqubeClient();
-const victoryPortalClient = new VictoryPortalClient();*/
-
-
 import LoginClient from './js/component/loginClient.js';
-/*import JiraClient from './js/component/jiraClient.js';*/
+import JiraClient from './js/component/jiraClient.js';
 import DaouofficeClient from './js/component/daouofficeClient.js';
-/*
 import OutlookClient from './js/component/outlookClient.js';
 import JenkinsClient from './js/component/jenkinsClient.js';
 import SonarqubeClient from './js/component/sonarqubeClient.js';
-import VictoryPortalClient from './js/component/victoryPortalClient.js';*/
+import VictoryPortalClient from './js/component/victoryPortalClient.js';
 
 const loginClient = new LoginClient();
-/*const jiraClient = new JiraClient();*/
+const jiraClient = new JiraClient();
 const daouofficeClient = new DaouofficeClient();
-/*
 const outlookClient = new OutlookClient();
 const jenkinsClient = new JenkinsClient();
 const sonarqubeClient = new SonarqubeClient();
-const victoryPortalClient = new VictoryPortalClient();*/
+const victoryPortalClient = new VictoryPortalClient();
 
 const receiveMessage = (request, sender, sendResponse) => {
     requestFn(request)
@@ -48,14 +37,12 @@ const requestFn = async (request) => {
         case 'loginClient':
             response = await loginClient[requestFn].apply(loginClient, [params]);
             break;
-        /*case 'jiraClient':
+        case 'jiraClient':
             response = await jiraClient[requestFn].apply(jiraClient, [params]);
             break;
-            */
         case 'daouofficeClient':
             response = await daouofficeClient[requestFn].apply(daouofficeClient, [params]);
             break;
-            /*
         case 'outlookClient':
             response = await outlookClient[requestFn].apply(outlookClient, [params]);
             break;
@@ -67,7 +54,7 @@ const requestFn = async (request) => {
             break;
         case 'victoryPortalClient':
             response = await victoryPortalClient[requestFn].apply(victoryPortalClient, [params]);
-            break;*/
+            break;
         default:
             console.error('request not found');
             console.error(request);
