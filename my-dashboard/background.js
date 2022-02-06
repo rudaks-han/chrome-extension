@@ -30,8 +30,6 @@ const requestFn = async (request) => {
     const requestFn = requestArr[1];
     const params = request.params;
 
-    console.log('---------- request ---------- ')
-    console.log('requestClass: ' + requestClass + ', requestFn: ' + requestFn + ', params: ', params)
     let response = null;
     switch (requestClass) {
         case 'loginClient':
@@ -59,6 +57,11 @@ const requestFn = async (request) => {
             console.error('request not found');
             console.error(request);
     }
+
+    console.log('---------- request ---------- ')
+    console.log('requestClass: ' + requestClass + ', requestFn: ' + requestFn + ', params: ', params)
+    console.log('response')
+    console.log(response)
 
     return response;
 }

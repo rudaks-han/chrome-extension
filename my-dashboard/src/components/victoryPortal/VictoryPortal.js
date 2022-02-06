@@ -7,6 +7,7 @@ import RightMenu from "./RightMenu";
 import AddLinkLayer from "../share/AddLinkLayer";
 import TitleLayer from "../share/TitleLayer";
 import ContentLayer from "./ContentLayer";
+const chrome = window.chrome;
 
 //const { ipcRenderer } = window.require('electron');
 
@@ -14,8 +15,13 @@ const VictoryPortal = () => {
     const [list, setList] = useState(null);
 
     useEffect(() => {
-        findList();
+        initialize();
     }, []);
+
+    const initialize = () => {
+        findList();
+    }
+
 
     /*useEffect(() => {
         if (tickTime == null) return;
@@ -27,6 +33,11 @@ const VictoryPortal = () => {
 
     const findList = () => {
         setList(null);
+        chrome.runtime.sendMessage({action: "victoryPortalClient.findList"}, response => {
+            console.error('victoryPortal response')
+            console.error(response)
+            setList(response);
+        });
         /*ipcRenderer.send('victoryPortal.findList');
         ipcRenderer.removeAllListeners('victoryPortal.findListCallback');
         ipcRenderer.on('victoryPortal.findListCallback', async (e, data) => {

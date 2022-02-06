@@ -21,7 +21,9 @@
 		"https://spectra.daouoffice.com/",
 		"https://enomix.atlassian.net/",
 		"https://mail.spectra.co.kr/",
-		"http://211.63.24.41:8080/"
+		"http://211.63.24.41:8080/",
+		"http://211.63.24.41:9000/",
+		"https://victory-portal.spectra.co.kr/"
 	],
 	"manifest_version": 3
 }

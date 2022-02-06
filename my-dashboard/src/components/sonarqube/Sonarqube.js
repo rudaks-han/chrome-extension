@@ -6,7 +6,7 @@ import AddLinkLayer from "../share/AddLinkLayer";
 import TitleLayer from "../share/TitleLayer";
 import RightMenu from "./RightMenu";
 import ContentLayer from "./ContentLayer";
-
+const chrome = window.chrome;
 //const { ipcRenderer } = window.require('electron');
 
 const Sonarqube = () => {
@@ -17,9 +17,13 @@ const Sonarqube = () => {
     let qualityErrorMessage;
 
     useEffect(() => {
+        initialize();
+    }, []);
+
+    const initialize = () => {
         findList();
         findUseAlarmOnError();
-    }, []);
+    }
 
     /*useEffect(() => {
         const { hour, minute } = UiShare.getTimeFormat(tickTime);
@@ -35,6 +39,12 @@ const Sonarqube = () => {
 
     const findList = () => {
         setList(null);
+        chrome.runtime.sendMessage({action: "sonarqubeClient.findList"}, response => {
+            console.error('sonarqube response')
+            console.error(response)
+            setList(response);
+            setLastUpdated(UiShare.getCurrDate() + " " + UiShare.getCurrTime());
+        });
         /*ipcRenderer.send('sonarqube.findList');
         ipcRenderer.removeAllListeners('sonarqube.findListCallback');
         ipcRenderer.on('sonarqube.findListCallback', async (e, data) => {

@@ -18,7 +18,9 @@ export default class DaouofficeClient {
             return await fetch('https://spectra.daouoffice.com/api/user/session')
                 .then(response => response.json())
                 .then(response => {
-                    return true;
+                    console.error('daouoffice checkLogin')
+                    console.error(response)
+                    return response.code === '200';
                 });
         } catch (e) {
             console.error(e);
@@ -79,6 +81,8 @@ export default class DaouofficeClient {
         return await fetch(`https://spectra.daouoffice.com/api/calendar/user/me/event/daily?year=${_this.getCurrYear()}&month=${_this.getCurrMonth()}`)
             .then(response => response.json())
             .then(response => {
+                console.error('daouoffice response')
+                console.error(response)
                 let holidayList = {};
                 let dayOffList = {};
                 let list = response.data.list;
