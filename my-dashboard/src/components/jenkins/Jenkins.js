@@ -46,8 +46,6 @@ const Jenkins = () => {
     const findList = async () => {
         setList(null);
         chrome.runtime.sendMessage({action: "jenkinsClient.findList"}, response => {
-            console.error('jenkinsClient.findList')
-            console.error(response)
             setList(response);
             setLastUpdated(UiShare.getCurrDate() + " " + UiShare.getCurrTime());
         });
@@ -55,13 +53,13 @@ const Jenkins = () => {
 
     const findModuleList = () => {
         chrome.runtime.sendMessage({action: "jenkinsClient.findModuleList"}, response => {
-            const jobs = response.filteredJobs;
+            const filteredJobs = response.filteredJobs;
             const availableModules = response.availableModules;
-            const filteredJobs = filterJobs(jobs);
-            const checkedModuleNames = availableModules.map(module => module.name);
+            const jobList = filterJobs(filteredJobs);
+            const checkedModuleNames = availableModules && availableModules.map(module => module.name) || [];
 
             setCheckedModuleNameList(checkedModuleNames);
-            setJobList(filteredJobs);
+            setJobList(jobList);
         });
     }
 

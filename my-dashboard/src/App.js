@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
+import './static/css/style.css';
 import UserContext from "./UserContext";
 import {MainLayout} from "./layouts/MainLayout";
 const chrome = window.chrome;

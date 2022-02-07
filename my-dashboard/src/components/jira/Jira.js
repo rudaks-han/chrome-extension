@@ -1,8 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import jiraIcon from '../../static/image/icons8-jira-100.png';
 import {Card} from 'semantic-ui-react'
-import UiShare from '../../UiShare';
-import TimerContext from "../../TimerContext";
 import RightMenu from "./RightMenu";
 import ContentLayer from "./ContentLayer";
 import AddLinkLayer from "../share/AddLinkLayer";

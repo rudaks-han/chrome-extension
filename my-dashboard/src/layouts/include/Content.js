@@ -8,6 +8,7 @@ import Sonarqube from "../../components/sonarqube/Sonarqube";
 import VictoryPortal from "../../components/victoryPortal/VictoryPortal";
 import Modeloffice from "../../components/modeloffice/Modeloffice";
 /*import TeamBook from "../../components/teambook/TeamBook";*/
+const chrome = window.chrome;
 
 const Content = () => {
     const components = [
@@ -28,6 +29,11 @@ const Content = () => {
     }, []);
 
     const findComponentSort = () => {
+        chrome.runtime.sendMessage({action: "shareClient.getStorage", key: 'sorted...'}, response => {
+            //setNotificationCount(response.);
+            console.error('___ chrome.runtime.sendMessage')
+        });
+
         let componentsIds = ['daouoffice'];
         if (!componentsIds) {
             componentsIds = [];
@@ -53,6 +59,12 @@ const Content = () => {
         });
 
         setState(sortedComponents);
+
+        chrome.runtime.sendMessage({action: "shareClient.setStorage", data: sortedComponents}, response => {
+            //setNotificationCount(response.);
+        });
+
+
 
         /*ipcRenderer.send('findComponentSort');
         ipcRenderer.on('findComponentSortCallback', (e, data) => {

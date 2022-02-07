@@ -1,3 +1,4 @@
+import HttpRequest from "../../util/httpRequest.js";
 
 export default class JiraClient {
     constructor() {}
@@ -12,11 +13,8 @@ export default class JiraClient {
 
     async checkLogin() {
         try {
-            return await fetch('https://enomix.atlassian.net/gateway/api/me')
-                .then(response => response.json())
-                .then(response => {
-                    return typeof response.account_id !== 'undefined';
-                });
+            const response = await HttpRequest.request('https://enomix.atlassian.net/gateway/api/me');
+            return response.account_id !== 'undefined';
         } catch (e) {
             console.error(e);
             return false;
@@ -32,9 +30,8 @@ export default class JiraClient {
             body: JSON.stringify(data)
         };
 
-        return await fetch(`https://enomix.atlassian.net/rest/internal/2/productsearch/singleRecentList`, options)
-            .then(response => response.json())
-            .then(response => response[0].items);
+        const response = await HttpRequest.request('https://enomix.atlassian.net/rest/internal/2/productsearch/singleRecentList', options);
+        return response[0].items;
     }
 
     async findAssignToMeList() {
@@ -46,35 +43,31 @@ export default class JiraClient {
             body: JSON.stringify(data)
         };
 
-        return await fetch(`https://enomix.atlassian.net/rest/gira/1/`, options)
-            .then(response => response.json())
-            .then(response => {
-                let items = [];
-                response.data.issues.edges.map(item => {
-                    const issueId = item.node.issueId;
-                    const issueKey = item.node.issuekey;
-                    const issueType = item.node.issuetype;
-                    const project = item.node.project;
-                    const status = item.node.status;
-                    const summary = item.node.summary;
+        const response = await HttpRequest.request('https://enomix.atlassian.net/rest/gira/1/', options);
+        let items = [];
+        response.data.issues.edges.map(item => {
+            const issueId = item.node.issueId;
+            const issueKey = item.node.issuekey;
+            const issueType = item.node.issuetype;
+            const project = item.node.project;
+            const status = item.node.status;
+            const summary = item.node.summary;
 
-                    items.push({
-                        issueId,
-                        issueKey,
-                        issueType,
-                        project,
-                        status,
-                        summary
-                    })
-                });
+            items.push({
+                issueId,
+                issueKey,
+                issueType,
+                project,
+                status,
+                summary
+            })
+        });
 
-                return items;
-            });
+        return items;
     }
 
     async findRecentProjectList() {
-        return await fetch(`https://enomix.atlassian.net/rest/internal/2/productsearch/search?counts=projects%3D5&type=projects`)
-            .then(response => response.json())
-            .then(response => response[0].items);
+        const response = await HttpRequest.request('https://enomix.atlassian.net/rest/internal/2/productsearch/search?counts=projects%3D5&type=projects');
+        return response[0].items;
     }
 }

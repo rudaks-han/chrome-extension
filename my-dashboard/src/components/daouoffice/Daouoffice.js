@@ -71,7 +71,8 @@ const Daouoffice = () => {
 
     const findUserInfo = () => {
         chrome.runtime.sendMessage({action: "daouofficeClient.findUserInfo"}, response => {
-            const clockedIn = response.clockInTime ? true: false;
+            //const clockedIn = response.clockInTime ? true: false;
+            const clockedIn = false;
             const clockedOut = response.clockOutTime ? true: false;
             const userId = response.userId;
 

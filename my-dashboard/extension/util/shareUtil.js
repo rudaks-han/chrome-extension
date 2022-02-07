@@ -122,4 +122,39 @@ export default class ShareUtil {
             //console.error(e);
         }
     }
+
+    /*static setStorage() {
+        chrome.storage.sync.set(jsonValue, function() {
+            logger.debug('Settings saved');
+            //logger.debug(JSON.stringify(jsonValue));
+            console.log(jsonValue);
+
+            showNotify('설정', '설정정보가 저장되었습니다.');
+
+            const firebaseKey = firebaseApp.user_config + '/' + username;
+            //const firebaseValue = {'use-flag' : useFlag};
+            delete jsonValue['password'];
+
+            firebaseApp.set(firebaseKey, jsonValue);
+        });
+    }*/
+
+    static getStorageData = key =>
+        new Promise((resolve, reject) =>
+            chrome.storage.local.get(key, result =>
+                chrome.runtime.lastError
+                    ? reject(Error(chrome.runtime.lastError.message))
+                    : resolve(result[key])
+            )
+        );
+
+    static setStorageData = data =>
+        new Promise((resolve, reject) =>
+            chrome.storage.local.set(data, () =>
+                chrome.runtime.lastError
+                    ? reject(Error(chrome.runtime.lastError.message))
+                    : resolve()
+            )
+        )
+
 }

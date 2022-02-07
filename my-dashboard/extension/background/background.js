@@ -1,10 +1,11 @@
-import LoginClient from './js/component/loginClient.js';
-import JiraClient from './js/component/jiraClient.js';
-import DaouofficeClient from './js/component/daouofficeClient.js';
-import OutlookClient from './js/component/outlookClient.js';
-import JenkinsClient from './js/component/jenkinsClient.js';
-import SonarqubeClient from './js/component/sonarqubeClient.js';
-import VictoryPortalClient from './js/component/victoryPortalClient.js';
+import LoginClient from './component/loginClient.js';
+import JiraClient from './component/jiraClient.js';
+import DaouofficeClient from './component/daouofficeClient.js';
+import OutlookClient from './component/outlookClient.js';
+import JenkinsClient from './component/jenkinsClient.js';
+import SonarqubeClient from './component/sonarqubeClient.js';
+import VictoryPortalClient from './component/victoryPortalClient.js';
+import ShareClient from './shareClient.js';
 
 const loginClient = new LoginClient();
 const jiraClient = new JiraClient();
@@ -13,6 +14,7 @@ const outlookClient = new OutlookClient();
 const jenkinsClient = new JenkinsClient();
 const sonarqubeClient = new SonarqubeClient();
 const victoryPortalClient = new VictoryPortalClient();
+const shareClient = new ShareClient();
 
 const receiveMessage = (request, sender, sendResponse) => {
     requestFn(request)
@@ -52,6 +54,9 @@ const requestFn = async (request) => {
             break;
         case 'victoryPortalClient':
             response = await victoryPortalClient[requestFn].apply(victoryPortalClient, [params]);
+            break;
+        case 'shareClient':
+            response = await shareClient[requestFn].apply(shareClient, [params]);
             break;
         default:
             console.error('request not found');

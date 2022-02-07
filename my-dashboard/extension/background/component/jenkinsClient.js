@@ -1,3 +1,4 @@
+import HttpRequest from "../../util/httpRequest.js";
 
 export default class JenkinsClient {
     constructor() {}
@@ -12,10 +13,8 @@ export default class JenkinsClient {
 
     async checkLogin() {
         try {
-            return await fetch('http://211.63.24.41:8080')
-                .then(response => {
-                    return response.status === 200;
-                });
+            const response = await HttpRequest.requestText('http://211.63.24.41:8080');
+            return response.status === 200;
         } catch (e) {
             console.error(e);
             return false;
@@ -26,10 +25,6 @@ export default class JenkinsClient {
         return `http://211.63.24.41:8080/view/victory/job/${moduleName}/job/${branch}/lastBuild/api/json?moduleName=${moduleName}`;
     }
 
-    getModuleUrl() {
-        return `http://211.63.24.41:8080/view/victory/api/json`;
-    }
-
     findUseAlarmOnError() {
         //let data = this.getStore().get(this.useAlarmOnErrorStoreId);
         //if (data == null) data = false;
@@ -38,47 +33,38 @@ export default class JenkinsClient {
 
     async findModuleList() {
         const _this = this;
-        return await fetch(_this.getModuleUrl())
-            .then(response => response.json())
-            .then(response => {
-                let moduleUrls = [];
-                let filteredJobs = [];
+        const response = await HttpRequest.request('http://211.63.24.41:8080/view/victory/api/json');
 
-                response.jobs.map(job => {
-                    if (job._class === 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject') {
-                        moduleUrls.push(_this.getModuleDetailUrl(job.name));
-                        filteredJobs.push(job);
-                    }
-                });
+        let moduleUrls = [];
+        let filteredJobs = [];
 
-                Promise.all(_this.fetchAll(moduleUrls))
-                    .then((responses) => {
-                        responses.map(response => {
-                            const fullName = response.fullName;
+        response.jobs.map(job => {
+            if (job._class === 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject') {
+                moduleUrls.push(_this.getModuleDetailUrl(job.name));
+                filteredJobs.push(job);
+            }
+        });
 
-                            let branch = 'master';
-                            const selectedJob = _this.filter(response.jobs, 'color', 'blue');
-                            if (selectedJob != null) {
-                                branch = selectedJob.name;
-                            }
+        const responses = await HttpRequest.requestAll(moduleUrls, {});
+        responses.map(response => {
+            const fullName = response.fullName;
+            let branch = 'master';
+            const selectedJob = _this.filter(response.jobs, 'color', 'blue');
+            if (selectedJob != null) {
+                branch = selectedJob.name;
+            }
 
-                            filteredJobs.map(filteredJob => {
-                                if (filteredJob.name === fullName) {
-                                    filteredJob['branch'] = branch;
-                                }
-                            });
-                        });
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                        //return null;
-                    });
+            filteredJobs.map(filteredJob => {
+                if (filteredJob.name === fullName) {
+                    filteredJob['branch'] = branch;
+                }
+            });
+        });
 
-                return {
-                    filteredJobs,
-                    availableModules: _this.getAvailableModules()
-                };
-            })
+        return {
+            filteredJobs,
+            availableModules: _this.getAvailableModules()
+        };
     }
 
     filter(items, key, value) {
@@ -156,37 +142,38 @@ export default class JenkinsClient {
         )
 
         let buildResults = [];
-        await Promise.all(_this.fetchAll(urls))
-            .then((responses) => {
-                let sessionExpired = true;
-                responses.map(response => {
-                    if (response.url) {
-                        const moduleName = _this.extractModuleName(response.fullDisplayName);
-                        const url = response.url;
-                        const result = response.result;
-                        const timestamp = response.timestamp;
-                        const fullDisplayName = response.fullDisplayName;
-                        let lastChangeSets = response.changeSets[0];
-                        let lastCommit = {};
-                        if (lastChangeSets) {
-                            lastCommit['authorName'] = lastChangeSets.items[0].author.fullName;
-                            lastCommit['comment'] = lastChangeSets.items[0].comment;
-                            lastCommit['date'] = lastChangeSets.items[0].date;
-                        }
 
-                        sessionExpired = false;
-                        buildResults.push({url, moduleName, result, timestamp, fullDisplayName, lastCommit, hasError: false})
-                    } else {
-                        const url = response.config.url;
-                        const moduleName = _this.getParam(url, 'moduleName');
-                        buildResults.push({url:'', moduleName, result:'', timestamp:0, fullDisplayName:'', lastCommit: {}, hasError: true})
-                    }
-                });
-            })
-            .catch((err) => {
-                console.log(err);
-                //return null;
-            });
+        console.error('____ urls');
+        console.error(urls);
+
+
+
+        const responses = await HttpRequest.requestAll(urls, {});
+
+        let sessionExpired = true;
+        responses.map(response => {
+            if (response.url) {
+                const moduleName = _this.extractModuleName(response.fullDisplayName);
+                const url = response.url;
+                const result = response.result;
+                const timestamp = response.timestamp;
+                const fullDisplayName = response.fullDisplayName;
+                let lastChangeSets = response.changeSets[0];
+                let lastCommit = {};
+                if (lastChangeSets) {
+                    lastCommit['authorName'] = lastChangeSets.items[0].author.fullName;
+                    lastCommit['comment'] = lastChangeSets.items[0].comment;
+                    lastCommit['date'] = lastChangeSets.items[0].date;
+                }
+
+                sessionExpired = false;
+                buildResults.push({url, moduleName, result, timestamp, fullDisplayName, lastCommit, hasError: false})
+            } else {
+                const url = response.config.url;
+                const moduleName = _this.getParam(url, 'moduleName');
+                buildResults.push({url:'', moduleName, result:'', timestamp:0, fullDisplayName:'', lastCommit: {}, hasError: true})
+            }
+        });
 
         return buildResults;
     }
