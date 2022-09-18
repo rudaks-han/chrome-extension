@@ -1,9 +1,20 @@
-import ReservationChecker from "./js/ReservationChecker.js";
+function goNextMonth() {
+    return model.goNextMonth();
+}
 
-const reservationChecker = new ReservationChecker();
-
-
-reservationChecker.check();
+chrome.runtime.onMessage.addListener(
+    function(message, callback) {
+        /*if (message.action === 'goNextMonth'){
+            chrome.tabs.query({active: true, currentWindow: true}).then(([tab]) => {
+                chrome.scripting.executeScript(
+                    {
+                        target: {tabId: tab.id},
+                        func: goNextMonth
+                        // function: () => {}, // files or function, both do not work.
+                    })
+            })
+        }*/
+    });
 
 //chrome.alarms.create('checkUserSession', { when:Date.now(), periodInMinutes: 5}); // 5분
 

@@ -10,11 +10,15 @@
 		"background",
 		"storage",
 		"notifications",
-		"alarms"
+		"alarms",
+		"tabs",
+		"activeTab",
+		"scripting"
 	],
 
 	"host_permissions": [
-		"*://*/*"
+		"*://*/*",
+		"<all_urls>"
 	],
 	"content_scripts": [
 		{
@@ -28,7 +32,7 @@
 	}],
 	"content_security_policy": {
 		"extension_pages": "script-src 'self'; object-src 'self'",
-		"sandbox": "sandbox allow-scripts; script-src 'self' 'https://camp.xticket.kr'; object-src 'self'"
+		"sandbox": "sandbox allow-scripts; script-src 'self'; object-src 'self'"
 
 	},
 	"manifest_version": 3

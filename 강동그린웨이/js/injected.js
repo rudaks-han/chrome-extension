@@ -20,21 +20,32 @@
     };
 
     XHR.send = function(postData) {
-
         this.addEventListener('load', function() {
             if ( this.responseType != 'blob' && this.responseText) {
                 try {
                     var responseText = JSON.parse(this.responseText);
-                    console.error(responseText)
-
                     if (responseText.data.bookProductList) {
                         responseText.data.bookProductList.forEach(function(el) {
+                            const statusCode = el.status_code;
                             const productName = el.product_name;
-                            const selectYn = el.select_yn;
 
-                            console.log(el);
-                            console.log('productName : ' + productName);
-                            console.log('selectYn : ' + selectYn);
+
+                            //console.log(el);
+
+                            //console.log('selectYn : ' + selectYn);
+
+                            if (!validBookingState(statusCode)) {
+                                console.log("[불가]" + productName + " : " + statusCode);
+                            } else {
+                                console.error("[가능]" + productName + " : " + statusCode);
+                            }
+
+
+                            if (validBookingState(statusCode)) {
+                                const startDate = getParam(postData, 'start_date');
+                                console.log('statusCode : ' + statusCode);
+                                console.log('productName : ' + productName);
+                            }
                         })
                     }
 
@@ -49,3 +60,26 @@
     };
 
 })(XMLHttpRequest);
+
+function validBookingState(statusCode) {
+    if (!(statusCode == '0' || statusCode == '3')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function getParam(params, name) {
+    var sval = "";
+    params = params.split("&");
+    for (var i = 0; i < params.length; i++) {
+        temp = params[i].split("=");
+        if ([temp[0]] == name) { sval = temp[1]; }
+    }
+
+    return sval;
+}
+
+function goNextMonth() {
+    model.goNextMonth();
+}
