@@ -1,7 +1,7 @@
 import React from 'react';
 import {Button, Checkbox, Form, Header, Icon, Modal} from 'semantic-ui-react';
 import DropdownTime from "./DropdownTime";
-/*const { ipcRenderer } = window.require('electron');*/
+import UiShare from "../../UiShare";
 
 const SettingModal = props => {
     const [open, setOpen] = React.useState(false)
@@ -22,7 +22,7 @@ const SettingModal = props => {
         }
 
         props.setUseAlarmClock(param);
-        //ipcRenderer.send('daouoffice.setUseAlarmClock', param);
+        UiShare.saveStorage({"daouoffice_useAlarmClock": param});
     }
 
     const onCheckUseClockOutTime = (event,data) => {
@@ -32,7 +32,7 @@ const SettingModal = props => {
         }
 
         props.setUseAlarmClock(param);
-        //ipcRenderer.send('daouoffice.setUseAlarmClock', param);
+        UiShare.saveStorage({"daouoffice_useAlarmClock": param});
     }
 
     const onChangeClockInBeforeTime = (event, data) => {
@@ -42,7 +42,7 @@ const SettingModal = props => {
         }
 
         props.setUseAlarmClock(param);
-        //ipcRenderer.send('daouoffice.setUseAlarmClock', param);
+        UiShare.saveStorage({"daouoffice_useAlarmClock": param});
     }
 
     const onChangeClockOutAfterTime = (event, data) => {
@@ -52,7 +52,7 @@ const SettingModal = props => {
         }
 
         props.setUseAlarmClock(param);
-        //ipcRenderer.send('daouoffice.setUseAlarmClock', param);
+        UiShare.saveStorage({"daouoffice_useAlarmClock": param});
     }
 
     return (

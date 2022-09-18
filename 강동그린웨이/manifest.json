@@ -1,0 +1,35 @@
+{
+	"name": "강동 그린웨이 예약",
+	"version": "0.0.1",
+	"description": "강동 그린웨이 예약",
+	"background": {
+		"service_worker": "extension/background/background.js",
+		"type": "module"
+	},
+	"permissions" : [
+		"background",
+		"storage",
+		"notifications",
+		"alarms"
+	],
+
+	"host_permissions": [
+		"*://*/*"
+	],
+	"content_scripts": [
+		{
+			"matches": ["https://camp.xticket.kr/*"],
+			"js": ["js/jquery-1.9.1.min.js", "js/content-script.js", "js/injected.js"]
+		}
+	],
+	"web_accessible_resources": [{
+		"resources": ["js/injected.js"],
+		"matches": ["https://camp.xticket.kr/*"]
+	}],
+	"content_security_policy": {
+		"extension_pages": "script-src 'self'; object-src 'self'",
+		"sandbox": "sandbox allow-scripts; script-src 'self' 'https://camp.xticket.kr'; object-src 'self'"
+
+	},
+	"manifest_version": 3
+}

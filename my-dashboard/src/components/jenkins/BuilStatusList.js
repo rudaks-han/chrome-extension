@@ -27,7 +27,6 @@ const BuildStatusList = props => {
                 let date = item.lastCommit && item.lastCommit.date && item.lastCommit.date.substring(0, 16) || '';
                 const freshness = item.timestamp > 0 ? toDate(item.timestamp) : '-';
 
-                console.error('lastBuildResult : ' + lastBuildResult)
                 return (
                     <Item key={moduleName}>
                         <Item.Image size='mini'>

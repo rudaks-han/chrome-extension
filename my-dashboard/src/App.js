@@ -9,7 +9,7 @@ function App() {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    getUserInfo();
+    //getUserInfo();
   }, []);
   const getUserInfo = () => {
     chrome.runtime.sendMessage({action: "loginClient.findUserInfo"}, response => {

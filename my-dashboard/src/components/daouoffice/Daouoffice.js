@@ -2,7 +2,6 @@ import React, {useContext, useEffect, useState} from 'react';
 import daouofficeIcon from '../../static/image/daouoffice.ico';
 import {Card} from 'semantic-ui-react'
 import UiShare from '../../UiShare';
-import TimerContext from "../../TimerContext";
 import ExtraButtons from "./ExtraButtons";
 import RightMenu from "./RightMenu";
 import AddLinkLayer from "../share/AddLinkLayer";
@@ -18,7 +17,7 @@ const Daouoffice = () => {
     const [authenticated, setAuthenticated] = useState(false);
     const [username, setUsername] = useState(false);
     const [notificationCount, setNotificationCount] = useState(0);
-    const [useAlarmClock, setUseAlarmClock] = useState({clockIn: true, beforeTime: 5, clockOut: true, afterTime: 0});
+    const [useAlarmClock, setUseAlarmClock] = useState({clockIn: false, beforeTime: 5, clockOut: false, afterTime: 0});
     const [clickedSetting, setClickSetting] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
 
@@ -38,7 +37,7 @@ const Daouoffice = () => {
         findUserInfo();
         findCalendar();
         findNotificationCount();
-        //findStore();
+        findStore();
         findDayoffList();
         findMyDayoffList();
     }
@@ -46,9 +45,9 @@ const Daouoffice = () => {
     const bindListener = () => {
         chrome.runtime.onMessage.addListener(
             function(request, sender, sendResponse) {
-                if (request.action === 'daouofficeClient.loginOk') {
+                if (request.action === 'daouofficeClient.login') {
                     setAuthenticated(true);
-                } else {
+                } else if (request.action === 'daouofficeClient.logout') {
                     setAuthenticated(false);
                 }
             });
@@ -71,8 +70,7 @@ const Daouoffice = () => {
 
     const findUserInfo = () => {
         chrome.runtime.sendMessage({action: "daouofficeClient.findUserInfo"}, response => {
-            //const clockedIn = response.clockInTime ? true: false;
-            const clockedIn = false;
+            const clockedIn = response.clockInTime ? true: false;
             const clockedOut = response.clockOutTime ? true: false;
             const userId = response.userId;
 
@@ -99,22 +97,24 @@ const Daouoffice = () => {
     }
 
     const findStore = () => {
-        /*ipcRenderer.send('daouoffice.findStore');
-        ipcRenderer.on('daouoffice.findStoreCallback', async (event, data) => {
-            setUsername(data.username);
+        UiShare.findStorage('daouoffice_useAlarmClock', response => {
+            if (response === null) {
+                return;
+            }
 
-            const clockIn = data.useAlarmClock.clockIn || false;
-            const clockOut = data.useAlarmClock.clockOut || false;
-            const beforeTime = data.useAlarmClock.beforeTime || 5;
-            const afterTime = data.useAlarmClock.afterTime || 0;
+            setUsername(response.username || 'anonymous');
+
+            const clockIn = response.clockIn || false;
+            const clockOut = response.clockOut || false;
+            const beforeTime = response.beforeTime || 5;
+            const afterTime = response.afterTime || 0;
             setUseAlarmClock({
                 clockIn,
                 clockOut,
                 beforeTime,
                 afterTime
             });
-            ipcRenderer.removeAllListeners('daouoffice.findStoreCallback');
-        });*/
+        });
     }
 
     const findDayoffList = () => {

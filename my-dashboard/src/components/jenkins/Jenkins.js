@@ -9,8 +9,6 @@ import TitleLayer from "../share/TitleLayer";
 import ContentLayer from "./ContentLayer";
 const chrome = window.chrome;
 
-//const { ipcRenderer } = window.require('electron');
-
 const Jenkins = () => {
     const [list, setList] = useState(null);
     const [authenticated, setAuthenticated] = useState(false);
@@ -19,8 +17,11 @@ const Jenkins = () => {
     const [jobList, setJobList] = useState([]);
     const [clickedSetting, setClickSetting] = useState(false);
     const [lastUpdated, setLastUpdated] = useState('');
-
     let buildErrorMessage;
+
+    useEffect(() => {
+        bindListener();
+    }, []);
 
     useEffect(() => {
         checkLogin();
@@ -28,6 +29,17 @@ const Jenkins = () => {
             initialize();
         }
     }, [authenticated]);
+
+    const bindListener = () => {
+        chrome.runtime.onMessage.addListener(
+            function(request, sender, sendResponse) {
+                if (request.action === 'jenkinsClient.login') {
+                    setAuthenticated(true);
+                } else if (request.action === 'jenkinsClient.logout') {
+                    setAuthenticated(false);
+                }
+            });
+    }
 
     const checkLogin = () => {
         setTimeout(() => {
@@ -102,19 +114,24 @@ const Jenkins = () => {
     }
 
     const onChangeModuleChange = (e, data) => {
+        console.error('onChangeModuleChange data')
+        console.error(data)
         const { name, value, checked } = data; // value: branch
+        const params = {name, value};
 
-        /*if (checked) {
-            ipcRenderer.send('jenkins.addAvailableModule', {name, value});
-            const newModules = [...checkedModuleNameList, name];
-            setCheckedModuleNameList(newModules);
+        if (checked) {
+            chrome.runtime.sendMessage({action: "jenkinsClient.addAvailableModule", params: params}, response => {
+                const newModules = [...checkedModuleNameList, name];
+                setCheckedModuleNameList(newModules);
+                findList();
+            });
         } else {
-            ipcRenderer.send('jenkins.removeAvailableModule', {name, value});
-            const newModules = checkedModuleNameList.filter(item => item !== name);
-            setCheckedModuleNameList(newModules);
-        }*/
-
-        findList();
+            chrome.runtime.sendMessage({action: "jenkinsClient.removeAvailableModule", params: params}, response => {
+                const newModules = checkedModuleNameList.filter(item => item !== name);
+                setCheckedModuleNameList(newModules);
+                findList();
+            });
+        }
     }
 
     const onClickRefresh = () => {
@@ -122,7 +139,7 @@ const Jenkins = () => {
     }
 
     const onClickLogin = () => {
-        //ipcRenderer.send('jenkins.openLoginPage');
+        window.open('http://211.63.24.41:8080/login');
     }
 
     const onClickLogout = () => {

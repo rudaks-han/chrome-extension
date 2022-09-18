@@ -1,7 +1,10 @@
 import HttpRequest from "../../util/httpRequest.js";
+import StorageUtil from "../../util/storageUtil.js";
 
 export default class SonarqubeClient {
-    constructor() {}
+    constructor() {
+        this.API_URL = 'http://211.63.24.41:9000';
+    }
 
     requestOptions() {
         return {
@@ -12,7 +15,7 @@ export default class SonarqubeClient {
     }
 
     getApiUrl(key) {
-        return `http://211.63.24.41:9000/api/measures/component?component=${key}&metricKeys=new_bugs,new_vulnerabilities,new_security_hotspots,new_code_smells,projects`;
+        return `${this.API_URL}/api/measures/component?component=${key}&metricKeys=new_bugs,new_vulnerabilities,new_security_hotspots,new_code_smells,projects`;
     }
 
     findUseAlarmOnError() {
@@ -24,16 +27,17 @@ export default class SonarqubeClient {
     async findModuleList() {
         const _this = this;
 
-        const response = await HttpRequest.request('http://211.63.24.41:9000/api/components/search?qualifiers=TRK');
+        const response = await HttpRequest.request(`${this.API_URL}/api/components/search?qualifiers=TRK`);
+        const availableModules = await _this.getAvailableModules();
         return {
             data: response,
-            availableModules: _this.getAvailableModules()
+            availableModules
         }
     }
 
-    addAvailableModule(event, data) {
+    async addAvailableModule(data) {
         const {name, key} = data;
-        const availableModules = this.getAvailableModules();
+        const availableModules = await this.getAvailableModules();
 
         let exists = false;
         availableModules.map(availableModule => {
@@ -44,40 +48,44 @@ export default class SonarqubeClient {
 
         if (!exists) {
             availableModules.push({name, key});
-            this.setAvailableModules(availableModules);
+            await this.setAvailableModules(availableModules);
         }
     }
 
-    removeAvailableModule(event, data) {
+    async removeAvailableModule(data) {
         const {name, key} = data;
-        const availableModules = this.getAvailableModules();
+        const availableModules = await this.getAvailableModules();
 
         const newAvailableModules = availableModules.filter(module => module.name !== name);
-        this.setAvailableModules(newAvailableModules);
+        await this.setAvailableModules(newAvailableModules);
     }
 
-    getAvailableModules() {
+    async getAvailableModules() {
         /*const modules = this.getStore().get(this.availableModuleStoreId);
         return  modules == null ? [] : modules;*/
-        return [];
+        //return [];
+        return await StorageUtil.getStorageData('sonarqube_availableModules') || [];
     }
 
-    setAvailableModules(data) {
+    async setAvailableModules(data) {
         //this.getStore().set(this.availableModuleStoreId, data);
+        await StorageUtil.setStorageData({
+            'sonarqube_availableModules': data
+        });
     }
 
-    useAlarmOnError(event, data) {
+    useAlarmOnError(data) {
         //this.getStore().set(this.useAlarmOnErrorStoreId, data);
     }
 
     async findList() {
-        let availableModules = this.getAvailableModules();
+        let availableModules = await this.getAvailableModules();
         if (!availableModules || availableModules.length === 0) {
             availableModules = [{
                 name: 'talk-api-mocha',
                 key: 'talk-api-mocha'
             }];
-            this.setAvailableModules(availableModules);
+            await this.setAvailableModules(availableModules);
         }
 
         const _this = this;

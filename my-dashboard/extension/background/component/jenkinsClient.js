@@ -1,7 +1,10 @@
 import HttpRequest from "../../util/httpRequest.js";
+import StorageUtil from "../../util/storageUtil.js";
 
 export default class JenkinsClient {
-    constructor() {}
+    constructor() {
+        this.API_URL = 'http://211.63.24.41:8080';
+    }
 
     requestOptions() {
         return {
@@ -13,7 +16,7 @@ export default class JenkinsClient {
 
     async checkLogin() {
         try {
-            const response = await HttpRequest.requestText('http://211.63.24.41:8080');
+            const response = await HttpRequest.requestText(this.API_URL);
             return response.status === 200;
         } catch (e) {
             console.error(e);
@@ -22,7 +25,7 @@ export default class JenkinsClient {
     }
 
     getApiUrl(moduleName, branch) {
-        return `http://211.63.24.41:8080/view/victory/job/${moduleName}/job/${branch}/lastBuild/api/json?moduleName=${moduleName}`;
+        return `${this.API_URL}/view/victory/job/${moduleName}/job/${branch}/lastBuild/api/json?moduleName=${moduleName}`;
     }
 
     findUseAlarmOnError() {
@@ -33,7 +36,7 @@ export default class JenkinsClient {
 
     async findModuleList() {
         const _this = this;
-        const response = await HttpRequest.request('http://211.63.24.41:8080/view/victory/api/json');
+        const response = await HttpRequest.request(`${this.API_URL}/view/victory/api/json`);
 
         let moduleUrls = [];
         let filteredJobs = [];
@@ -61,9 +64,10 @@ export default class JenkinsClient {
             });
         });
 
+        const availableModules = await _this.getAvailableModules();
         return {
             filteredJobs,
-            availableModules: _this.getAvailableModules()
+            availableModules
         };
     }
 
@@ -80,13 +84,23 @@ export default class JenkinsClient {
     }
 
     getModuleDetailUrl(moduleName) {
-        return `http://211.63.24.41:8080/job/${moduleName}/api/json`;
+        return `${this.API_URL}/job/${moduleName}/api/json`;
     }
 
-    addAvailableModule(event, data) {
+    async setAvailableModules(data) {
+        await StorageUtil.setStorageData({
+            'jenkins_availableModules': data
+        });
+    }
+
+    async getAvailableModules() {
+        return await StorageUtil.getStorageData('jenkins_availableModules');
+    }
+
+    async addAvailableModule(data) {
         const name = data.name;
         const branch = data.value;
-        const availableModules = this.getAvailableModules();
+        const availableModules = await this.getAvailableModules() || [];
         let exists = false;
         availableModules.map(availableModule => {
             if (name == availableModule.name) {
@@ -96,33 +110,24 @@ export default class JenkinsClient {
 
         if (!exists) {
             availableModules.push({name, branch});
-            this.setAvailableModules(availableModules);
+            await this.setAvailableModules(availableModules);
         }
     }
 
-    removeAvailableModule(event, data) {
+    async removeAvailableModule(data) {
         const {name, branch} = data;
-        const availableModules = this.getAvailableModules();
+        const availableModules = await this.getAvailableModules();
 
         const newAvailableModules = availableModules.filter(module => module.name !== name);
-        this.setAvailableModules(newAvailableModules);
+        await this.setAvailableModules(newAvailableModules);
     }
 
-    useAlarmOnError(event, data) {
+    useAlarmOnError(data) {
         //this.getStore().set(this.useAlarmOnErrorStoreId, data);
     }
 
-    getAvailableModules() {
-        //return this.getStore().get(this.availableModuleStoreId);
-        return null;
-    }
-
-    setAvailableModules(data) {
-        //this.getStore().set(this.availableModuleStoreId, data);
-    }
-
     async findList() {
-        let availableModules = this.getAvailableModules();
+        let availableModules = await this.getAvailableModules();
         if (!availableModules) {
             availableModules = [
                 {
@@ -142,14 +147,7 @@ export default class JenkinsClient {
         )
 
         let buildResults = [];
-
-        console.error('____ urls');
-        console.error(urls);
-
-
-
         const responses = await HttpRequest.requestAll(urls, {});
-
         let sessionExpired = true;
         responses.map(response => {
             if (response.url) {
@@ -207,3 +205,15 @@ export default class JenkinsClient {
         return sval;
     }
 }
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.status != 'complete')
+        return;
+
+    if (tab.url === `${this.API_URL}/`) {
+        chrome.runtime.sendMessage({action: 'jenkinsClient.login'});
+    } else if (tab.url.startsWith(`${this.API_URL}/logout`)
+        || tab.url.startsWith(`${this.API_URL}/login`)) {
+        chrome.runtime.sendMessage({action: 'jenkinsClient.logout'});
+    }
+});

@@ -7,6 +7,7 @@ import Jenkins from "../../components/jenkins/Jenkins";
 import Sonarqube from "../../components/sonarqube/Sonarqube";
 import VictoryPortal from "../../components/victoryPortal/VictoryPortal";
 import Modeloffice from "../../components/modeloffice/Modeloffice";
+import UiShare from "../../UiShare";
 /*import TeamBook from "../../components/teambook/TeamBook";*/
 const chrome = window.chrome;
 
@@ -14,11 +15,11 @@ const Content = () => {
     const components = [
         { id: 'jira', name: "Jira" , component: <Jira />},
         { id: 'daouoffice', name: "Daouoffice", component: <Daouoffice /> },
-        { id: 'outlook', name: "Outlook", component: <Outlook /> },
         { id: 'jenkins', name: "Jenkins", component: <Jenkins /> },
         { id: 'sonarqube', name: "Sonarqube", component: <Sonarqube /> },
         { id: 'victoryPortal', name: "VictoryPortal", component: <VictoryPortal /> },
         { id: 'modeloffice', name: "Modeloffice", component: <Modeloffice /> },
+        { id: 'outlook', name: "Outlook", component: <Outlook /> },
         /*{ id: 'teambook', name: "TeamBook", component: <TeamBook /> },*/
     ];
 
@@ -29,46 +30,8 @@ const Content = () => {
     }, []);
 
     const findComponentSort = () => {
-        chrome.runtime.sendMessage({action: "shareClient.getStorage", key: 'sorted...'}, response => {
-            //setNotificationCount(response.);
-            console.error('___ chrome.runtime.sendMessage')
-        });
-
-        let componentsIds = ['daouoffice'];
-        if (!componentsIds) {
-            componentsIds = [];
-            components.map(component => {
-                componentsIds.push(component.id);
-            });
-        }
-
-        components.map(component => {
-            if (!componentsIds.includes(component.id)) {
-                componentsIds.push(component.id);
-            }
-        });
-
-
-        const sortedComponents = [];
-        componentsIds.map(id => {
-            components.map(component => {
-                if (component.id === id) {
-                    sortedComponents.push(component);
-                }
-            })
-        });
-
-        setState(sortedComponents);
-
-        chrome.runtime.sendMessage({action: "shareClient.setStorage", data: sortedComponents}, response => {
-            //setNotificationCount(response.);
-        });
-
-
-
-        /*ipcRenderer.send('findComponentSort');
-        ipcRenderer.on('findComponentSortCallback', (e, data) => {
-            let componentsIds = data;
+        UiShare.findStorage('componentSortKey', response => {
+            let componentsIds = response;
             if (!componentsIds) {
                 componentsIds = [];
                 components.map(component => {
@@ -82,7 +45,6 @@ const Content = () => {
                 }
             });
 
-
             const sortedComponents = [];
             componentsIds.map(id => {
                 components.map(component => {
@@ -93,12 +55,16 @@ const Content = () => {
             });
 
             setState(sortedComponents);
-        });*/
+        });
     }
 
-    const onSort = (e, data) => {
+    const onSort = () => {
         const components = state.map(item => item.id);
-        //ipcRenderer.send('saveComponentSort', components);
+        const data = {
+            'componentSortKey': components
+        }
+
+        UiShare.saveStorage(data);
     }
 
     return (

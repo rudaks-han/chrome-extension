@@ -63,10 +63,10 @@ const requestFn = async (request) => {
             console.error(request);
     }
 
-    console.log('---------- request ---------- ')
+    /*console.log('---------- request ---------- ')
     console.log('requestClass: ' + requestClass + ', requestFn: ' + requestFn + ', params: ', params)
     console.log('response')
-    console.log(response)
+    console.log(response)*/
 
     return response;
 }

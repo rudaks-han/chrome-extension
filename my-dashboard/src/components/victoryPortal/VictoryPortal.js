@@ -34,15 +34,8 @@ const VictoryPortal = () => {
     const findList = () => {
         setList(null);
         chrome.runtime.sendMessage({action: "victoryPortalClient.findList"}, response => {
-            console.error('victoryPortal response')
-            console.error(response)
             setList(response);
         });
-        /*ipcRenderer.send('victoryPortal.findList');
-        ipcRenderer.removeAllListeners('victoryPortal.findListCallback');
-        ipcRenderer.on('victoryPortal.findListCallback', async (e, data) => {
-            setList(data);
-        });*/
     }
 
     const displayListLayer = () => {

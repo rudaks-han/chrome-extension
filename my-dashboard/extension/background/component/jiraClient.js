@@ -1,7 +1,9 @@
 import HttpRequest from "../../util/httpRequest.js";
 
 export default class JiraClient {
-    constructor() {}
+    constructor() {
+        this.API_URL = 'https://enomix.atlassian.net';
+    }
 
     requestOptions() {
         return {
@@ -13,8 +15,8 @@ export default class JiraClient {
 
     async checkLogin() {
         try {
-            const response = await HttpRequest.request('https://enomix.atlassian.net/gateway/api/me');
-            return response.account_id !== 'undefined';
+            const response = await HttpRequest.request(`${this.API_URL}/gateway/api/me`);
+            return response.account_id !== undefined;
         } catch (e) {
             console.error(e);
             return false;
@@ -30,7 +32,7 @@ export default class JiraClient {
             body: JSON.stringify(data)
         };
 
-        const response = await HttpRequest.request('https://enomix.atlassian.net/rest/internal/2/productsearch/singleRecentList', options);
+        const response = await HttpRequest.request(`${this.API_URL}/rest/internal/2/productsearch/singleRecentList`, options);
         return response[0].items;
     }
 
@@ -43,7 +45,7 @@ export default class JiraClient {
             body: JSON.stringify(data)
         };
 
-        const response = await HttpRequest.request('https://enomix.atlassian.net/rest/gira/1/', options);
+        const response = await HttpRequest.request(`${this.API_URL}/rest/gira/1/`, options);
         let items = [];
         response.data.issues.edges.map(item => {
             const issueId = item.node.issueId;
@@ -67,7 +69,18 @@ export default class JiraClient {
     }
 
     async findRecentProjectList() {
-        const response = await HttpRequest.request('https://enomix.atlassian.net/rest/internal/2/productsearch/search?counts=projects%3D5&type=projects');
+        const response = await HttpRequest.request(`${this.API_URL}/rest/internal/2/productsearch/search?counts=projects%3D5&type=projects`);
         return response[0].items;
     }
 }
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.status != 'complete')
+        return;
+
+    if (tab.url.startsWith(`${this.API_URL}/jira/projects`)) {
+        chrome.runtime.sendMessage({action: 'jiraClient.login'});
+    } else if (tab.url.startsWith('https://id.atlassian.com/login')) {
+        chrome.runtime.sendMessage({action: 'jiraClient.logout'});
+    }
+});

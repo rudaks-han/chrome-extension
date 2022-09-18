@@ -14,11 +14,26 @@ const Jira = () => {
     const [authenticated, setAuthenticated] = useState(false);
 
     useEffect(() => {
+        bindListener();
+    }, []);
+
+    useEffect(() => {
         checkLogin();
         if (authenticated) {
             initialize();
         }
     }, [authenticated]);
+
+    const bindListener = () => {
+        chrome.runtime.onMessage.addListener(
+            function(request, sender, sendResponse) {
+                if (request.action === 'jiraClient.login') {
+                    setAuthenticated(true);
+                } else if (request.action === 'jiraClient.logout') {
+                    setAuthenticated(false);
+                }
+            });
+    }
 
     const checkLogin = () => {
         setTimeout(() => {
@@ -62,7 +77,7 @@ const Jira = () => {
     }
 
     const onClickLogin = () => {
-        //ipcRenderer.send('jira.openLoginPage');
+        window.open('https://id.atlassian.com/login');
     }
 
     const onClickLogout = () => {

@@ -1,15 +1,22 @@
-import ShareUtil from '../util/shareUtil.js';
+import StorageUtil from '../util/storageUtil.js';
 
 export default class ShareClient {
     constructor() {}
 
     async setStorage(data) {
-        await ShareUtil.setStorageData(data);
+        console.log('ShareClient#setStorage data');
+        console.log(data)
+        await StorageUtil.setStorageData(data);
     }
 
-    async getStorage(key) {
-        console.error('getStorage key')
-        console.error(key)
-        return await ShareUtil.getStorageData(key);
+    async getStorage(data) {
+        console.log('ShareClient#getStorage key');
+        console.log(data['key']);
+        return await StorageUtil.getStorageData(data['key']);
+    }
+
+    async clearStorage() {
+        console.log('ShareClient#clearStorage');
+        return await StorageUtil.clearStorageData();
     }
 }

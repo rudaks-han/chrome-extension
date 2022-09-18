@@ -6,7 +6,3 @@ s.onload = function() {
 $(function() {
     (document.head || document.documentElement).appendChild(s);
 })
-
-function matchText() {
-    console.error('matchText')
-}

@@ -1,7 +1,9 @@
 import HttpRequest from "../../util/httpRequest.js";
 
 export default class VictoryPortalClient {
-    constructor() {}
+    constructor() {
+        this.API_URL = 'https://victory-portal.spectra.co.kr';
+    }
 
     requestOptions() {
         return {
@@ -14,6 +16,6 @@ export default class VictoryPortalClient {
     async findList() {
         const _this = this;
 
-        return await HttpRequest.request('https://victory-portal.spectra.co.kr/wp-json/wp/v2/posts?per_page=10', _this.requestOptions());
+        return await HttpRequest.request(`${this.API_URL}/wp-json/wp/v2/posts?per_page=10`, _this.requestOptions());
     }
 }

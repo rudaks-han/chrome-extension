@@ -18,19 +18,17 @@ const ExtraButtons = props => {
                 />
             </Button.Group>
             &nbsp;
-            <Button.Group>
-                <Button>링크</Button>
-                <Dropdown
-                    className='button icon'
-                    floating
-                    options={[
-                        { key: '1', icon: 'discussions', selected: true, text: '회의실 예약', href: 'https://spectra.daouoffice.com/app/asset', target: '_blank'},
-                        { key: '2', icon: 'address book', selected: true, text: '주소록', href: 'https://spectra.daouoffice.com/app/contact/dept/2752', target: '_blank'},
-                        { key: '3', icon: 'address book', selected: true, text: '시차출퇴근 근무 신청서', href: 'https://spectra.daouoffice.com/app/approval/document/new/2752/188949', target: '_blank'},
-                    ]}
-                    trigger={<></>}
-                />
-            </Button.Group>
+            <Dropdown text='바로가기' pointing className='button icon'>
+                <Dropdown.Menu>
+                    <Dropdown.Item href='https://spectra.daouoffice.com/app/asset' target="_blank">회의실 예약</Dropdown.Item>
+                    <Dropdown.Item href='https://spectra.daouoffice.com/app/contact/dept/2752' target="_blank">주소록</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item href='https://spectra.daouoffice.com/app/approval/document/new/2752/188949' target="_blank">시차출퇴근 근무 신청서</Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item href='https://spectra.daouoffice.com/app/approval/document/new/2752/194661' target="_blank">연차 신청서</Dropdown.Item>
+                    <Dropdown.Item href='https://spectra.daouoffice.com/app/approval/document/new/2752/199820' target="_blank">비용 신청서</Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
         </div>
     } else {
         return null;

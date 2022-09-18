@@ -14,11 +14,26 @@ const Outlook = () => {
     const [unreadCount, setUnreadCount] = useState(0);
 
     useEffect(() => {
+        bindListener();
+    }, []);
+
+    useEffect(() => {
         checkLogin();
         if (authenticated) {
             initialize();
         }
     }, [authenticated]);
+
+    const bindListener = () => {
+        chrome.runtime.onMessage.addListener(
+            function(request, sender, sendResponse) {
+                if (request.action === 'outlookClient.login') {
+                    setAuthenticated(true);
+                } else if (request.action === 'outlookClient.logout') {
+                    setAuthenticated(false);
+                }
+            });
+    }
 
     const checkLogin = () => {
         setTimeout(() => {
@@ -36,19 +51,8 @@ const Outlook = () => {
         setList(null);
         chrome.runtime.sendMessage({action: "outlookClient.findList"}, response => {
             setList(response);
+            setUnreadCount(response.unreadCount);
         });
-
-        /*ipcRenderer.send('outlook.findList');
-        ipcRenderer.removeAllListeners('outlook.findListCallback');
-        ipcRenderer.on('outlook.findListCallback', async (e, data) => {
-            setList(data);
-            setUnreadCount(data.unreadCount);
-        });*/
-
-        /*ipcRenderer.removeAllListeners('outlook.authenticated');
-        ipcRenderer.on('outlook.authenticated', async (e, data) => {
-            setAuthenticated(data);
-        });*/
     }
 
     const onClickRefresh = () => {

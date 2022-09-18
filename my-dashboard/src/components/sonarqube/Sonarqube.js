@@ -25,32 +25,12 @@ const Sonarqube = () => {
         findUseAlarmOnError();
     }
 
-    /*useEffect(() => {
-        const { hour, minute } = UiShare.getTimeFormat(tickTime);
-        if ((hour === 10 && minute === 0) || (hour === 15 && minute === 0)) {
-            findList();
-            setTimeout(() => {
-                if (useAlarmOnError && qualityErrorMessage) {
-                    UiShare.showNotification(qualityErrorMessage, 'Sonarqube');
-                }
-            }, 1000*5);
-        }
-    }, [tickTime]);*/
-
     const findList = () => {
         setList(null);
         chrome.runtime.sendMessage({action: "sonarqubeClient.findList"}, response => {
-            console.error('sonarqube response')
-            console.error(response)
             setList(response);
             setLastUpdated(UiShare.getCurrDate() + " " + UiShare.getCurrTime());
         });
-        /*ipcRenderer.send('sonarqube.findList');
-        ipcRenderer.removeAllListeners('sonarqube.findListCallback');
-        ipcRenderer.on('sonarqube.findListCallback', async (e, data) => {
-            setList(data);
-            setLastUpdated(UiShare.getCurrDate() + " " + UiShare.getCurrTime());
-        });*/
     }
 
     const findUseAlarmOnError = () => {

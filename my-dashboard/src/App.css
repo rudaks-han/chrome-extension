@@ -192,6 +192,9 @@ body ::-webkit-scrollbar {
   padding-left: 35px !important;
 }
 
+.menu a {
+  color: #000 !important;
+}
 
 /*.main-content .component {
   //min-width: 420px;

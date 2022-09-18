@@ -3,6 +3,7 @@ import HttpRequest from "../../util/httpRequest.js";
 
 export default class DaouofficeClient {
     constructor() {
+        this.API_URL = 'https://spectra.daouoffice.com';
     }
 
     requestOptions() {
@@ -16,7 +17,7 @@ export default class DaouofficeClient {
 
     async checkLogin() {
         try {
-            const response = await HttpRequest.request('https://spectra.daouoffice.com/api/user/session');
+            const response = await HttpRequest.request(`${this.API_URL}/api/user/session`);
             return response.code == '200';
         } catch (e) {
             console.error(e);
@@ -29,8 +30,8 @@ export default class DaouofficeClient {
         let data = {}
 
         const responses = await HttpRequest.requestAll([
-            'https://spectra.daouoffice.com/api/ehr/timeline/info',
-            'https://spectra.daouoffice.com/api/ehr/timeline/summary'
+            `${this.API_URL}/api/ehr/timeline/info`,
+            `${this.API_URL}/api/ehr/timeline/summary`
         ], _this.requestOptions());
 
         const infoResponse = responses[0];
@@ -61,12 +62,12 @@ export default class DaouofficeClient {
     async findList() {
         const count = 10;
 
-        return await HttpRequest.request(`https://spectra.daouoffice.com/api/board/2302/posts?offset=${count}&page=0`);
+        return await HttpRequest.request(`${this.API_URL}/api/board/2302/posts?offset=${count}&page=0`);
     }
 
     async findCalendar() {
         const _this = this;
-        const response = await HttpRequest.request(`https://spectra.daouoffice.com/api/calendar/user/me/event/daily?year=${_this.getCurrYear()}&month=${_this.getCurrMonth()}`);
+        const response = await HttpRequest.request(`${this.API_URL}/api/calendar/user/me/event/daily?year=${_this.getCurrYear()}&month=${_this.getCurrMonth()}`);
         let holidayList = {};
         let dayOffList = {};
         let list = response.data.list;
@@ -132,7 +133,7 @@ export default class DaouofficeClient {
     }
 
     async findNotificationCount() {
-        const response = await HttpRequest.request('https://spectra.daouoffice.com/api/home/noti/new');
+        const response = await HttpRequest.request(`${this.API_URL}/api/home/noti/new`);
         return response.data;
     }
 
@@ -140,14 +141,14 @@ export default class DaouofficeClient {
         const currDate = ShareUtil.getCurrDate();
         const toDate = ShareUtil.addDays(currDate, 7);
 
-        const response = await HttpRequest.request(`https://spectra.daouoffice.com/api/calendar/event?timeMin=${currDate}T00%3A00%3A00.000%2B09%3A00&timeMax=${toDate}T23%3A59%3A59.999%2B09%3A00&includingAttendees=true&calendarIds%5B%5D=8452&calendarIds%5B%5D=8987&calendarIds%5B%5D=11324&calendarIds%5B%5D=11326`);
+        const response = await HttpRequest.request(`${this.API_URL}/api/calendar/event?timeMin=${currDate}T00%3A00%3A00.000%2B09%3A00&timeMax=${toDate}T23%3A59%3A59.999%2B09%3A00&includingAttendees=true&calendarIds%5B%5D=8452&calendarIds%5B%5D=8987&calendarIds%5B%5D=11324&calendarIds%5B%5D=11326`);
         return response.data;
     }
 
     async findMyDayoffList() {
         const currDate = ShareUtil.getCurrDate();
 
-        const response = await HttpRequest.request(`https://spectra.daouoffice.com/api/ehr/vacation/stat?baseDate=${currDate}`);
+        const response = await HttpRequest.request(`${this.API_URL}/api/ehr/vacation/stat?baseDate=${currDate}`);
         return response.data;
     }
 
@@ -161,7 +162,7 @@ export default class DaouofficeClient {
             body: JSON.stringify(data),
         };
 
-        return await HttpRequest.request(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockIn?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, options);
+        return await HttpRequest.request(`${this.API_URL}/api/ehr/timeline/status/clockIn?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, options);
     }
 
     async clockOut() {
@@ -174,20 +175,17 @@ export default class DaouofficeClient {
             body: JSON.stringify(data),
         };
 
-        return await HttpRequest.request(`https://spectra.daouoffice.com/api/ehr/timeline/status/clockOut?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, options);
+        return await HttpRequest.request(`${this.API_URL}/api/ehr/timeline/status/clockOut?userId=${params.userId}&baseDate=${ShareUtil.getCurrDate()}`, options);
     }
 }
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-
     if (changeInfo.status != 'complete')
         return;
 
-    if (tab.url.startsWith('https://spectra.daouoffice.com/app/home')) {
-        chrome.runtime.sendMessage({action: 'daouofficeClient.loginOk'});
+    if (tab.url.startsWith(`${this.API_URL}/app/home`)) {
+        chrome.runtime.sendMessage({action: 'daouofficeClient.login'});
+    } else if (tab.url.startsWith(`${this.API_URL}/login`)) {
+        chrome.runtime.sendMessage({action: 'daouofficeClient.logout'});
     }
 });
-
-function sendMessage(request) {
-    chrome.runtime.sendMessage(request);
-}
