@@ -9,22 +9,22 @@ class ErrorChecker {
 		let hasError = false;
 
 		if (result.newBug > 0) {
-			message += this.addComma(message) + `New Bugs: ${result.newBug}개`;
+			message += this.addComma(message) + `Bugs: ${result.newBug}개`;
 			hasError = true;
 		}
 
 		if (result.newVulnerabilities > 0) {
-			message += this.addComma(message) + `New Vulnerabilities: ${result.newVulnerabilities}개`;
+			message += this.addComma(message) + `Vulnerabilities: ${result.newVulnerabilities}개`;
 			hasError = true;
 		}
 
 		if (result.newSecurityHotSpots > 0) {
-			message += this.addComma(message) + `New Security Hotspots: ${result.newSecurityHotSpots}개`;
+			message += this.addComma(message) + `Security Hotspots: ${result.newSecurityHotSpots}개`;
 			hasError = true;
 		}
 
 		if (result.newCodeSmells > 0) {
-			message += this.addComma(message) + `New Code Smells: ${result.newCodeSmells}개`;
+			message += this.addComma(message) + `Code Smells: ${result.newCodeSmells}개`;
 			hasError = true;
 		}
 

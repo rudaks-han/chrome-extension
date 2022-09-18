@@ -23,28 +23,34 @@
         this.addEventListener('load', function() {
             if ( this.responseType != 'blob' && this.responseText) {
                 try {
+                    //console.error(this.responseText)
                     var responseText = JSON.parse(this.responseText);
                     if (responseText.data.bookProductList) {
                         responseText.data.bookProductList.forEach(function(el) {
-                            const statusCode = el.status_code;
-                            const productName = el.product_name;
-
 
                             //console.log(el);
 
                             //console.log('selectYn : ' + selectYn);
 
+                            const statusCode = el.status_code;
+                            const productName = el.product_name;
+
                             if (!validBookingState(statusCode)) {
                                 console.log("[불가]" + productName + " : " + statusCode);
                             } else {
-                                console.error("[가능]" + productName + " : " + statusCode);
-                            }
 
+                                if (validPlace(statusCode)) {
+                                    const startDate = getParam(postData, 'start_date');
+                                    console.log('statusCode : ' + statusCode);
+                                    console.log('productName : ' + productName);
 
-                            if (validBookingState(statusCode)) {
-                                const startDate = getParam(postData, 'start_date');
-                                console.log('statusCode : ' + statusCode);
-                                console.log('productName : ' + productName);
+                                    console.error("[가능]" + productName + " : " + statusCode);
+
+                                    const title = `[${startDate}][${productName}] 강동그린웨이 예약가능`;
+                                    const body = `[${startDate}] ${productName}`;
+                                    const url = 'https://camp.xticket.kr/web/main';
+                                    pushBullet(title, body, url);
+                                }
                             }
                         })
                     }
@@ -69,6 +75,17 @@ function validBookingState(statusCode) {
     }
 }
 
+function validPlace(productName) {
+    if (productName.indexOf('청단풍') > -1
+        || productName.indexOf('마로') > -1
+        || productName.indexOf('자작') > -1
+        || productName.indexOf('매화') > -1) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function getParam(params, name) {
     var sval = "";
     params = params.split("&");
@@ -80,6 +97,24 @@ function getParam(params, name) {
     return sval;
 }
 
-function goNextMonth() {
-    model.goNextMonth();
+function pushBullet(title, body, url)
+{
+    var params = {};
+    params.type = 'note';
+    params.title = title;
+    params.body = body;
+    params.url = url;
+    $.ajax({
+        type:"POST",
+        //url:'https://api.pushbullet.com/v2/users/me',
+        url:'https://api.pushbullet.com/v2/pushes',
+        data:params,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('Authorization', 'Bearer o.BsIzlJe5UhFijfgNk33yjlAZO3tFvwqM');
+            //xhr.setRequestHeader('Authorization', 'Bearer nXmkzdhFQae9zY6YRGScOPTmoKnoT77m'); // 승엽
+        },
+        success:function(res){
+            console.error(JSON.stringify(res))
+        }
+    });
 }

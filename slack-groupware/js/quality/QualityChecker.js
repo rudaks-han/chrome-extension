@@ -22,7 +22,8 @@ class QualityChecker {
 		})).then(responses => {
 			logger.debug('# ajax response')
 			return responses.map(response => {
-				return new NewCodeParser().execute(response);;
+				//return new NewCodeParser().execute(response);;
+				return new CodeParser().execute(response);;
 			});
 		}).then(responses => {
 			logger.debug('# newCodeParser response')

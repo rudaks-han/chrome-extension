@@ -1,6 +1,6 @@
 class Slack {
 	send(channel, message) {
-		const authToken = 'xoxb-471569414946-1939462143793-DbJnG7LszkZmJMvFLotcP29a';
+		const authToken = 'xoxb-471569414946-1939462143793-PSSWliJ76qHbSkEuGDdNgGjL';
 
 		const headers = {
 			"Authorization": "Bearer " + authToken,
